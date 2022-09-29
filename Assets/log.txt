@@ -1,0 +1,42 @@
+Script: SpeechTest
+Local Functions:
+ScriptFunction 'SetIntValue' printout.
+	Type: SetVariable
+		VariableName: strVar
+		Operator: Equals
+		AssignType: String
+		AssignValue: this string
+	Type: SetVariable
+		VariableName: myVar
+		Operator: Equals
+		AssignType: Int
+		AssignValue: 5
+	Type: SetVariable
+		VariableName: myVarFloat
+		Operator: Equals
+		AssignType: Float
+		AssignValue: 5.55
+	Type: SetVariable
+		VariableName: myVarCopy
+		Operator: Equals
+		AssignType: NamedVariable
+		AssignValue: myVar
+	Type: SetVariable
+		VariableName: booleanVar
+		Operator: Equals
+		AssignType: Bool
+		AssignValue: True
+ScriptFunction 'DoChoice' printout.
+	Type: Speech
+		SpeakerName: Pepper
+		IsNamedSpeaker: True
+		Sentence: This is a speech line.
+	Type: Speech
+		SpeakerName: ???
+		IsNamedSpeaker: False
+		Sentence: I'm an unknown speaker.
+	Type: Speech
+		SpeakerName: 
+		IsNamedSpeaker: False
+		Sentence: I'm the players thoughts.
+Commands:
