@@ -29,10 +29,6 @@ public class EnemyController : HumanoidController
 
         SuccessfulFlee
     }
-    public State GetState()
-    {
-        return state;
-    }
     private State state;
 
     public State GetState()
