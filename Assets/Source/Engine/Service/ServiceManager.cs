@@ -30,6 +30,11 @@ public static class Service
     {
         return ServiceManager.instance.GetVars<T>();
     }
+
+    public static GameObject GetGO()
+    {
+        return ServiceManager.instance.gameObject;
+    }
 }
 
 [DefaultExecutionOrder(-999)]
