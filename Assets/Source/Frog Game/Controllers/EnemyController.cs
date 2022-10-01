@@ -18,6 +18,10 @@ public class EnemyController : HumanoidController
         Fleeing,    // Has a frog, trying to flee
         Stunned     // Has been stunned
     }
+    public State GetState()
+    {
+        return state;
+    }
     private State state;
 
     protected override void Start()
