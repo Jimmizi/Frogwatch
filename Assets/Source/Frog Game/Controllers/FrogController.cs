@@ -20,10 +20,16 @@ public class FrogController : HumanoidController
 
     public static List<FrogController> FrogList = new();
 
+    public SpriteRenderer FrogHeldBubblesRenderer;
+    public Animator FrogLandAnimator;
+    private bool bAbortFadeIn = false;
+    private bool bAbortFadeOut = false;
+
     private float nextHopInterval;
     private float hopTimer;
     private float fThrowTime;
     private bool bFirstThrowSectionDone;
+    private float fDropTimeAccelHops = 0.0f;
 
     public State GetState()
     {
@@ -66,17 +72,25 @@ public class FrogController : HumanoidController
         {
             m_animator.SetBool("HeldByWitch", true);
         }
+
+        StartCoroutine(DoBubblesFadeIn());
+        FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
     }
 
     public void SetDropped()
     {
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("HeldByWitch", false);
+
+        StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
+        StartCoroutine(DoBubblesFadeOut());
+
     }
 
     public void SetThrown(Vector2 dir)
     {
         StartCoroutine(PerformThrown(dir));
+        StartCoroutine(DoBubblesFadeOut());
     }
 
     public bool CanPickup()
@@ -92,13 +106,18 @@ public class FrogController : HumanoidController
     // Update is called once per frame
     protected new void Update()
     {
+        if (fDropTimeAccelHops >= 0.0f)
+        {
+            fDropTimeAccelHops -= Time.deltaTime;
+        }
+
         switch (state)
         {
             case State.Idle:
             {
                 TryContainFrogs();
 
-                hopTimer += Time.deltaTime;
+                hopTimer += Time.deltaTime * (fDropTimeAccelHops > 0.0f ? 4.0f : 1.0f);
                 if (hopTimer >= nextHopInterval)
                 {
                     TryPerformHop();
@@ -149,7 +168,7 @@ public class FrogController : HumanoidController
         StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance)));
     }
 
-    IEnumerator PerformThrown(Vector2 vDir)
+    IEnumerator PerformThrown(Vector2 vDir, bool bAccelHops = false)
     {
         state = State.Thrown;
 
@@ -206,6 +225,13 @@ public class FrogController : HumanoidController
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("IsHopping", false);
         m_animator.SetBool("HeldByWitch", false);
+
+        FrogLandAnimator.SetTrigger("TriggerLand");
+
+        if (bAccelHops)
+        {
+            fDropTimeAccelHops = 4.0f;
+        }
     }
 
     IEnumerator PerformHop(Vector2 vNewPos)
@@ -240,6 +266,7 @@ public class FrogController : HumanoidController
         }
 
         m_animator.SetBool("IsHopping", false);
+        FrogLandAnimator.SetTrigger("TriggerLand");
     }
 
     private float GetNextHopInterval()
@@ -401,6 +428,77 @@ public class FrogController : HumanoidController
 
         Gizmos.color = new Color(1f, 0.1215686f, 0.01568628f, 0.25f);
         Gizmos.DrawSphere(transform.position, GetVars().NearbyAvoidRadius);
+    }
+
+    IEnumerator DoBubblesFadeOut()
+    {
+        void MinusAlpha(float a)
+        {
+            Color col = FrogHeldBubblesRenderer.color;
+            col.a -= a;
+            FrogHeldBubblesRenderer.color = col;
+        }
+
+        bAbortFadeIn = true;
+
+        while (FrogHeldBubblesRenderer.color.a > 0.0f)
+        {
+            if (bAbortFadeOut)
+            {
+                break;
+            }
+
+            // Fade out over half a second
+            MinusAlpha((Time.deltaTime) * 2);
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (!bAbortFadeOut)
+        {
+            Color col = FrogHeldBubblesRenderer.color;
+            col.a = 0.0f;
+            FrogHeldBubblesRenderer.color = col;
+        }
+
+        bAbortFadeIn = false;
+
+        yield return null;
+    }
+
+    IEnumerator DoBubblesFadeIn()
+    {
+        void AddAlpha(float a)
+        {
+            Color col = FrogHeldBubblesRenderer.color;
+            col.a += a;
+            FrogHeldBubblesRenderer.color = col;
+        }
+
+        bAbortFadeOut = true;
+
+        while (FrogHeldBubblesRenderer.color.a < 1.0f)
+        {
+            if (bAbortFadeIn)
+            {
+                break;
+            }
+
+            // Fade in over half a second
+            AddAlpha((Time.deltaTime) * 2);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (!bAbortFadeIn)
+        {
+            Color col = FrogHeldBubblesRenderer.color;
+            col.a = 1.0f;
+            FrogHeldBubblesRenderer.color = col;
+        }
+
+        bAbortFadeOut = false;
+
+        yield return null;
     }
 
     void OnDrawGizmos()

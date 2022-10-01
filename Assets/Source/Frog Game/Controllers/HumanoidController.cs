@@ -12,15 +12,20 @@ public class HumanoidController : MonoBehaviour
 
     public EaserEase FrogCarryFloatEase;
     public float ControllerSpeed = 5.0f;
+    public float DashSpeed = 7.5f;
     public float PickupDistance = 1.0f;
+    public float DashTime = 0.05f;
+    public float DashLogicalTime = 0.5f;
     public Vector2 FrogCarryOffsetStart = new();
     public Vector2 FrogCarryOffsetEnd = new();
     public float CarryFrogAnimSpeed = 0.5f;
 
     public float InteractCooldown = 1.0f;
+    public float DashCooldown = 3.0f;
 
     protected Vector2 InputDirection = new();
     protected bool JustPressedInteract;
+    protected bool JustPressedDash;
     protected Rigidbody2D m_rigidbody;
     protected Animator m_animator;
     protected Vector2 BaseOffset = new();
@@ -38,9 +43,11 @@ public class HumanoidController : MonoBehaviour
     private bool carryFrogTimeFlipped = false;
 
     private float interactCooldownTimer = 0.0f;
-
+    public float DashCooldownTimer = 0.0f;
+    protected float dashIsAliveTimer = 0.0f;
     
     public bool IsCarryingFrog => FrogCarrying != null;
+    public bool IsDashing => dashIsAliveTimer > 0.0f;
 
     public static Vector2 GetPlayerPosition()
     {
@@ -87,6 +94,11 @@ public class HumanoidController : MonoBehaviour
     public bool CanInteract()
     {
         return interactCooldownTimer <= 0.0f;
+    }
+
+    public bool CanDash()
+    {
+        return DashCooldownTimer <= 0.0f && !IsDashing;
     }
 
     public FrogSystemVars GetVars()
@@ -143,6 +155,17 @@ public class HumanoidController : MonoBehaviour
         carryFrogTimeFlipped = false;
     }
 
+    protected void DropCarriedFrog()
+    {
+        if (FrogCarrying != null)
+        {
+            FrogCarrying.SetDropped();
+            FrogCarrying = null;
+            carryFrogTimer = 0.0f;
+            carryFrogTimeFlipped = false;
+        }
+    }
+
     protected virtual void Update()
     {
         KeepInBounds();
@@ -179,6 +202,53 @@ public class HumanoidController : MonoBehaviour
         else if(!CanInteract())
         {
             interactCooldownTimer -= Time.deltaTime;
+        }
+
+        if (JustPressedDash)
+        {
+            if (CanDash() && (InputDirection.x != 0.0f || InputDirection.y != 0.0f))
+            {
+                StartCoroutine(DoDash(InputDirection));
+            }
+        }
+        // If can't dash and we're done with our alive timer, then we can start the cooldown going down
+        else if (!CanDash() && dashIsAliveTimer <= 0.0f)
+        {
+            // Done in player
+            //DashCooldownTimer -= Time.deltaTime;
+
+            // Done in player
+            //if (DashCooldownTimer <= 0.0f)
+            //{
+            //    OnDashRecharged();
+            //}
+        }
+
+        // Done in player
+        //if (dashIsAliveTimer > 0.0f)
+        //{
+        //    dashIsAliveTimer -= Time.deltaTime;
+        //}
+    }
+
+    protected virtual void OnDashStart() {}
+    protected virtual void OnDashRecharged() {}
+
+    IEnumerator DoDash(Vector2 dir)
+    {
+        // Done in player
+        //dashIsAliveTimer = DashLogicalTime;
+        //DashCooldownTimer = DashCooldown;
+
+        OnDashStart();
+
+        float fTime = 0.0f;
+
+        while (fTime < DashTime)
+        {
+            fTime += Time.deltaTime;
+            m_rigidbody.position += dir * DashSpeed * Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 

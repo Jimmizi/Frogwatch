@@ -141,6 +141,16 @@ public class EnemyController : HumanoidController
         return state == State.Fleeing;
     }
 
+    public void SetDashedInto()
+    {
+        DropCarriedFrog();
+        SetState(State.Stunned);
+        timeToStayInState = GetNextTimeToStun();
+
+        SetAnimCarrying(false);
+        SetAnimWalking(false);
+    }
+
     void InitWander()
     {
         vCurrentDirection = GetNewWanderDirection();
@@ -274,13 +284,23 @@ public class EnemyController : HumanoidController
 
     void ProcessStunned()
     {
-
+        if (GetTimeInState() > timeToStayInState)
+        {
+            SetState(State.Wandering);
+            InitWander();
+        }
     }
 
     float GetNextTimeToIdle()
     {
         var vars = GetVars();
         return Random.Range(vars.WitchIdleMinTime, vars.WitchIdleMaxTime);
+    }
+
+    float GetNextTimeToStun()
+    {
+        var vars = GetVars();
+        return Random.Range(vars.WitchStunnedMinTime, vars.WitchStunnedMaxTime);
     }
     float GetNextTimeToWander()
     {
