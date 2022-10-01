@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class IndicatorBaseUI : MonoBehaviour
 {
+    [SerializeField] float scaleFactor = 600f;
     public IndicatorTracker trackedObject { get; set; }    
 
     [SerializeField, Tooltip("Reference to the image component that draws this indicator")]
@@ -79,9 +80,16 @@ public class IndicatorBaseUI : MonoBehaviour
         {
             transform.position = screenPosition;
 
+            
             Vector3 objectDirection = screenTrackPosition - screenPosition;
             float angle = Mathf.Atan2(objectDirection.y, objectDirection.x);
             transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+
+            float distance = objectDirection.magnitude;
+            float scale = scaleFactor / distance;
+            float clampedScale = Mathf.Clamp(scale, 0.7f, 1.6f);
+            transform.localScale = new Vector3(clampedScale, clampedScale, clampedScale);
+
         }
     }
 }
