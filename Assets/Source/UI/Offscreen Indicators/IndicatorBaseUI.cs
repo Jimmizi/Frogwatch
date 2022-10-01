@@ -5,26 +5,40 @@ using UnityEngine.UI;
 
 public class IndicatorBaseUI : MonoBehaviour
 {
-    [SerializeField] float scaleFactor = 600f;
+    [SerializeField, Tooltip("Distance scale factor, the higher this number the faster the arrow grows over distance")]
+    float scaleFactor = 600f;
+
     public IndicatorTracker trackedObject { get; set; }    
 
     [SerializeField, Tooltip("Reference to the image component that draws this indicator")]
-    private Image _image = null;
+    private Image _arrowImage = null;
     public Image image
     {
         get
         {
-            if (!_image)
+            if (!_arrowImage)
             {
-                _image = GetComponent<Image>();
+                _arrowImage = GetComponent<Image>();
             }
 
-            return _image;
+            return _arrowImage;
         }
     }
 
     [SerializeField, Tooltip("How much to inset the indicator from the edge of the screen in pixels")]
     public float padding = 10;
+
+    [SerializeField, Tooltip("Transform to apply position to")]
+    private Transform _positionTransform;
+    public Transform positionTransform => _positionTransform ? _positionTransform : transform;
+
+    [SerializeField, Tooltip("Transform to apply rotation to")]
+    private Transform _rotationTransform;
+    public Transform rotationTransform => _rotationTransform ? _rotationTransform : transform;
+
+    [SerializeField, Tooltip("Transform to apply scale to")]
+    private Transform _scaleTransform;
+    public Transform scaleTransform => _scaleTransform ? _scaleTransform : transform;
 
 
     /// <summary> World position of the tracked object. </summary>
@@ -67,29 +81,27 @@ public class IndicatorBaseUI : MonoBehaviour
         }
     }
 
-    public bool isVisible
+    public virtual bool isVisible
     {
         get { return trackedObject != null && !isOnScreen; }
     }
 
-    void Update()
+    virtual protected void Update()
     {               
         image.enabled = isVisible;
 
         if (isVisible)
         {
-            transform.position = screenPosition;
-
+            positionTransform.position = screenPosition;
             
             Vector3 objectDirection = screenTrackPosition - screenPosition;
             float angle = Mathf.Atan2(objectDirection.y, objectDirection.x);
-            transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+            rotationTransform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
 
             float distance = objectDirection.magnitude;
             float scale = scaleFactor / distance;
             float clampedScale = Mathf.Clamp(scale, 0.7f, 1.6f);
-            transform.localScale = new Vector3(clampedScale, clampedScale, clampedScale);
-
+            scaleTransform.localScale = new Vector3(clampedScale, clampedScale, clampedScale);
         }
     }
 }
