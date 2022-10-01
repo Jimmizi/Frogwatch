@@ -13,13 +13,16 @@ public class FrogController : HumanoidController
         InPond
     }
 
-    public float MinTimeBetweenHops = 1.0f;
-    public float MaxTimeBetweenHops = 10.0f;
 
-    public float NearbyAvoidRadius = 1.0f;
 
-    public float HopDistance = 1.0f;
-    public float HopMovementSpeed = 5.0f;
+    private FrogSystemVars tuning;
+    //public float MinTimeBetweenHops = 1.0f;
+    //public float MaxTimeBetweenHops = 10.0f;
+
+    //public float NearbyAvoidRadius = 1.0f;
+
+    //public float HopDistance = 1.0f;
+    //public float HopMovementSpeed = 5.0f;
 
     private float nextHopInterval;
     private float hopTimer;
@@ -34,10 +37,11 @@ public class FrogController : HumanoidController
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
-
+        tuning = Service.Vars<FrogSystemVars>();
         ResetTimer();
         state = State.Free;
+
+        base.Start();
     }
 
     void ResetTimer()
@@ -49,8 +53,6 @@ public class FrogController : HumanoidController
     // Update is called once per frame
     protected override void Update()
     {
-        base.Update();
-
         if (!performingHop)
         {
             hopTimer += Time.deltaTime;
@@ -60,6 +62,8 @@ public class FrogController : HumanoidController
                 ResetTimer();
             }
         }
+
+        base.Update();
     }
 
     protected override void FixedUpdate()
@@ -76,37 +80,42 @@ public class FrogController : HumanoidController
         Vector2 dir = GetHopDirection();
         Vector2 vPos = transform.position;
 
-        StartCoroutine(PerformHop(vPos + (dir * HopDistance)));
+        StartCoroutine(PerformHop(vPos + (dir * tuning.HopDistance)));
     }
 
     IEnumerator PerformHop(Vector2 vNewPos)
     {
         performingHop = true;
-        float bailTimer = 0.0f;
-        while (Vector2.Distance(m_rigidbody.position, vNewPos) > 0.05f)
+        m_animator.SetBool("IsHopping", true);
+
+        Vector2 vOriginalPos = m_rigidbody.position;
+
+
+        float fTime = 0.0f;
+
+        while (fTime <= 1.0f)
         {
-            m_rigidbody.position = Vector2.Lerp(m_rigidbody.position, vNewPos, Time.deltaTime * HopMovementSpeed);
+            m_rigidbody.position = Easer.EaseVector2(tuning.MovementEaser, vOriginalPos, vNewPos, fTime);
+            
+            fTime += Time.deltaTime * tuning.HopMovementSpeed;
 
             if (state != State.Free)
             {
                 break;
             }
-
-            if (bailTimer > 3.0f)
-            {
-               // break;
-            }
-
-            bailTimer += Time.deltaTime;
+            
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
+        m_rigidbody.position = vNewPos;
+
+        m_animator.SetBool("IsHopping", false);
         performingHop = false;
     }
 
     private float GetNextHopInterval()
     {
-        return Random.Range(MinTimeBetweenHops, MaxTimeBetweenHops);
+        return Random.Range(tuning.MinTimeBetweenHops, tuning.MaxTimeBetweenHops);
     }
     
     private Vector2 GetHopDirection()
@@ -114,7 +123,7 @@ public class FrogController : HumanoidController
         int NumDirectionsToScore = 10;
 
         Dictionary<Vector2, float> directions = new();
-        List<HumanoidController> nearbyEnts = HumanoidController.GetControllersInArea(transform.position, NearbyAvoidRadius);
+        List<HumanoidController> nearbyEnts = HumanoidController.GetControllersInArea(transform.position, tuning.NearbyAvoidRadius);
 
         List<BoxCollider2D> frogBounds = Service.Vars<FrogSystemVars>().FrogMovementBounds;
 
@@ -128,7 +137,7 @@ public class FrogController : HumanoidController
                 continue;
             }
 
-            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * HopDistance);
+            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * tuning.HopDistance);
             bool bInvalidPosition = false;
 
             foreach (var bound in frogBounds)
@@ -204,7 +213,7 @@ public class FrogController : HumanoidController
         }
 
         Gizmos.color = new Color(1f, 0.9215686f, 0.01568628f, 0.25f);
-        Gizmos.DrawSphere(transform.position, NearbyAvoidRadius);
+        Gizmos.DrawSphere(transform.position, tuning.NearbyAvoidRadius);
     }
 
     void OnDrawGizmos()

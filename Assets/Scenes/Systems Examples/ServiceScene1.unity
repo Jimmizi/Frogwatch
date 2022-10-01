@@ -484,7 +484,7 @@ Animator:
   m_GameObject: {fileID: 453098584}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e37de7e5bfe1ee648bc4e8afacb95bd6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8d912debf0bb97843b681395ff8fd76a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -588,11 +588,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControllerSpeed: 5
-  MinTimeBetweenHops: 2
-  MaxTimeBetweenHops: 5
-  NearbyAvoidRadius: 5
-  HopDistance: 1
-  HopMovementSpeed: 5
 --- !u!50 &453098590
 Rigidbody2D:
   serializedVersion: 4
@@ -1052,7 +1047,7 @@ Animator:
   m_GameObject: {fileID: 1295486168}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e37de7e5bfe1ee648bc4e8afacb95bd6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8d912debf0bb97843b681395ff8fd76a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1142,11 +1137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControllerSpeed: 5
-  MinTimeBetweenHops: 2
-  MaxTimeBetweenHops: 5
-  NearbyAvoidRadius: 5
-  HopDistance: 1
-  HopMovementSpeed: 5
 --- !u!50 &1295486174
 Rigidbody2D:
   serializedVersion: 4
@@ -1214,6 +1204,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrogMovementBounds:
   - {fileID: 1032323207}
+  MinTimeBetweenHops: 1
+  MaxTimeBetweenHops: 2
+  NearbyAvoidRadius: 5
+  HopDistance: 1
+  HopMovementSpeed: 4
+  MovementEaser: 1
 --- !u!1 &1341701911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,7 +1255,7 @@ Animator:
   m_GameObject: {fileID: 1341701911}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e37de7e5bfe1ee648bc4e8afacb95bd6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8d912debf0bb97843b681395ff8fd76a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1349,11 +1345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControllerSpeed: 5
-  MinTimeBetweenHops: 2
-  MaxTimeBetweenHops: 5
-  NearbyAvoidRadius: 5
-  HopDistance: 1
-  HopMovementSpeed: 5
 --- !u!50 &1341701917
 Rigidbody2D:
   serializedVersion: 4
@@ -1550,7 +1541,7 @@ Animator:
   m_GameObject: {fileID: 1904997527}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e37de7e5bfe1ee648bc4e8afacb95bd6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8d912debf0bb97843b681395ff8fd76a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1640,11 +1631,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControllerSpeed: 5
-  MinTimeBetweenHops: 2
-  MaxTimeBetweenHops: 5
-  NearbyAvoidRadius: 5
-  HopDistance: 1
-  HopMovementSpeed: 5
 --- !u!50 &1904997533
 Rigidbody2D:
   serializedVersion: 4
