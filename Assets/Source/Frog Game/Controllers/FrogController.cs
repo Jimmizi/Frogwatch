@@ -77,7 +77,7 @@ public class FrogController : HumanoidController
     }
 
     // Update is called once per frame
-    protected override void Update()
+    protected new void Update()
     {
         switch (state)
         {
@@ -107,9 +107,6 @@ public class FrogController : HumanoidController
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-
-        base.Update();
     }
 
     private void TryContainFrogs()

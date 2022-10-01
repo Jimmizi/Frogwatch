@@ -89,9 +89,23 @@ public class HumanoidController : MonoBehaviour
         return interactCooldownTimer <= 0.0f;
     }
 
-    // Update is called once per frame
+    private void KeepInBounds()
+    {
+        var bounds = Service.Vars<FrogSystemVars>()?.FrogMovementBounds;
+        if (bounds != null)
+        {
+            var futurePos = m_rigidbody.position + (InputDirection * ControllerSpeed * Time.deltaTime);
+            if (!bounds.OverlapPoint(futurePos))
+            {
+                InputDirection = Vector2.zero;
+            }
+        }
+    }
+    
     protected virtual void Update()
     {
+        KeepInBounds();
+
         m_rigidbody.position += InputDirection * ControllerSpeed * Time.deltaTime;
         SetAnimWalking(InputDirection.x != 0.0f || InputDirection.y != 0.0f);
         
@@ -100,7 +114,7 @@ public class HumanoidController : MonoBehaviour
             Debug.Log("Just pressed interact.");
             if (CanInteract())
             {
-                //interactCooldownTimer = InteractCooldown;
+                //interactCooldownTimer = InteractCooldown; // Remove cooldown for now
 
                 if (!IsCarryingFrog)
                 {
