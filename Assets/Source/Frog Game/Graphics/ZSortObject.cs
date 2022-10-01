@@ -57,6 +57,6 @@ public class ZSortObject : MonoBehaviour
         }
 
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(new Vector3(transform.position.x + GroundContactPosition.x, transform.position.y + GroundContactPosition.y, 0.0f), new Vector3(0.1f, 0.1f, 0.1f));
+        Gizmos.DrawCube(new Vector3(transform.position.x + GroundContactPosition.x, transform.position.y + GroundContactPosition.y, 0.0f), new Vector3(0.025f, 0.025f, 0.025f));
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,8 +17,8 @@ public class FrogController : HumanoidController
         Thrown,
         InPond
     }
-    
-    private FrogSystemVars tuning;
+
+    public static List<FrogController> FrogList = new();
 
     private float nextHopInterval;
     private float hopTimer;
@@ -37,11 +38,18 @@ public class FrogController : HumanoidController
     // Start is called before the first frame update
     protected override void Start()
     {
-        tuning = Service.Vars<FrogSystemVars>();
+        FrogList.Add(this);
+
         ResetTimer();
         state = State.Idle;
 
         base.Start();
+    }
+
+    protected override void OnDestroy()
+    {
+        FrogList.Remove(this);
+        base.OnDestroy();
     }
 
     void ResetTimer()
@@ -50,15 +58,20 @@ public class FrogController : HumanoidController
         hopTimer = 0.0f;
     }
 
-    public void SetCarried()
+    public void SetCarried(bool bHeldByWitch = false)
     {
         state = State.Carried;
         m_animator.SetBool("IsCarried", true);
+        if (bHeldByWitch)
+        {
+            m_animator.SetBool("HeldByWitch", true);
+        }
     }
 
     public void SetDropped()
     {
-        
+        m_animator.SetBool("IsCarried", false);
+        m_animator.SetBool("HeldByWitch", false);
     }
 
     public void SetThrown(Vector2 dir)
@@ -111,7 +124,7 @@ public class FrogController : HumanoidController
 
     private void TryContainFrogs()
     {
-        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
+        BoxCollider2D frogBounds = GetVars().FrogMovementBounds;
         
         if (!frogBounds.OverlapPoint(m_rigidbody.position))
         {
@@ -133,18 +146,18 @@ public class FrogController : HumanoidController
         Vector2 dir = GetHopDirection();
         Vector2 vPos = transform.position;
 
-        StartCoroutine(PerformHop(vPos + (dir * tuning.HopDistance)));
+        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance)));
     }
 
     IEnumerator PerformThrown(Vector2 vDir)
     {
         state = State.Thrown;
 
-        Vector2 heightOffset = new Vector2(0.0f, 1.0f);
+        Vector2 heightOffset = new Vector2(0.0f, 0.25f);
         Vector2 vOriginalPos = m_rigidbody.position;
-        Vector2 vNewPos = Player.GetOffsetPosition() + (vDir * tuning.ThrownDistance) + heightOffset;
+        Vector2 vNewPos = Player.GetOffsetPosition() + (vDir * GetVars().ThrownDistance) + heightOffset;
 
-        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
+        BoxCollider2D frogBounds = GetVars().FrogMovementBounds;
 
         bool newIsInvalid = false;
         bool originalIsInvalid = false;
@@ -167,9 +180,9 @@ public class FrogController : HumanoidController
 
         while (fThrowTime <= 1.0f)
         {
-            m_rigidbody.position = Easer.EaseVector2(tuning.ThrownEaser, vOriginalPos, vNewPos, fThrowTime);
+            m_rigidbody.position = Easer.EaseVector2(GetVars().ThrownEaser, vOriginalPos, vNewPos, fThrowTime);
 
-            fThrowTime += Time.deltaTime * tuning.ThrownSpeed;
+            fThrowTime += Time.deltaTime * GetVars().ThrownSpeed;
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
@@ -178,9 +191,9 @@ public class FrogController : HumanoidController
 
         while (fThrowTime <= 1.0f)
         {
-            m_rigidbody.position = Easer.EaseVector2(tuning.ThrownEaserSecondary, vNewPos, vNewPos - heightOffset, fThrowTime);
+            m_rigidbody.position = Easer.EaseVector2(GetVars().ThrownEaserSecondary, vNewPos, vNewPos - heightOffset, fThrowTime);
 
-            fThrowTime += Time.deltaTime * (tuning.ThrownSpeed * 2);
+            fThrowTime += Time.deltaTime * (GetVars().ThrownSpeed * 2);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
@@ -192,6 +205,7 @@ public class FrogController : HumanoidController
 
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("IsHopping", false);
+        m_animator.SetBool("HeldByWitch", false);
     }
 
     IEnumerator PerformHop(Vector2 vNewPos)
@@ -206,9 +220,9 @@ public class FrogController : HumanoidController
 
         while (fTime <= 1.0f)
         {
-            m_rigidbody.position = Easer.EaseVector2(tuning.MovementEaser, vOriginalPos, vNewPos, fTime);
+            m_rigidbody.position = Easer.EaseVector2(GetVars().MovementEaser, vOriginalPos, vNewPos, fTime);
             
-            fTime += Time.deltaTime * tuning.HopMovementSpeed;
+            fTime += Time.deltaTime * GetVars().HopMovementSpeed;
 
             if (state != State.Hopping)
             {
@@ -230,7 +244,7 @@ public class FrogController : HumanoidController
 
     private float GetNextHopInterval()
     {
-        return Random.Range(tuning.MinTimeBetweenHops, tuning.MaxTimeBetweenHops);
+        return Random.Range(GetVars().MinTimeBetweenHops, GetVars().MaxTimeBetweenHops);
     }
     
     private Vector2 GetHopDirection()
@@ -238,21 +252,20 @@ public class FrogController : HumanoidController
         int NumDirectionsToScore = 10;
 
         Dictionary<Vector2, float> directions = new();
-        List<HumanoidController> nearbyEnts = HumanoidController.GetControllersInArea(transform.position, tuning.NearbyAvoidRadius);
+        List<HumanoidController> nearbyEnts = HumanoidController.GetControllersInArea(transform.position, GetVars().NearbyAvoidRadius);
 
-        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
-
+        BoxCollider2D frogBounds = GetVars().FrogMovementBounds;
+        Vector2 vThisPos = GetOffsetPosition();
+        
         for (int i = 0; i < NumDirectionsToScore; ++i)
         {
             Vector2 vRandomDir = Random.insideUnitCircle.normalized;
-            Vector2 vThisPos = transform.position;
-
             if (directions.ContainsKey(vRandomDir))
             {
                 continue;
             }
 
-            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * tuning.HopDistance);
+            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * GetVars().HopDistance);
             if (!frogBounds.OverlapPoint(vPossibleNewPosition))
             {
                 continue;
@@ -260,64 +273,134 @@ public class FrogController : HumanoidController
 
             float fScore = 0.0f;
             float fFacingDot = 0.0f;
-            float fNonFacingDot = 0.0f;
+            float fHorizontalRatio = (frogBounds.offset.x + vThisPos.x) / (frogBounds.offset.x + (frogBounds.size.x / 2));
+            float fVerticalRatio = (frogBounds.offset.y + vThisPos.y) / (frogBounds.offset.y + (frogBounds.size.y / 2));
+            int iEdgeHits = 0;
 
-            // Higher the score the worst
+            bool extremeEdge = (fHorizontalRatio > 0.75f || fVerticalRatio > 0.75f);
+
+            // Higher the score the worse
             for (int y = 0; y < nearbyEnts.Count; ++y)
             {
+                bool isFrog = nearbyEnts[y].ZSort.IsFrog;
+
                 Vector2 vEntPos = nearbyEnts[y].transform.position;
 
                 Vector2 vDirToEnt = vEntPos - vThisPos;
                 vDirToEnt.Normalize();
-                
+
                 float fDot = Vector2.Dot(vRandomDir, vDirToEnt);
-                
-                if (fDot > 0.0f)
+                fFacingDot += isFrog ? fDot * 0.2f : -fDot * (extremeEdge ? 0.1f : 0.5f);
+            }
+
+            if (nearbyEnts.Count > 0)
+            {
+                fFacingDot /= nearbyEnts.Count;
+            }
+
+            fScore += fFacingDot;
+            
+            // If more than 75% to the horizontal edge
+            if (fHorizontalRatio > 0.65f)
+            {
+                // If on the right and going right
+                if (vThisPos.x > 0 && vRandomDir.x > 0.0f)
                 {
-                    fFacingDot += fDot;
+                    ++iEdgeHits;
+
+
+                    if (fHorizontalRatio > 0.85f)
+                    {
+                        fScore = 0.0f;
+                    }
+                }
+                // If on the left and going left
+                else if (vThisPos.x < 0 && vRandomDir.x < 0.0f)
+                {
+                    ++iEdgeHits;
+
+
+                    if (fHorizontalRatio > 0.85f)
+                    {
+                        fScore = 0.0f;
+                    }
                 }
                 else
                 {
-                    fNonFacingDot += -fDot;
+                    fScore += 0.3f;
                 }
+
             }
 
-            if (fFacingDot > fNonFacingDot)
+            // If more than 75% to the vertical edge
+            if (fVerticalRatio > 0.65f)
             {
-                fScore += fFacingDot;
+                // If above and going above
+                if (vThisPos.y > 0 && vRandomDir.y > 0.0f)
+                {
+                    ++iEdgeHits;
+
+                    if (fVerticalRatio > 0.85f)
+                    {
+                        fScore = 0.0f;
+                    }
+                }
+                // If below and going below
+                else if (vThisPos.y < 0 && vRandomDir.y < 0.0f)
+                {
+                    ++iEdgeHits;
+
+                    if (fVerticalRatio > 0.85f)
+                    {
+                        fScore = 0.0f;
+                    }
+                }
+                else
+                {
+                    fScore += 0.3f;
+                }
             }
-            else if (fFacingDot < fNonFacingDot)
-            {
-                fScore -= fNonFacingDot;
-            }
+            
+            fScore /= 1 + iEdgeHits;
+
+            // Try keep them towards the middle
+            //float fDotTowardsMiddle = Vector2.Dot(vRandomDir, frogBounds.offset);
+            //fScore -= fDotTowardsMiddle * Random.Range(0.5f, 2.0f);
 
             directions.Add(vRandomDir, fScore);
         }
 
-        float fBestScore = 999.0f;
+        float fBestScore = 0.0f;
         Vector2 vBestDir = Vector2.zero;
 
         foreach (var score in directions)
         {
-            if (score.Value < fBestScore)
+            if (score.Value > fBestScore)
             {
                 fBestScore = score.Value;
                 vBestDir = score.Key;
             }
         }
+        
+        List<Vector2> vDirectionsToTry = new();
+        for (int i = 0; i < directions.Count; ++i)
+        {
+            vDirectionsToTry.Add(directions.Keys.ElementAt(i));
+            vDirectionsToTry.Add(vBestDir);
+        }
 
-        return vBestDir;
+        return vDirectionsToTry.Count == 0 ? Vector2.zero : vDirectionsToTry[Random.Range(0, vDirectionsToTry.Count)];
     }
 
     protected override void OnDrawGizmosSelected()
     {
-        if (Application.isPlaying)
+        if (!Application.isPlaying)
         {
             return;
         }
 
-        Gizmos.color = new Color(1f, 0.9215686f, 0.01568628f, 0.25f);
-        Gizmos.DrawSphere(transform.position, tuning.NearbyAvoidRadius);
+        Gizmos.color = new Color(1f, 0.1215686f, 0.01568628f, 0.25f);
+        Gizmos.DrawSphere(transform.position, GetVars().NearbyAvoidRadius);
     }
 
     void OnDrawGizmos()

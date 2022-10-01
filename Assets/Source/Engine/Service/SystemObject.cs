@@ -27,6 +27,10 @@ public abstract class SystemObject
     //public abstract void OnSceneLoaded();
 
     public virtual void ShutdownService() {}
+
+    public virtual void OnDrawGizmos()
+    {
+    } 
 }
 
 /// <summary>
