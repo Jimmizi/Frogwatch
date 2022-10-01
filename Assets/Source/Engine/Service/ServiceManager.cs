@@ -275,6 +275,17 @@ public class ServiceManager : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        foreach (var servicesAtPriority in serviceList)
+        {
+            foreach (var serv in servicesAtPriority.Value)
+            {
+                serv.OnDrawGizmos();
+            }
+        }
+    }
+
     #endregion
 
     private void Log(object message)

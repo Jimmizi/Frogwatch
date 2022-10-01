@@ -39,7 +39,7 @@ public class HumanoidController : MonoBehaviour
 
     private float interactCooldownTimer = 0.0f;
 
-
+    
     public bool IsCarryingFrog => FrogCarrying != null;
 
     public static Vector2 GetPlayerPosition()
@@ -89,24 +89,65 @@ public class HumanoidController : MonoBehaviour
         return interactCooldownTimer <= 0.0f;
     }
 
+    public FrogSystemVars GetVars()
+    {
+        return Service.Vars<FrogSystemVars>();
+    }
+
+    protected virtual float GetCurrentSpeedMult()
+    {
+        return ControllerSpeed;
+    }
+
+    protected virtual bool CanLeaveBounds()
+    {
+        return false;
+    }
+
     private void KeepInBounds()
     {
-        var bounds = Service.Vars<FrogSystemVars>()?.FrogMovementBounds;
+        if (CanLeaveBounds())
+        {
+            return;
+        }
+
+        var bounds = GetVars().FrogMovementBounds;
         if (bounds != null)
         {
-            var futurePos = m_rigidbody.position + (InputDirection * ControllerSpeed * Time.deltaTime);
+            var futurePos = m_rigidbody.position + (InputDirection * GetCurrentSpeedMult() * Time.deltaTime);
             if (!bounds.OverlapPoint(futurePos))
             {
                 InputDirection = Vector2.zero;
             }
+
+            if (!bounds.OverlapPoint(m_rigidbody.position))
+            {
+                Vector2 vClosestPoint = bounds.ClosestPoint(m_rigidbody.position);
+                Vector2 vDirToCenter = bounds.offset - vClosestPoint;
+                vDirToCenter.Normalize();
+
+                vClosestPoint += vDirToCenter * 2;
+                m_rigidbody.position = vClosestPoint;
+            }
         }
     }
-    
+
+    protected void SetCarryingFrog(FrogController frog, bool bByWitch = false)
+    {
+        frog.SetCarried(bByWitch);
+        FrogCarrying = frog;
+
+        SetAnimCarrying(true);
+
+        carryFrogTimer = 0.0f;
+        carryFrogTimeFlipped = false;
+    }
+
     protected virtual void Update()
     {
         KeepInBounds();
 
-        m_rigidbody.position += InputDirection * ControllerSpeed * Time.deltaTime;
+        m_rigidbody.position += InputDirection * GetCurrentSpeedMult() * Time.deltaTime;
         SetAnimWalking(InputDirection.x != 0.0f || InputDirection.y != 0.0f);
         
         if (JustPressedInteract)
@@ -118,14 +159,10 @@ public class HumanoidController : MonoBehaviour
 
                 if (!IsCarryingFrog)
                 {
-                    FrogCarrying = GetFrogToPickup();
-                    if (FrogCarrying != null)
+                    var frogFound = GetBestFrogWithinPickupDistance();
+                    if (frogFound != null)
                     {
-                        FrogCarrying.SetCarried();
-                        SetAnimCarrying(true);
-
-                        carryFrogTimer = 0.0f;
-                        carryFrogTimeFlipped = false;
+                        SetCarryingFrog(frogFound);
                     }
                 }
                 else
@@ -191,7 +228,17 @@ public class HumanoidController : MonoBehaviour
         return retControllers;
     }
 
-    public FrogController GetFrogToPickup()
+    public FrogController GetBestFrogWithinPickupDistance()
+    {
+        return GetFrogToPickup(PickupDistance);
+    }
+
+    public FrogController GetBestFrogToHunt()
+    {
+        return GetFrogToPickup(GetVars().WitchLookForFrogRange);
+    }
+
+    public FrogController GetFrogToPickup(float range)
     {
         // Also dirty
 
@@ -211,7 +258,7 @@ public class HumanoidController : MonoBehaviour
                 float dist = Vector2.Distance(frog.GetOffsetPosition(), vQueryPosition);
 
                 // Don't worry about frogs equal distance
-                if (dist < PickupDistance && !nearbyFrogs.ContainsKey(dist))
+                if (dist < range && !nearbyFrogs.ContainsKey(dist))
                 {
                     nearbyFrogs.Add(dist, frog);
                 }
@@ -229,9 +276,13 @@ public class HumanoidController : MonoBehaviour
         }
 
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(new Vector3(transform.position.x + FrogCarryOffsetStart.x, transform.position.y + FrogCarryOffsetStart.y, 0.0f), new Vector3(0.1f, 0.1f, 0.1f));
+        Gizmos.DrawCube(new Vector3(transform.position.x + FrogCarryOffsetStart.x, transform.position.y + FrogCarryOffsetStart.y, 0.0f), new Vector3(0.025f, 0.025f, 0.025f));
 
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(new Vector3(transform.position.x + FrogCarryOffsetEnd.x, transform.position.y + FrogCarryOffsetEnd.y, 0.0f), new Vector3(0.1f, 0.1f, 0.1f));
+        Gizmos.DrawCube(new Vector3(transform.position.x + FrogCarryOffsetEnd.x, transform.position.y + FrogCarryOffsetEnd.y, 0.0f), new Vector3(0.025f, 0.025f, 0.025f));
+
+
+        Gizmos.color = new Color(1f, 0.1215686f, 0.01568628f, 0.25f);
+        Gizmos.DrawSphere(GetOffsetPosition(), PickupDistance);
     }
 }

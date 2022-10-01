@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : HumanoidController
 {
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
         HumanoidController.Player = this;
 
