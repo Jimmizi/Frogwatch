@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ZSortSystem : SystemObject
 {
-    public List<ZSortObject> ActiveFrogs = new();
+    public List<ZSortObject> ActiveZSortObjects = new();
 
     public override void AwakeService()
     {
@@ -21,9 +21,9 @@ public class ZSortSystem : SystemObject
     {
         Dictionary<int, SortedDictionary<float, ZSortObject>> sortedYPositions = new();
 
-        foreach (var frog in ActiveFrogs)
+        foreach (var obj in ActiveZSortObjects)
         {
-            float flippedY = -frog.GetSortPosition().y;
+            float flippedY = -obj.GetSortPosition().y;
             int roundedLayer = Mathf.FloorToInt(flippedY);
 
             if (!sortedYPositions.ContainsKey(roundedLayer))
@@ -31,7 +31,7 @@ public class ZSortSystem : SystemObject
                 sortedYPositions.Add(roundedLayer, new SortedDictionary<float, ZSortObject>());
             }
 
-            sortedYPositions[roundedLayer].Add(flippedY, frog);
+            sortedYPositions[roundedLayer].Add(flippedY, obj);
         }
 
         int precisionPerLayer = 10;
@@ -40,10 +40,42 @@ public class ZSortSystem : SystemObject
         {
             int baseLayer = sortedY.Key * precisionPerLayer;
 
-            foreach (var frogInLayer in sortedY.Value)
+            foreach (var objInLayer in sortedY.Value)
             {
-                int precisionLayer = Mathf.FloorToInt((frogInLayer.Key - Mathf.FloorToInt(frogInLayer.Key)) * 10.0f);
-                frogInLayer.Value.SpriteRend.sortingOrder = baseLayer + precisionLayer;
+                if (objInLayer.Value.IsFrog)
+                {
+                    var frogController = objInLayer.Value.GetComponent<FrogController>();
+                    if (frogController != null)
+                    {
+                        if (frogController.GetState() == FrogController.State.Carried)
+                        {
+                            continue;
+                        }
+
+                        if (frogController.GetState() == FrogController.State.Thrown && frogController.ShouldDrawInFrontDuringThrow())
+                        {
+                            objInLayer.Value.SpriteRend.sortingOrder = 999;
+                            continue;
+                        }
+                    }
+                }
+
+                int precisionLayer = Mathf.FloorToInt((objInLayer.Key - Mathf.FloorToInt(objInLayer.Key)) * 10.0f);
+                int actualLayer = baseLayer + precisionLayer;
+
+                if (objInLayer.Value.IsPlayer || objInLayer.Value.IsWitch)
+                {
+                    var humanCon = objInLayer.Value.GetComponent<HumanoidController>();
+                    if (humanCon != null)
+                    {
+                        if (humanCon.IsCarryingFrog)
+                        {
+                            humanCon.FrogCarrying.ZSort.SpriteRend.sortingOrder = actualLayer + 1;
+                        }
+                    }
+                }
+
+                objInLayer.Value.SpriteRend.sortingOrder = actualLayer;
             }
         }
 
