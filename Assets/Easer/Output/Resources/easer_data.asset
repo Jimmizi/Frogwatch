@@ -634,32 +634,23 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: -0.119761765
-          outSlope: -0.119761765
+          inSlope: 0.446299
+          outSlope: 0.446299
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.2999789
         - serializedVersion: 3
-          time: 0.3681063
+          time: 0.50143254
           value: 1
-          inSlope: 5.1809597
+          inSlope: 2.154935
           outSlope: -2.393787
           tangentMode: 1
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.07121912
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.7288168
-          value: 1
-          inSlope: 2.5988007
-          outSlope: -2.0946472
-          tangentMode: 1
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.91803306
+          time: 0.84720176
           value: 1
           inSlope: 1.9426506
           outSlope: -1.2518234
@@ -767,7 +758,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    - name: CustomCurve
+    - name: Wiggly
       curve:
         serializedVersion: 2
         m_Curve:
@@ -810,4 +801,63 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-  current: 6
+    - name: Throw
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 3.1132073
+          outSlope: 3.1132073
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.098804116
+        - serializedVersion: 3
+          time: 0.5008765
+          value: 0.9269855
+          inSlope: 0.46220398
+          outSlope: 0.46220398
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.2290491
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - name: Linear
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+  current: 13

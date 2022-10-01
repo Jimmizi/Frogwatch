@@ -9,6 +9,10 @@ public class ZSortObject : MonoBehaviour
 
     public Vector2 GroundContactPosition = new();
 
+    public bool IsFrog;
+    public bool IsPlayer;
+    public bool IsWitch;
+
     public Vector2 GetSortPosition()
     {
         return new Vector2(transform.position.x, transform.position.y) + GroundContactPosition;
@@ -18,12 +22,25 @@ public class ZSortObject : MonoBehaviour
     void Start()
     {
         SpriteRend = GetComponent<SpriteRenderer>();
-        Service.Get<ZSortSystem>().ActiveFrogs.Add(this);
+        Service.Get<ZSortSystem>().ActiveZSortObjects.Add(this);
+
+        if (GetComponent<FrogController>() != null)
+        {
+            IsFrog = true;
+        }
+        else if (GetComponent<PlayerController>() != null)
+        {
+            IsPlayer = true;
+        }
+        else if (GetComponent<EnemyController>() != null)
+        {
+            IsWitch = true;
+        }
     }
 
     void OnDestroy()
     {
-        Service.Get<ZSortSystem>().ActiveFrogs.Remove(this);
+        Service.Get<ZSortSystem>().ActiveZSortObjects.Remove(this);
     }
 
     // Update is called once per frame

@@ -69,7 +69,7 @@ public class GameFaderSystem : SystemObjectWithVars<GameFaderVars>
     
     public override void AwakeService()
     {
-        Debug.Assert(GetVars().BlackScreenGroup);
+        //Debug.Assert(GetVars().BlackScreenGroup);
 
 
     }

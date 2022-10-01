@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 453098589}
   - component: {fileID: 453098590}
   m_Layer: 0
-  m_Name: 6rjb9ptv_0
+  m_Name: Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -575,6 +575,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteRend: {fileID: 0}
   GroundContactPosition: {x: 0, y: -0.55}
+  IsFrog: 0
+  IsPlayer: 0
+  IsWitch: 0
 --- !u!114 &453098589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +590,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6653174d1ce96a4d9c58aa157baa38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogCarryFloatEase: 0
   ControllerSpeed: 5
+  PickupDistance: 1
+  FrogCarryOffsetStart: {x: 0, y: 0}
+  FrogCarryOffsetEnd: {x: 0, y: 0}
+  CarryFrogAnimSpeed: 0.5
+  InteractCooldown: 1
+  ZSort: {fileID: 0}
+  FrogCarrying: {fileID: 0}
 --- !u!50 &453098590
 Rigidbody2D:
   serializedVersion: 4
@@ -686,7 +697,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.9885311, y: -0.01620555}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -697,7 +708,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 17.1, y: 8.9}
+  m_Size: {x: 20.081802, y: 10.066792}
   m_EdgeRadius: 0
 --- !u!1 &1086336611
 GameObject:
@@ -853,7 +864,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd52655403623646b571c2ac3d7347d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogCarryFloatEase: 15
   ControllerSpeed: 2.5
+  PickupDistance: 1
+  FrogCarryOffsetStart: {x: 0, y: 0.92}
+  FrogCarryOffsetEnd: {x: 0, y: 1.23}
+  CarryFrogAnimSpeed: 0.5
+  InteractCooldown: 0.75
+  ZSort: {fileID: 0}
+  FrogCarrying: {fileID: 0}
 --- !u!212 &1123086162
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -982,6 +1001,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteRend: {fileID: 0}
   GroundContactPosition: {x: 0, y: -1.2}
+  IsFrog: 0
+  IsPlayer: 0
+  IsWitch: 0
 --- !u!95 &1123086167
 Animator:
   serializedVersion: 4
@@ -1017,7 +1039,7 @@ GameObject:
   - component: {fileID: 1295486173}
   - component: {fileID: 1295486174}
   m_Layer: 0
-  m_Name: 6rjb9ptv_0 (3)
+  m_Name: Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1037,6 +1059,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteRend: {fileID: 0}
   GroundContactPosition: {x: 0, y: -0.55}
+  IsFrog: 0
+  IsPlayer: 0
+  IsWitch: 0
 --- !u!95 &1295486170
 Animator:
   serializedVersion: 4
@@ -1136,7 +1161,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6653174d1ce96a4d9c58aa157baa38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogCarryFloatEase: 0
   ControllerSpeed: 5
+  PickupDistance: 1
+  FrogCarryOffsetStart: {x: 0, y: 0}
+  FrogCarryOffsetEnd: {x: 0, y: 0}
+  CarryFrogAnimSpeed: 0.5
+  InteractCooldown: 1
+  ZSort: {fileID: 0}
+  FrogCarrying: {fileID: 0}
 --- !u!50 &1295486174
 Rigidbody2D:
   serializedVersion: 4
@@ -1202,14 +1235,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c7b5be7908ec434182d6d1c42274e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrogMovementBounds:
-  - {fileID: 1032323207}
+  FrogMovementBounds: {fileID: 1032323207}
   MinTimeBetweenHops: 1
   MaxTimeBetweenHops: 2
   NearbyAvoidRadius: 5
   HopDistance: 1
   HopMovementSpeed: 4
+  ThrownSpeed: 3
+  ThrownDistance: 4
   MovementEaser: 1
+  ThrownEaser: 16
+  ThrownEaserSecondary: 13
 --- !u!1 &1341701911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,7 +1261,7 @@ GameObject:
   - component: {fileID: 1341701916}
   - component: {fileID: 1341701917}
   m_Layer: 0
-  m_Name: 6rjb9ptv_0 (1)
+  m_Name: Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1245,6 +1281,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteRend: {fileID: 0}
   GroundContactPosition: {x: 0, y: -0.55}
+  IsFrog: 0
+  IsPlayer: 0
+  IsWitch: 0
 --- !u!95 &1341701913
 Animator:
   serializedVersion: 4
@@ -1325,7 +1364,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1341701911}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2, y: 1.53, z: 0}
+  m_LocalPosition: {x: -2.2, y: 1.71, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1344,7 +1383,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6653174d1ce96a4d9c58aa157baa38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogCarryFloatEase: 0
   ControllerSpeed: 5
+  PickupDistance: 1
+  FrogCarryOffsetStart: {x: 0, y: 0}
+  FrogCarryOffsetEnd: {x: 0, y: 0}
+  CarryFrogAnimSpeed: 0.5
+  InteractCooldown: 1
+  ZSort: {fileID: 0}
+  FrogCarrying: {fileID: 0}
 --- !u!50 &1341701917
 Rigidbody2D:
   serializedVersion: 4
@@ -1511,7 +1558,7 @@ GameObject:
   - component: {fileID: 1904997532}
   - component: {fileID: 1904997533}
   m_Layer: 0
-  m_Name: 6rjb9ptv_0 (2)
+  m_Name: Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1531,6 +1578,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteRend: {fileID: 0}
   GroundContactPosition: {x: 0, y: -0.55}
+  IsFrog: 0
+  IsPlayer: 0
+  IsWitch: 0
 --- !u!95 &1904997529
 Animator:
   serializedVersion: 4
@@ -1630,7 +1680,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6653174d1ce96a4d9c58aa157baa38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogCarryFloatEase: 0
   ControllerSpeed: 5
+  PickupDistance: 1
+  FrogCarryOffsetStart: {x: 0, y: 0}
+  FrogCarryOffsetEnd: {x: 0, y: 0}
+  CarryFrogAnimSpeed: 0.5
+  InteractCooldown: 1
+  ZSort: {fileID: 0}
+  FrogCarrying: {fileID: 0}
 --- !u!50 &1904997533
 Rigidbody2D:
   serializedVersion: 4

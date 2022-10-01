@@ -16,5 +16,7 @@ public enum EaserEase{
 	InBounce = 12,
 	OutBounce = 13,
 	InOutBounce = 14,
-	CustomCurve = 15,
+	Wiggly = 15,
+	Throw = 16,
+	Linear = 17,
 }

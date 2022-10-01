@@ -1,34 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 
 public class FrogController : HumanoidController
 {
     public enum State
     {
-        Free,
+        Idle,
+        Hopping,
         Carried,
+        Thrown,
         InPond
     }
-
-
-
+    
     private FrogSystemVars tuning;
-    //public float MinTimeBetweenHops = 1.0f;
-    //public float MaxTimeBetweenHops = 10.0f;
-
-    //public float NearbyAvoidRadius = 1.0f;
-
-    //public float HopDistance = 1.0f;
-    //public float HopMovementSpeed = 5.0f;
 
     private float nextHopInterval;
     private float hopTimer;
+    private float fThrowTime;
+    private bool bFirstThrowSectionDone;
 
+    public State GetState()
+    {
+        return state;
+    }
     private State state;
-    private bool performingHop;
 
 
     //public Vector2 DirectionTest = new();
@@ -39,7 +39,7 @@ public class FrogController : HumanoidController
     {
         tuning = Service.Vars<FrogSystemVars>();
         ResetTimer();
-        state = State.Free;
+        state = State.Idle;
 
         base.Start();
     }
@@ -50,20 +50,81 @@ public class FrogController : HumanoidController
         hopTimer = 0.0f;
     }
 
+    public void SetCarried()
+    {
+        state = State.Carried;
+        m_animator.SetBool("IsCarried", true);
+    }
+
+    public void SetDropped()
+    {
+        
+    }
+
+    public void SetThrown(Vector2 dir)
+    {
+        StartCoroutine(PerformThrown(dir));
+    }
+
+    public bool CanPickup()
+    {
+        return state == State.Idle || state == State.Hopping;
+    }
+
+    public bool ShouldDrawInFrontDuringThrow()
+    {
+        return bFirstThrowSectionDone && fThrowTime < 0.45f;
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
-        if (!performingHop)
+        switch (state)
         {
-            hopTimer += Time.deltaTime;
-            if (hopTimer >= nextHopInterval)
+            case State.Idle:
             {
-                TryPerformHop();
-                ResetTimer();
+                TryContainFrogs();
+
+                hopTimer += Time.deltaTime;
+                if (hopTimer >= nextHopInterval)
+                {
+                    TryPerformHop();
+                    ResetTimer();
+                }
+
+                break;
             }
+        case State.Hopping:
+                break;
+            case State.Carried:
+                break;
+            case State.Thrown:
+            {
+                break;
+            }
+            case State.InPond:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
+
         base.Update();
+    }
+
+    private void TryContainFrogs()
+    {
+        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
+        
+        if (!frogBounds.OverlapPoint(m_rigidbody.position))
+        {
+            Vector2 vClosestPoint = frogBounds.ClosestPoint(m_rigidbody.position);
+            Vector2 vDirToCenter = frogBounds.offset - vClosestPoint;
+            vDirToCenter.Normalize();
+
+            vClosestPoint += vDirToCenter * 2;
+            m_rigidbody.position = vClosestPoint;
+        }
     }
 
     protected override void FixedUpdate()
@@ -72,26 +133,79 @@ public class FrogController : HumanoidController
 
     void TryPerformHop()
     {
-        if (state != State.Free)
-        {
-            return;
-        }
-
         Vector2 dir = GetHopDirection();
         Vector2 vPos = transform.position;
 
         StartCoroutine(PerformHop(vPos + (dir * tuning.HopDistance)));
     }
 
+    IEnumerator PerformThrown(Vector2 vDir)
+    {
+        state = State.Thrown;
+
+        Vector2 heightOffset = new Vector2(0.0f, 1.0f);
+        Vector2 vOriginalPos = m_rigidbody.position;
+        Vector2 vNewPos = Player.GetOffsetPosition() + (vDir * tuning.ThrownDistance) + heightOffset;
+
+        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
+
+        bool newIsInvalid = false;
+        bool originalIsInvalid = false;
+        
+        if (!frogBounds.OverlapPoint(vNewPos))
+        {
+            newIsInvalid = true;
+        }
+        if (!frogBounds.OverlapPoint(vNewPos))
+        {
+            originalIsInvalid = true;
+        }
+        if (newIsInvalid)
+        {
+            vNewPos = (originalIsInvalid ? GetPlayerPosition() : vOriginalPos);
+        }
+
+        fThrowTime = 0.0f;
+        bFirstThrowSectionDone = false;
+
+        while (fThrowTime <= 1.0f)
+        {
+            m_rigidbody.position = Easer.EaseVector2(tuning.ThrownEaser, vOriginalPos, vNewPos, fThrowTime);
+
+            fThrowTime += Time.deltaTime * tuning.ThrownSpeed;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        fThrowTime = 0.0f;
+        bFirstThrowSectionDone = true;
+
+        while (fThrowTime <= 1.0f)
+        {
+            m_rigidbody.position = Easer.EaseVector2(tuning.ThrownEaserSecondary, vNewPos, vNewPos - heightOffset, fThrowTime);
+
+            fThrowTime += Time.deltaTime * (tuning.ThrownSpeed * 2);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        m_rigidbody.position = vNewPos - heightOffset;
+        state = State.Idle;
+        ResetTimer();
+
+        // TODO Add into pond where if new pos is situated in a pond
+
+        m_animator.SetBool("IsCarried", false);
+        m_animator.SetBool("IsHopping", false);
+    }
+
     IEnumerator PerformHop(Vector2 vNewPos)
     {
-        performingHop = true;
+        state = State.Hopping;
         m_animator.SetBool("IsHopping", true);
 
         Vector2 vOriginalPos = m_rigidbody.position;
-
-
+        
         float fTime = 0.0f;
+        bool bAbort = false;
 
         while (fTime <= 1.0f)
         {
@@ -99,18 +213,22 @@ public class FrogController : HumanoidController
             
             fTime += Time.deltaTime * tuning.HopMovementSpeed;
 
-            if (state != State.Free)
+            if (state != State.Hopping)
             {
+                bAbort = true;
                 break;
             }
             
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        m_rigidbody.position = vNewPos;
+        if (!bAbort)
+        {
+            m_rigidbody.position = vNewPos;
+            state = State.Idle;
+        }
 
         m_animator.SetBool("IsHopping", false);
-        performingHop = false;
     }
 
     private float GetNextHopInterval()
@@ -125,7 +243,7 @@ public class FrogController : HumanoidController
         Dictionary<Vector2, float> directions = new();
         List<HumanoidController> nearbyEnts = HumanoidController.GetControllersInArea(transform.position, tuning.NearbyAvoidRadius);
 
-        List<BoxCollider2D> frogBounds = Service.Vars<FrogSystemVars>().FrogMovementBounds;
+        BoxCollider2D frogBounds = tuning.FrogMovementBounds;
 
         for (int i = 0; i < NumDirectionsToScore; ++i)
         {
@@ -138,18 +256,7 @@ public class FrogController : HumanoidController
             }
 
             Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * tuning.HopDistance);
-            bool bInvalidPosition = false;
-
-            foreach (var bound in frogBounds)
-            {
-                if (!bound.OverlapPoint(vPossibleNewPosition))
-                {
-                    bInvalidPosition = true;
-                    break;
-                }
-            }
-
-            if (bInvalidPosition)
+            if (!frogBounds.OverlapPoint(vPossibleNewPosition))
             {
                 continue;
             }
@@ -205,7 +312,7 @@ public class FrogController : HumanoidController
         return vBestDir;
     }
 
-    void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
         if (Application.isPlaying)
         {
