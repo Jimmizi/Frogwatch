@@ -168,6 +168,11 @@ public class FrogController : HumanoidController
         return bFirstThrowSectionDone && fThrowTime < 0.45f;
     }
 
+    public override void OnJustSpawned()
+    {
+        base.OnJustSpawned();
+    }
+
     // Update is called once per frame
     protected new void Update()
     {
@@ -494,7 +499,7 @@ public class FrogController : HumanoidController
                 vDirToEnt.Normalize();
 
                 float fDot = Vector2.Dot(vRandomDir, vDirToEnt);
-                fFacingDot += isFrog ? fDot * 0.2f : -fDot * (extremeEdge ? 0.1f : 0.5f);
+                fFacingDot += isFrog ? fDot * 0.05f : -fDot * (extremeEdge ? 0.1f : 0.5f);
             }
 
             if (nearbyEnts.Count > 0)

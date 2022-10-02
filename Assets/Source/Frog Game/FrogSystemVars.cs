@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FrogSystemVars : ServiceVars
 {
+    public GameObject FrogPrefab;
+
     public bool AllowFrogsToAmbientlyHopIntoPonds = true;
 
 

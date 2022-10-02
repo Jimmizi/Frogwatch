@@ -10,6 +10,8 @@ public class HumanoidController : MonoBehaviour
     public static List<HumanoidController> Controllers = new();
     public static PlayerController Player = null;
 
+    public Animator OnSpawnedAnimator;
+
     public EaserEase FrogCarryFloatEase;
     public float ControllerSpeed = 5.0f;
     public float DashSpeed = 7.5f;
@@ -61,6 +63,14 @@ public class HumanoidController : MonoBehaviour
     public void ExternalSetPosition(Vector2 vPos)
     {
         m_rigidbody.position = vPos - BaseOffset;
+    }
+
+    public virtual void OnJustSpawned()
+    {
+        if (OnSpawnedAnimator != null)
+        {
+            OnSpawnedAnimator.SetTrigger("Start");
+        }
     }
 
     // Start is called before the first frame update

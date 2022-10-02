@@ -32,7 +32,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
 
     public override void StartService()
     {
-        
+        //StartSpawningFrogs(true);
     }
 
     public override void UpdateService()
@@ -47,8 +47,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
         if (isSpawningFrogs)
         {
             frogSpawnTimer -= Time.deltaTime;
-
-
+            TrySpawnFrog();
         }
     }
 
@@ -74,7 +73,25 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
         
         averageFrogPosition = vTotalPosition / FrogController.FrogList.Count;
     }
-    
+
+
+    void TrySpawnFrog()
+    {
+        Vector2 vSpawnPos = GetFrogSpawnPosition();
+
+        //
+
+        GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab);
+        FrogController controller = newFrog.GetComponent<FrogController>();
+        controller.ExternalSetPosition(vSpawnPos);
+        //controller.OnJustSpawned();
+    }
+
+    Vector2 GetFrogSpawnPosition()
+    {
+        return Vector2.zero;
+    }
+
     public override void OnDrawGizmos()
     {
         //Gizmos.color = Color.gray;
