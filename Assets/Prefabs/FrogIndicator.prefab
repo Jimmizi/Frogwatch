@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4395032993999489476}
   - component: {fileID: 4395032993999489498}
-  - component: {fileID: 4395032993999489477}
   - component: {fileID: 4395032993999489499}
+  - component: {fileID: 4746360552871727789}
+  - component: {fileID: 1003300186215919208}
   m_Layer: 5
   m_Name: FrogIndicator
   m_TagString: Untagged
@@ -36,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -472, y: 0}
+  m_AnchoredPosition: {x: -530, y: 0}
   m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4395032993999489498
@@ -47,7 +48,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4395032993999489479}
   m_CullTransparentMesh: 1
---- !u!114 &4395032993999489477
+--- !u!114 &4395032993999489499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4395032993999489479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5344fee060fc1ef4a871bcc71f3e92c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleFactor: 600
+  _arrowImage: {fileID: 0}
+  padding: 32
+  _positionTransform: {fileID: 0}
+  _rotationTransform: {fileID: 0}
+  _scaleTransform: {fileID: 0}
+--- !u!114 &4746360552871727789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,17 +96,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4395032993999489499
-MonoBehaviour:
+--- !u!95 &1003300186215919208
+Animator:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4395032993999489479}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5344fee060fc1ef4a871bcc71f3e92c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _image: {fileID: 0}
-  padding: 32
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d7702cc5412672d45b9c48b584c64fff, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
