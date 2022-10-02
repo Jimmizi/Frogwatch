@@ -367,6 +367,7 @@ MonoBehaviour:
   DashCooldownTimer: 0
   FrogHeldBubblesRenderer: {fileID: 368167149}
   FrogLandAnimator: {fileID: 410838984}
+  exclamationMark: {fileID: 5485937185760289817}
 --- !u!50 &48068475901459678
 Rigidbody2D:
   serializedVersion: 4
