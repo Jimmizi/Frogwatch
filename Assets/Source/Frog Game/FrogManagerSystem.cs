@@ -87,7 +87,8 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
         
         GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab);
         FrogController controller = newFrog.GetComponent<FrogController>();
-        controller.ExternalSetPosition(vSpawnPos);
+        controller.SpawnPosition = vSpawnPos;
+        //controller.ExternalSetPosition(vSpawnPos);
         controller.OnJustSpawned();
     }
 

@@ -32,6 +32,7 @@ public class FrogSystemVars : ServiceVars
     public EaserEase MovementEaser;
     public EaserEase ThrownEaser;
     public EaserEase ThrownEaserSecondary;
+    public EaserEase SpawnEaser;
 
     public float WitchStunnedMinTime = 4.0f;
     public float WitchStunnedMaxTime = 8.0f;

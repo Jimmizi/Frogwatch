@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Com.LuisPedroFonseca.ProCamera2D;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class FrogController : HumanoidController
 {
@@ -26,7 +28,6 @@ public class FrogController : HumanoidController
 
         return iCount;
     }
-    
     public static int GetNumberOfCarriedFrogs()
     {
         int iCount = 0;
@@ -40,13 +41,13 @@ public class FrogController : HumanoidController
 
         return iCount;
     }
-    
     public static int NumFrogsTaken = 0;
 
 
 
     public enum State
     {
+        OnSpawn,
         Idle,
         Hopping,
         Carried,
@@ -70,6 +71,8 @@ public class FrogController : HumanoidController
     private bool bFirstThrowSectionDone;
     private float fDropTimeAccelHops = 0.0f;
     private float escapeTestTimer = 0.0f;
+
+    public Vector2 SpawnPosition;
 
     private bool bPerformingCarriedPtfxFadeInBubbles = false;
     private bool bPerformingCarriedPtfxFadeOutBubbles = false;
@@ -97,7 +100,7 @@ public class FrogController : HumanoidController
         FrogList.Add(this);
 
         ResetTimer();
-        state = State.Idle;
+        state = State.OnSpawn;
 
         base.Start();
     }
@@ -172,6 +175,9 @@ public class FrogController : HumanoidController
 
     public override void OnJustSpawned()
     {
+        ExternalSetPosition(new Vector2(SpawnPosition.x, 9.0f));
+        StartCoroutine(DoSpawning());
+
         base.OnJustSpawned();
     }
 
@@ -202,6 +208,9 @@ public class FrogController : HumanoidController
 
         switch (state)
         {
+            case State.OnSpawn:
+                ProcessSpawning();
+                break;
             case State.Idle:
             {
                 TryContainFrogs();
@@ -229,6 +238,48 @@ public class FrogController : HumanoidController
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    void ProcessSpawning()
+    {
+
+    }
+
+    IEnumerator DoSpawning()
+    {
+        float fTime = 0.0f;
+        bool bAbort = false;
+
+        Vector2 vOriginalPos = m_rigidbody.position;
+
+        float fBaseScale = 0.2f;
+
+        transform.localScale = new Vector3(fBaseScale, fBaseScale, 1.0f);
+
+        float fNextScale = fBaseScale;
+
+        while (fTime <= 1.0f)
+        {
+            fNextScale += (1.0f - fBaseScale) * Time.deltaTime;
+            fNextScale = Mathf.Clamp(fNextScale, 0.0f, 1.0f);
+
+            transform.localScale = new Vector3(fNextScale, fNextScale, 1.0f);
+
+            m_rigidbody.position = Easer.EaseVector2(GetVars().SpawnEaser, vOriginalPos, SpawnPosition, fTime);
+            fTime += Time.deltaTime;
+            
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        // If we want camera shake
+        //if (Vector2.Distance(m_rigidbody.position, Player.GetOffsetPosition()) < 2.0f)
+        //{
+        //    Camera.main.GetComponent<ProCamera2DShake>().Shake(0.5f, new Vector2(Random.Range(0.05f, 0.2f), Random.Range(0.05f, 0.2f)));
+        //}
+
+        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        FrogLandAnimator.SetTrigger("TriggerLand");
+        state = State.Idle;
     }
 
     void ProcessInPond()
