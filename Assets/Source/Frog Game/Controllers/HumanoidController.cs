@@ -10,6 +10,8 @@ public class HumanoidController : MonoBehaviour
     public static List<HumanoidController> Controllers = new();
     public static PlayerController Player = null;
 
+    public Animator OnSpawnedAnimator;
+
     public EaserEase FrogCarryFloatEase;
     public float ControllerSpeed = 5.0f;
     public float DashSpeed = 7.5f;
@@ -23,7 +25,7 @@ public class HumanoidController : MonoBehaviour
     public float InteractCooldown = 1.0f;
     public float DashCooldown = 3.0f;
 
-    protected Vector2 InputDirection = new();
+    public Vector2 InputDirection = new();
     protected bool JustPressedInteract;
     protected bool JustPressedDash;
     protected Rigidbody2D m_rigidbody;
@@ -63,8 +65,20 @@ public class HumanoidController : MonoBehaviour
         m_rigidbody.position = vPos - BaseOffset;
     }
 
-    // Start is called before the first frame update
+    public virtual void OnJustSpawned()
+    {
+        if (OnSpawnedAnimator != null)
+        {
+            //OnSpawnedAnimator.SetTrigger("Start");
+        }
+    }
+    
     protected virtual void Start()
+    {
+        
+    }
+
+    protected virtual void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
@@ -161,12 +175,12 @@ public class HumanoidController : MonoBehaviour
         carryFrogTimeFlipped = false;
     }
 
-    protected void DropCarriedFrog()
+    protected void DropCarriedFrog(bool bDueToStunned = false)
     {
         if (FrogCarrying != null)
         {
             SetAnimCarrying(false);
-            FrogCarrying.SetDropped();
+            FrogCarrying.SetDropped(bDueToStunned);
             FrogCarrying = null;
             carryFrogTimer = 0.0f;
             carryFrogTimeFlipped = false;

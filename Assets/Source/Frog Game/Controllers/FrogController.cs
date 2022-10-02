@@ -135,7 +135,7 @@ public class FrogController : HumanoidController
         }
     }
 
-    public void SetDropped()
+    public void SetDropped(bool bDueToStunned = false)
     {
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("HeldByWitch", false);
@@ -144,8 +144,10 @@ public class FrogController : HumanoidController
         {
             exclamationMark.SetActive(false);
         }
+        
+        Vector2 vDir = (bDueToStunned ? HumanoidController.Player.InputDirection : GetHopDirection()) * 0.5f;
 
-        StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
+        StartCoroutine(PerformThrown(vDir, true));
         StartCoroutine(DoBubblesFadeOut());
         StartCoroutine(DoHeartsFadeOut());
 
@@ -166,6 +168,11 @@ public class FrogController : HumanoidController
     public bool ShouldDrawInFrontDuringThrow()
     {
         return bFirstThrowSectionDone && fThrowTime < 0.45f;
+    }
+
+    public override void OnJustSpawned()
+    {
+        base.OnJustSpawned();
     }
 
     // Update is called once per frame
@@ -247,11 +254,10 @@ public class FrogController : HumanoidController
             {
                 // Add extra chance per frog so that we get more randomness
                 float fExtraChance = Random.Range(vars.AdditionalEscapeChancePerExtraFrogMin, vars.AdditionalEscapeChancePerExtraFrogMax);
-
                 fChanceToEscape += fExtraChance;
             }
             
-            if (true || fChanceToEscape < Random.Range(0.0f, 100.0f))
+            if (Random.Range(0.0f, 100.0f) < fChanceToEscape)
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
@@ -495,7 +501,7 @@ public class FrogController : HumanoidController
                 vDirToEnt.Normalize();
 
                 float fDot = Vector2.Dot(vRandomDir, vDirToEnt);
-                fFacingDot += isFrog ? fDot * 0.2f : -fDot * (extremeEdge ? 0.1f : 0.5f);
+                fFacingDot += isFrog ? fDot * 0.05f : -fDot * (extremeEdge ? 0.1f : 0.5f);
             }
 
             if (nearbyEnts.Count > 0)

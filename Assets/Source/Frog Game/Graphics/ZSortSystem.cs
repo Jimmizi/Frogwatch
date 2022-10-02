@@ -19,7 +19,7 @@ public class ZSortSystem : SystemObject
 
     public override void UpdateService()
     {
-        Dictionary<int, SortedDictionary<float, ZSortObject>> sortedYPositions = new();
+        Dictionary<int, SortedDictionary<float, List<ZSortObject>>> sortedYPositions = new();
 
         foreach (var obj in ActiveZSortObjects)
         {
@@ -28,10 +28,15 @@ public class ZSortSystem : SystemObject
 
             if (!sortedYPositions.ContainsKey(roundedLayer))
             {
-                sortedYPositions.Add(roundedLayer, new SortedDictionary<float, ZSortObject>());
+                sortedYPositions.Add(roundedLayer, new SortedDictionary<float, List<ZSortObject>>());
             }
 
-            sortedYPositions[roundedLayer].Add(flippedY, obj);
+            if (!sortedYPositions[roundedLayer].ContainsKey(flippedY))
+            {
+                sortedYPositions[roundedLayer].Add(flippedY, new List<ZSortObject>());
+            }
+
+            sortedYPositions[roundedLayer][flippedY].Add(obj);
         }
 
         int precisionPerLayer = 10;
@@ -42,40 +47,43 @@ public class ZSortSystem : SystemObject
 
             foreach (var objInLayer in sortedY.Value)
             {
-                if (objInLayer.Value.IsFrog)
+                foreach (var obj in objInLayer.Value)
                 {
-                    var frogController = objInLayer.Value.GetComponent<FrogController>();
-                    if (frogController != null)
+                    if (obj.IsFrog)
                     {
-                        if (frogController.GetState() == FrogController.State.Carried)
+                        var frogController = obj.GetComponent<FrogController>();
+                        if (frogController != null)
                         {
-                            continue;
-                        }
+                            if (frogController.GetState() == FrogController.State.Carried)
+                            {
+                                continue;
+                            }
 
-                        if (frogController.GetState() == FrogController.State.Thrown && frogController.ShouldDrawInFrontDuringThrow())
-                        {
-                            objInLayer.Value.SpriteRend.sortingOrder = 999;
-                            continue;
+                            if (frogController.GetState() == FrogController.State.Thrown && frogController.ShouldDrawInFrontDuringThrow())
+                            {
+                                obj.SpriteRend.sortingOrder = 999;
+                                continue;
+                            }
                         }
                     }
-                }
 
-                int precisionLayer = Mathf.FloorToInt((objInLayer.Key - Mathf.FloorToInt(objInLayer.Key)) * 10.0f);
-                int actualLayer = baseLayer + precisionLayer;
+                    int precisionLayer = Mathf.FloorToInt((objInLayer.Key - Mathf.FloorToInt(objInLayer.Key)) * 10.0f);
+                    int actualLayer = baseLayer + precisionLayer;
 
-                if (objInLayer.Value.IsPlayer || objInLayer.Value.IsWitch)
-                {
-                    var humanCon = objInLayer.Value.GetComponent<HumanoidController>();
-                    if (humanCon != null)
+                    if (obj.IsPlayer || obj.IsWitch)
                     {
-                        if (humanCon.IsCarryingFrog)
+                        var humanCon = obj.GetComponent<HumanoidController>();
+                        if (humanCon != null)
                         {
-                            humanCon.FrogCarrying.ZSort.SpriteRend.sortingOrder = actualLayer + 1;
+                            if (humanCon.IsCarryingFrog)
+                            {
+                                humanCon.FrogCarrying.ZSort.SpriteRend.sortingOrder = actualLayer + 1;
+                            }
                         }
                     }
-                }
 
-                objInLayer.Value.SpriteRend.sortingOrder = actualLayer;
+                    obj.SpriteRend.sortingOrder = actualLayer;
+                }
             }
         }
 

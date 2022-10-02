@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c7b5be7908ec434182d6d1c42274e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrogPrefab: {fileID: 48068475901459672, guid: 3793fec8785ba5149be88dd02484e97a, type: 3}
+  AllowFrogsToAmbientlyHopIntoPonds: 1
   FrogMovementBounds: {fileID: 0}
   MinTimeBetweenHops: 1
   MaxTimeBetweenHops: 2
@@ -52,6 +54,10 @@ MonoBehaviour:
   HopMovementSpeed: 4
   ThrownSpeed: 3
   ThrownDistance: 1
+  FrogEscapeTestInterval: 5
+  BaseEscapeChance: 10
+  AdditionalEscapeChancePerExtraFrogMin: 2.5
+  AdditionalEscapeChancePerExtraFrogMax: 15
   MovementEaser: 1
   ThrownEaser: 16
   ThrownEaserSecondary: 13

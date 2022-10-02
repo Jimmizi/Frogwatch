@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FrogSystemVars : ServiceVars
 {
+    public GameObject FrogPrefab;
+    public GameObject WitchPrefab;
+
     public bool AllowFrogsToAmbientlyHopIntoPonds = true;
 
 
@@ -13,6 +16,7 @@ public class FrogSystemVars : ServiceVars
     public float MaxTimeBetweenHops = 10.0f;
 
     public float NearbyAvoidRadius = 1.0f;
+    public float SpawnNearbyAvoidRadius = 3.0f;
 
     public float HopDistance = 1.0f;
     public float HopMovementSpeed = 5.0f;
