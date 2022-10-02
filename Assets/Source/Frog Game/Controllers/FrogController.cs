@@ -247,11 +247,10 @@ public class FrogController : HumanoidController
             {
                 // Add extra chance per frog so that we get more randomness
                 float fExtraChance = Random.Range(vars.AdditionalEscapeChancePerExtraFrogMin, vars.AdditionalEscapeChancePerExtraFrogMax);
-
                 fChanceToEscape += fExtraChance;
             }
             
-            if (true || fChanceToEscape < Random.Range(0.0f, 100.0f))
+            if (fChanceToEscape < Random.Range(0.0f, 100.0f))
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
