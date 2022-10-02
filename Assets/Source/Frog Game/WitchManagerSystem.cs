@@ -9,7 +9,7 @@ public class WitchManagerSystem : SystemObject
     {
         isSpawningWitches = true;
         targetNumberOfWitches = iTargetNumber;
-        spawnTimer = GetTimeBetweenSpawns();
+        spawnTimer = GetTimeBetweenSpawns() + GetFirstTimeSpawnIncrease();
     }
     public void StopSpawningFrogs()
     {
@@ -30,6 +30,11 @@ public class WitchManagerSystem : SystemObject
         return 10.0f;
     }
 
+    float GetFirstTimeSpawnIncrease()
+    {
+        return 20.0f;
+    }
+
     public override void AwakeService()
     {
 
@@ -38,7 +43,12 @@ public class WitchManagerSystem : SystemObject
     public override void StartService()
     {
         StartSpawningWitches(1);
-        spawnTimer = 1.0f;
+
+        GameTimer.OnMinuteCrossed += delegate
+        {
+            ++targetNumberOfWitches;
+            spawnTimer = 0.0f;
+        };
     }
 
     public override void UpdateService()
@@ -62,12 +72,12 @@ public class WitchManagerSystem : SystemObject
     {
 
     }
-
+    
     void TrySpawnWitch()
     {
         Vector2 vSpawnPos = GetSpawnPosition();
 
-        GameObject witch = Object.Instantiate(Service.Vars<FrogSystemVars>().WitchPrefab);
+        GameObject witch = Object.Instantiate(Service.Vars<FrogSystemVars>().WitchPrefab, vSpawnPos, Quaternion.identity);
         EnemyController controller = witch.GetComponent<EnemyController>();
         controller.ExternalSetPosition(vSpawnPos);
         controller.OnJustSpawned();

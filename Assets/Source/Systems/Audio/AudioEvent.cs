@@ -9,5 +9,6 @@ public enum AudioEvent
     Dashing,
     DashRecharged,
     DashIntoWitch,
-    WitchPickedFrog
+    WitchPickedFrog,
+    SmokePuff
 }

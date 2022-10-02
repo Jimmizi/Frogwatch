@@ -654,6 +654,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PondLarge
       objectReference: {fileID: 0}
+    - target: {fileID: 7718766931892629956, guid: 86618c8480155984aa7b70a72d161dab, type: 3}
+      propertyPath: IsLarge
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86618c8480155984aa7b70a72d161dab, type: 3}
 --- !u!4 &2226457280944316195 stripped

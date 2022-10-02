@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143bf0e0230c65d44ba53269732761c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsLarge: 1
   CollectionBox: {fileID: 7718766931892630011}
   DisplayBox: {fileID: 6974628246810107868}
   FreeOffsets: []

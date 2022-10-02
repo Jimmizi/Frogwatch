@@ -23,7 +23,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
 
     float GetTimeBetweenSpawns()
     {
-        return 10.0f;
+        return 2.0f;
     }
 
     public override void AwakeService()

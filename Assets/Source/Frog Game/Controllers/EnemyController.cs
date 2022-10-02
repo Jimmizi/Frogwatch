@@ -178,6 +178,9 @@ public class EnemyController : HumanoidController
     {
         if (state != State.Stunned && state != State.SuccessfulFlee && state != State.Finished)
         {
+            GameStats.RecordWitchBonk();
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.DashIntoWitch, transform.position);
+
             DropCarriedFrog(true);
             SetState(State.Stunned);
             timeToStayInState = GetNextTimeToStun();
@@ -208,6 +211,8 @@ public class EnemyController : HumanoidController
     {
         SetCarryingFrog(targetFrog, true);
         targetFrog = null;
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.WitchPickedFrog, transform.position);
 
         SetState(State.Fleeing);
 
@@ -394,6 +399,7 @@ public class EnemyController : HumanoidController
 
         if (SmokeDisappearAnimator != null)
         {
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.SmokePuff, transform.position);
             SmokeDisappearAnimator.SetTrigger("Start");
         }
 
@@ -714,40 +720,40 @@ public class EnemyController : HumanoidController
 
     protected override void OnDrawGizmos()
     {
-        if (!Application.isPlaying)
-        {
-            return;
-        }
+        //if (!Application.isPlaying)
+        //{
+        //    return;
+        //}
 
-        if (state != State.Idle && state != State.Stunned)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(GetOffsetPosition() + new Vector2(0.0f, 0.05f), GetOffsetPosition() + (vCurrentDirection * GetPathfindingAheadDistance()) + new Vector2(0.0f, 0.05f));
-        }
+        //if (state != State.Idle && state != State.Stunned)
+        //{
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawLine(GetOffsetPosition() + new Vector2(0.0f, 0.05f), GetOffsetPosition() + (vCurrentDirection * GetPathfindingAheadDistance()) + new Vector2(0.0f, 0.05f));
+        //}
 
-        if (debugLastHit.point != Vector2.zero)
-        {
-            Vector2 vNearestCorner = GetNearestColliderPoint(debugLastHit);
-            Vector2 vDirFromHit = vNearestCorner - debugLastHit.point;
-            vDirFromHit.Normalize();
+        //if (debugLastHit.point != Vector2.zero)
+        //{
+        //    Vector2 vNearestCorner = GetNearestColliderPoint(debugLastHit);
+        //    Vector2 vDirFromHit = vNearestCorner - debugLastHit.point;
+        //    vDirFromHit.Normalize();
 
-            Vector2 vPushedPosition = vNearestCorner + vDirFromHit * 0.15f;
+        //    Vector2 vPushedPosition = vNearestCorner + vDirFromHit * 0.15f;
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(debugLastHitOrigin, debugLastHit.point);
+        //    Gizmos.color = Color.green;
+        //    Gizmos.DrawLine(debugLastHitOrigin, debugLastHit.point);
 
-            Gizmos.color = new Color(1.0f, 0.65f, 0.0f);
-            Gizmos.DrawLine(debugLastHit.point, vNearestCorner);
+        //    Gizmos.color = new Color(1.0f, 0.65f, 0.0f);
+        //    Gizmos.DrawLine(debugLastHit.point, vNearestCorner);
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(vNearestCorner, vPushedPosition);
-        }
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawLine(vNearestCorner, vPushedPosition);
+        //}
 
-        if (state == State.Fleeing)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(GetOffsetPosition(), vFleeTarget);
-        }
+        //if (state == State.Fleeing)
+        //{
+        //    Gizmos.color = Color.white;
+        //    Gizmos.DrawLine(GetOffsetPosition(), vFleeTarget);
+        //}
 
         //BoxCollider2D coll = GetVars().FrogMovementBounds;
 

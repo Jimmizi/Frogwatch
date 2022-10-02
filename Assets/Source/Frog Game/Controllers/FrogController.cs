@@ -248,10 +248,7 @@ public class FrogController : HumanoidController
     IEnumerator DoSpawning()
     {
         float fTime = 0.0f;
-        bool bAbort = false;
-
         Vector2 vOriginalPos = m_rigidbody.position;
-
         float fBaseScale = 0.2f;
 
         transform.localScale = new Vector3(fBaseScale, fBaseScale, 1.0f);
@@ -271,13 +268,15 @@ public class FrogController : HumanoidController
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        // If we want camera shake
+        // If we want camera shake - also add on camera
         //if (Vector2.Distance(m_rigidbody.position, Player.GetOffsetPosition()) < 2.0f)
         //{
         //    Camera.main.GetComponent<ProCamera2DShake>().Shake(0.5f, new Vector2(Random.Range(0.05f, 0.2f), Random.Range(0.05f, 0.2f)));
         //}
 
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
         FrogLandAnimator.SetTrigger("TriggerLand");
         state = State.Idle;
     }
@@ -314,6 +313,13 @@ public class FrogController : HumanoidController
                 m_animator.SetBool("InPond", false);
                 
                 TryPerformHop(true);
+                pondFrogIsIn = null;
+            }
+            else if(Random.Range(0.0f, 100.0f) < 20.0f)
+            {
+                pondFrogIsIn.RemoveFrog(this);
+                m_animator.SetBool("InPond", false);
+                TryPerformHop(false, true);
             }
         }
     }
@@ -337,13 +343,19 @@ public class FrogController : HumanoidController
     {
     }
 
-    void TryPerformHop(bool bToEscapePond = false)
+    void TryPerformHop(bool bToEscapePond = false, bool bZeroDirection = false)
     {
-        Vector2 dir = GetHopDirection(bToEscapePond);
-        Vector2 vPos = transform.position;
+        float fMod = (bToEscapePond ? 2.0f : 1.0f);
+        if (pondFrogIsIn != null && pondFrogIsIn.IsLarge)
+        {
+            fMod *= 2.0f;
+        }
 
+        Vector2 dir = !bZeroDirection ? GetHopDirection(bToEscapePond, fMod) : Vector2.zero;
+        Vector2 vPos = transform.position;
+        
         state = State.Hopping;
-        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance * (bToEscapePond ? 2.0f : 1.0f))));
+        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance * fMod)));
     }
 
     void AssignToPond(PondDropArea newPond)
@@ -352,6 +364,8 @@ public class FrogController : HumanoidController
         pondFrogIsIn = newPond;
 
         state = State.InPond;
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogSplash, transform.position);
         FrogLandAnimator.SetTrigger("TriggerSplash");
         m_animator.SetBool("InPond", true);
         escapeTestTimer = 0.0f;
@@ -412,6 +426,8 @@ public class FrogController : HumanoidController
         if (pondDroppedOn != null)
         {
             AssignToPond(pondDroppedOn);
+
+            GameStats.RecordFrogThrownIntoPond();
         }
         else
         {
@@ -422,6 +438,7 @@ public class FrogController : HumanoidController
                 fDropTimeAccelHops = 4.0f;
             }
 
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
             FrogLandAnimator.SetTrigger("TriggerLand");
         }
 
@@ -473,6 +490,7 @@ public class FrogController : HumanoidController
 
             if (!bAssignedToPond)
             {
+                Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
                 FrogLandAnimator.SetTrigger("TriggerLand");
             }
         }
@@ -485,9 +503,9 @@ public class FrogController : HumanoidController
         return Random.Range(GetVars().MinTimeBetweenHops, GetVars().MaxTimeBetweenHops);
     }
     
-    private Vector2 GetHopDirection(bool isEscapingPond = false)
+    private Vector2 GetHopDirection(bool isEscapingPond = false, float fHopMod = 1.0f)
     {
-        float hopDist = GetVars().HopDistance * (isEscapingPond ? 2.0f : 1.0f);
+        float hopDist = GetVars().HopDistance * fHopMod;
         
         int NumDirectionsToScore = 10;
 

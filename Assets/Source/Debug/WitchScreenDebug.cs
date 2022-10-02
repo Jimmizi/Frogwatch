@@ -18,7 +18,7 @@ public class WitchScreenDebug : MonoBehaviour
 
     void OnGUI()
     {
-        Vector2 currentPos = new Vector2(15, 30);
+        Vector2 currentPos = new Vector2(315, 30);
 
         void DrawText(string text)
         {
@@ -30,7 +30,7 @@ public class WitchScreenDebug : MonoBehaviour
         {
             DrawText($"Witch: {e.name}");
 
-            currentPos.x = 30;
+            currentPos.x = 325;
             {
                 DrawText($"State: {e.GetState()}");
 
@@ -39,7 +39,7 @@ public class WitchScreenDebug : MonoBehaviour
                     DrawText($"Target: {e.targetFrog.name}");
                 }
             }
-            currentPos.x = 15;
+            currentPos.x = 315;
 
             currentPos.y += 48.0f;
         }
@@ -52,5 +52,10 @@ public class WitchScreenDebug : MonoBehaviour
                 DrawWitchDebug(wc);
             }
         }
+
+        // Stats debug
+        
+        currentPos = new Vector2(15, 30);
+        DrawText($"Traveled: {GameStats.Stats.DistanceMoved}");
     }
 }

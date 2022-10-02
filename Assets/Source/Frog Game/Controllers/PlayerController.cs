@@ -65,6 +65,8 @@ public class PlayerController : HumanoidController
     
     protected override void OnDashStart()
     {
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.Dashing, transform.position);
+
         Debug.Log("Dash started");
         StartCoroutine(DoColorFadeOut());
         DashChargeAnimator.SetBool("DashReady", false);
@@ -90,6 +92,8 @@ public class PlayerController : HumanoidController
 
     protected override void OnDashRecharged()
     {
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.DashRecharged, transform.position);
+
         Debug.Log("Dash recharged");
         StartCoroutine(DoColorFadeIn());
         DashChargeAnimator.SetBool("DashReady", true);
