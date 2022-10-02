@@ -7,13 +7,17 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
     private float cacheAvgFrogPosTimer;
     public Vector2 averageFrogPosition;
 
-    public void SetSpawningBegin(bool bFirstSpawnIsInstant)
+    public void StartSpawningFrogs(bool bFirstSpawnIsInstant)
     {
         isSpawningFrogs = true;
         frogSpawnTimer = bFirstSpawnIsInstant ? 0.0f : GetTimeBetweenSpawns();
     }
-    private bool isSpawningFrogs = false;
+    public void StopSpawningFrogs()
+    {
+        isSpawningFrogs = false;
+    }
 
+    private bool isSpawningFrogs = false;
     private float frogSpawnTimer;
 
     float GetTimeBetweenSpawns()
