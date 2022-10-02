@@ -16,7 +16,24 @@ public class DashSolver : MonoBehaviour
         
     }
 
+
+
     void OnTriggerEnter2D(Collider2D col)
+    {
+        TryCollide(col);
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        TryCollide(col);
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+        TryCollide(col);
+    }
+
+    void TryCollide(Collider2D col)
     {
         if (!HumanoidController.Player.IsDashing)
         {
@@ -27,11 +44,10 @@ public class DashSolver : MonoBehaviour
         {
             return;
         }
-        
+
         var enemyControl = col.gameObject.GetComponentInParent<EnemyController>();
         if (enemyControl)
         {
-            Debug.Log($"Dashed into {col.gameObject.name}");
             enemyControl.SetDashedInto();
         }
     }

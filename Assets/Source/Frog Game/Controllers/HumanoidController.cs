@@ -339,6 +339,15 @@ public class HumanoidController : MonoBehaviour
         return nearbyFrogs.Count > 0 ? nearbyFrogs.First().Value : null;
     }
 
+    protected virtual void OnDrawGizmos()
+    {
+        if (IsDashing)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(GetOffsetPosition(), 0.25f);
+        }
+    }
+
     protected virtual void OnDrawGizmosSelected()
     {
         if (Application.isPlaying)
