@@ -135,7 +135,7 @@ public class FrogController : HumanoidController
         }
     }
 
-    public void SetDropped()
+    public void SetDropped(bool bDueToStunned = false)
     {
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("HeldByWitch", false);
@@ -144,8 +144,10 @@ public class FrogController : HumanoidController
         {
             exclamationMark.SetActive(false);
         }
+        
+        Vector2 vDir = (bDueToStunned ? HumanoidController.Player.InputDirection : GetHopDirection()) * 0.5f;
 
-        StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
+        StartCoroutine(PerformThrown(vDir, true));
         StartCoroutine(DoBubblesFadeOut());
         StartCoroutine(DoHeartsFadeOut());
 

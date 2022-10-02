@@ -29878,6 +29878,10 @@ PrefabInstance:
       propertyPath: FrogMovementBounds
       value: 
       objectReference: {fileID: 1032323207}
+    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
+      propertyPath: FrogEscapeTestInterval
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101843, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: m_Name
       value: FrogSystemVars

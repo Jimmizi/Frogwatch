@@ -45,12 +45,15 @@ public class WitchManagerSystem : SystemObject
     {
         if (isSpawningWitches)
         {
-            spawnTimer -= Time.deltaTime;
-
-            if (spawnTimer <= 0.0f)
+            if (EnemyController.Witches.Count < targetNumberOfWitches)
             {
-                spawnTimer = GetTimeBetweenSpawns();
-                TrySpawnWitch();
+                spawnTimer -= Time.deltaTime;
+
+                if (spawnTimer <= 0.0f)
+                {
+                    spawnTimer = GetTimeBetweenSpawns();
+                    TrySpawnWitch();
+                }
             }
         }
     }
@@ -79,8 +82,7 @@ public class WitchManagerSystem : SystemObject
         Vector2 vWorldPos = new Vector2(bounds.transform.position.x, bounds.transform.position.y) + bounds.offset;
         float halfHori = (bounds.size.x / 2) * 0.9f;
         float halfVert = (bounds.size.y / 2) * 0.9f;
-
-        float fAvoidRad = 10.0f;
+        
         Vector2 vPlayerPos = HumanoidController.Player.GetOffsetPosition();
 
         // Expensive but whatever

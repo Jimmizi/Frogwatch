@@ -12,6 +12,8 @@ public class EnemyController : HumanoidController
 {
     private Vector2 vCurrentDirection;
 
+    public static List<EnemyController> Witches = new();
+
     [HideInInspector]
     public FrogController targetFrog;
 
@@ -85,10 +87,19 @@ public class EnemyController : HumanoidController
 
     protected override void Start()
     {
+        Witches.Add(this);
+
         SetState(State.Idle);
         timeToStayInState = GetNextTimeToIdle();
 
         base.Start();
+    }
+
+    protected override void OnDestroy()
+    {
+        Witches.Remove(this);
+
+        base.OnDestroy();
     }
 
     // Update is called once per frame
@@ -167,7 +178,7 @@ public class EnemyController : HumanoidController
     {
         if (state != State.Stunned && state != State.SuccessfulFlee && state != State.Finished)
         {
-            DropCarriedFrog();
+            DropCarriedFrog(true);
             SetState(State.Stunned);
             timeToStayInState = GetNextTimeToStun();
             vCurrentDirection = Vector2.zero;
@@ -267,8 +278,17 @@ public class EnemyController : HumanoidController
 
     void ProcessChasing()
     {
-        Vector2 vPos = GetOffsetPosition();
+        // If frog is invalid now, or too long has been spent trying to catch the frog, stop
+        if (!targetFrog.CanPickup() || GetTimeInState() > 15.0f)
+        {
+            SetState(State.Idle);
+            InitIdle();
+            targetFrog = null;
+            return;
+        }
 
+        Vector2 vPos = GetOffsetPosition();
+        
         if (!IsCourseCorrecting())
         {
             var frogPos = targetFrog.GetOffsetPosition();
