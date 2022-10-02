@@ -22,6 +22,15 @@ public class AudioSystem : SystemObjectWithVars<AudioSystemVars>
     {
     }
 
+    public void PlayEvent(AudioEvent audioEvent, Vector3 position)
+    {
+        AudioClip clip = GetVars().FindAudioEventClip(audioEvent);
+        if (clip != null)
+        {
+            PlayOneShot(clip, position);
+        }
+    }
+
     public void PlayOneShot(AudioClip clip, Vector3 position)
     {
         AudioSource audioSource = FindFreeOneShot();
