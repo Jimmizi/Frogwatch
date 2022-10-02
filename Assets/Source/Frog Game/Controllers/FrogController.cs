@@ -40,7 +40,7 @@ public class FrogController : HumanoidController
 
         return iCount;
     }
-
+    
     public static int NumFrogsTaken = 0;
 
 
@@ -69,6 +69,7 @@ public class FrogController : HumanoidController
     private float fThrowTime;
     private bool bFirstThrowSectionDone;
     private float fDropTimeAccelHops = 0.0f;
+    private float escapeTestTimer = 0.0f;
 
     private bool bPerformingCarriedPtfxFadeInBubbles = false;
     private bool bPerformingCarriedPtfxFadeOutBubbles = false;
@@ -120,7 +121,11 @@ public class FrogController : HumanoidController
         FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
         if (bHeldByWitch)
         {
-            exclamationMark?.SetActive(true);
+            if (exclamationMark != null)
+            {
+                exclamationMark.SetActive(true);
+            }
+
             m_animator.SetBool("HeldByWitch", true);
             StartCoroutine(DoBubblesFadeIn());
         }
@@ -134,7 +139,11 @@ public class FrogController : HumanoidController
     {
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("HeldByWitch", false);
-        exclamationMark?.gameObject.SetActive(false);
+
+        if (exclamationMark != null)
+        {
+            exclamationMark.SetActive(false);
+        }
 
         StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
         StartCoroutine(DoBubblesFadeOut());
@@ -208,9 +217,47 @@ public class FrogController : HumanoidController
                 break;
             }
             case State.InPond:
+                ProcessInPond();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    void ProcessInPond()
+    {
+        // Shouldn't hit but just in case
+        if (pondFrogIsIn == null)
+        {
+            state = State.Idle;
+            return;
+        }
+
+        escapeTestTimer += Time.deltaTime;
+
+        if (escapeTestTimer >= GetVars().FrogEscapeTestInterval)
+        {
+            escapeTestTimer = 0.0f;
+
+            FrogSystemVars vars = GetVars();
+            float fChanceToEscape = vars.BaseEscapeChance;
+
+            // i starts at 1, don't include self as an extra frog
+            for (int i = 1; i < pondFrogIsIn.GetNumFrogsInPond(); ++i)
+            {
+                // Add extra chance per frog so that we get more randomness
+                float fExtraChance = Random.Range(vars.AdditionalEscapeChancePerExtraFrogMin, vars.AdditionalEscapeChancePerExtraFrogMax);
+
+                fChanceToEscape += fExtraChance;
+            }
+            
+            if (true || fChanceToEscape < Random.Range(0.0f, 100.0f))
+            {
+                pondFrogIsIn.RemoveFrog(this);
+                m_animator.SetBool("InPond", false);
+                
+                TryPerformHop(true);
+            }
         }
     }
 
@@ -233,12 +280,24 @@ public class FrogController : HumanoidController
     {
     }
 
-    void TryPerformHop()
+    void TryPerformHop(bool bToEscapePond = false)
     {
-        Vector2 dir = GetHopDirection();
+        Vector2 dir = GetHopDirection(bToEscapePond);
         Vector2 vPos = transform.position;
 
-        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance)));
+        state = State.Hopping;
+        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance * (bToEscapePond ? 2.0f : 1.0f))));
+    }
+
+    void AssignToPond(PondDropArea newPond)
+    {
+        newPond.AddFrog(this);
+        pondFrogIsIn = newPond;
+
+        state = State.InPond;
+        FrogLandAnimator.SetTrigger("TriggerSplash");
+        m_animator.SetBool("InPond", true);
+        escapeTestTimer = 0.0f;
     }
 
     IEnumerator PerformThrown(Vector2 vDir, bool bAccelHops = false)
@@ -292,15 +351,10 @@ public class FrogController : HumanoidController
         m_rigidbody.position = vNewPos - heightOffset;
         ResetTimer();
         
-        PondDropArea pondDroppedOn = PondDropArea.GetOverlapped(m_rigidbody.position);
+        PondDropArea pondDroppedOn = PondDropArea.GetOverlapped(GetOffsetPosition());
         if (pondDroppedOn != null)
         {
-            pondDroppedOn.AddFrog(this);
-            pondFrogIsIn = pondDroppedOn;
-
-            state = State.InPond;
-            FrogLandAnimator.SetTrigger("TriggerSplash");
-            m_animator.SetBool("InPond", true);
+            AssignToPond(pondDroppedOn);
         }
         else
         {
@@ -321,7 +375,6 @@ public class FrogController : HumanoidController
 
     IEnumerator PerformHop(Vector2 vNewPos)
     {
-        state = State.Hopping;
         m_animator.SetBool("IsHopping", true);
 
         Vector2 vOriginalPos = m_rigidbody.position;
@@ -344,14 +397,30 @@ public class FrogController : HumanoidController
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
+        bool bAssignedToPond = false;
+
         if (!bAbort)
         {
             m_rigidbody.position = vNewPos;
             state = State.Idle;
-        }
 
+            if (GetVars().AllowFrogsToAmbientlyHopIntoPonds)
+            {
+                PondDropArea pondDroppedOn = PondDropArea.GetOverlapped(GetOffsetPosition());
+                if (pondDroppedOn != null)
+                {
+                    AssignToPond(pondDroppedOn);
+                    bAssignedToPond = true;
+                }
+            }
+
+            if (!bAssignedToPond)
+            {
+                FrogLandAnimator.SetTrigger("TriggerLand");
+            }
+        }
+        
         m_animator.SetBool("IsHopping", false);
-        FrogLandAnimator.SetTrigger("TriggerLand");
     }
 
     private float GetNextHopInterval()
@@ -359,8 +428,10 @@ public class FrogController : HumanoidController
         return Random.Range(GetVars().MinTimeBetweenHops, GetVars().MaxTimeBetweenHops);
     }
     
-    private Vector2 GetHopDirection()
+    private Vector2 GetHopDirection(bool isEscapingPond = false)
     {
+        float hopDist = GetVars().HopDistance * (isEscapingPond ? 2.0f : 1.0f);
+        
         int NumDirectionsToScore = 10;
 
         Dictionary<Vector2, float> directions = new();
@@ -378,16 +449,31 @@ public class FrogController : HumanoidController
             }
 
             // Don't hop out of bounds
-            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * GetVars().HopDistance);
+            Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * hopDist);
             if (!frogBounds.OverlapPoint(vPossibleNewPosition))
             {
                 continue;
             }
-            
+
+            PondDropArea pondDroppedOn = PondDropArea.GetOverlapped(vPossibleNewPosition);
+
             // Don't hop into static objects
             if (StaticObject.GetOverlapped(vPossibleNewPosition) != null)
             {
-                continue;
+                // Potentially allow hopping onto this static object to be okay 
+                if (!GetVars().AllowFrogsToAmbientlyHopIntoPonds || pondDroppedOn == null)
+                {
+                    continue;
+                }
+            }
+
+            // If not allowing ambient hopping into ponds or we're escaping from one, don't pick positions in ponds
+            if (!GetVars().AllowFrogsToAmbientlyHopIntoPonds || isEscapingPond)
+            {
+                if (pondDroppedOn != null)
+                {
+                    continue;
+                }
             }
 
             float fScore = 0.0f;

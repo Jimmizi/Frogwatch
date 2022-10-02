@@ -20,7 +20,10 @@ public class PondDropArea : MonoBehaviour
     public Dictionary<FrogController, Vector2> FilledSlots = new();
     public List<FrogController> ExtraFrogs = new();
 
-    
+    public int GetNumFrogsInPond()
+    {
+        return FilledSlots.Count + ExtraFrogs.Count;
+    }
 
     void Start()
     {

@@ -131,19 +131,20 @@ public class HumanoidController : MonoBehaviour
         var bounds = GetVars().FrogMovementBounds;
         if (bounds != null)
         {
-            var futurePos = m_rigidbody.position + (InputDirection * GetCurrentSpeedMult() * Time.deltaTime);
+            Vector2 vPos = m_rigidbody.position;
+            var futurePos = vPos + (InputDirection * GetCurrentSpeedMult() * Time.deltaTime);
             if (!bounds.OverlapPoint(futurePos))
             {
                 InputDirection = Vector2.zero;
             }
 
-            if (!bounds.OverlapPoint(m_rigidbody.position))
+            if (!bounds.OverlapPoint(vPos))
             {
-                Vector2 vClosestPoint = bounds.ClosestPoint(m_rigidbody.position);
+                Vector2 vClosestPoint = bounds.ClosestPoint(vPos);
                 Vector2 vDirToCenter = bounds.offset - vClosestPoint;
                 vDirToCenter.Normalize();
 
-                vClosestPoint += vDirToCenter * 2;
+                vClosestPoint += vDirToCenter;
                 m_rigidbody.position = vClosestPoint;
             }
         }
@@ -250,10 +251,24 @@ public class HumanoidController : MonoBehaviour
 
         float fTime = 0.0f;
 
+        var bounds = GetVars().FrogMovementBounds;
         while (fTime < DashTime)
         {
             fTime += Time.deltaTime;
-            m_rigidbody.position += dir * DashSpeed * Time.deltaTime;
+
+            Vector2 vAddition = dir * DashSpeed * Time.deltaTime;
+
+            if (bounds != null)
+            {
+                // Stop a dash if it would put us out of bounds
+                var futurePos = m_rigidbody.position + vAddition;
+                if (!bounds.OverlapPoint(futurePos))
+                {
+                    break;
+                }
+            }
+
+            m_rigidbody.position += vAddition;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }

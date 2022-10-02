@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FrogSystemVars : ServiceVars
 {
+    public bool AllowFrogsToAmbientlyHopIntoPonds = true;
+
+
     public BoxCollider2D FrogMovementBounds = new ();
 
     public float MinTimeBetweenHops = 1.0f;
@@ -16,6 +19,11 @@ public class FrogSystemVars : ServiceVars
 
     public float ThrownSpeed = 0.75f;
     public float ThrownDistance = 1.0f;
+
+    public float FrogEscapeTestInterval = 5.0f;
+    public float BaseEscapeChance = 10.0f;
+    public float AdditionalEscapeChancePerExtraFrogMin = 2.5f;
+    public float AdditionalEscapeChancePerExtraFrogMax = 15.0f;
 
     public EaserEase MovementEaser;
     public EaserEase ThrownEaser;

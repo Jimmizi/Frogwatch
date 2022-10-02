@@ -11,11 +11,16 @@ using Random = UnityEngine.Random;
 public class EnemyController : HumanoidController
 {
     private Vector2 vCurrentDirection;
+
+    [HideInInspector]
     public FrogController targetFrog;
+
     private Vector2 vCourseCorrectedPosition;
     private float fCourseCorrectingUpdateTick;
     private float fTimeSpentCourseCorrecting;
     private int numRecentCourseCorrectionSpams;
+
+    public Animator SmokeDisappearAnimator;
 
     private Vector2 vFleeTarget;
 
@@ -160,7 +165,7 @@ public class EnemyController : HumanoidController
 
     public void SetDashedInto()
     {
-        if (state != State.Stunned)
+        if (state != State.Stunned && state != State.SuccessfulFlee && state != State.Finished)
         {
             DropCarriedFrog();
             SetState(State.Stunned);
@@ -196,7 +201,10 @@ public class EnemyController : HumanoidController
         SetState(State.Fleeing);
 
         var vRandoCorner = GetRandomBoundsEdge();
+        var vDir = vRandoCorner - GetOffsetPosition();
+        vDir.Normalize();
 
+        vFleeTarget = vRandoCorner + (vDir * 0.2f);
         vFleeTarget = vRandoCorner;
         vCurrentDirection = Vector2.zero;
     }
@@ -330,13 +338,68 @@ public class EnemyController : HumanoidController
         SetState(State.Finished);
         vCurrentDirection = Vector2.zero;
 
-        //StartCoroutine(DoFleeRespawn());
+        StartCoroutine(DoFleeEnding());
     }
 
-    //IEnumerator DoFleeRespawn()
-    //{
+    IEnumerator DoFleeEnding()
+    {
+        float fTime = 0.0f;
 
-    //}
+        List<SpriteRenderer> frogRenderers = new();
+
+        var frogSr = FrogCarrying.GetComponent<SpriteRenderer>();
+        if (frogSr != null)
+        {
+            frogRenderers.Add(frogSr);
+        }
+        
+        SpriteRenderer[] frogRenders = FrogCarrying.GetComponentsInChildren<SpriteRenderer>();
+        if (frogRenders.Length > 0)
+        {
+            frogRenderers.AddRange(frogRenders);
+        }
+
+        SpriteRenderer witchRender = GetComponent<SpriteRenderer>();
+
+        void MinusAlpha(SpriteRenderer rend, float a)
+        {
+            Color col = rend.color;
+
+            if (col.a > 0.0f)
+            {
+                col.a -= a;
+                rend.color = col;
+            }
+        }
+
+        if (SmokeDisappearAnimator != null)
+        {
+            SmokeDisappearAnimator.SetTrigger("Start");
+        }
+
+        while (fTime < 1.0f)
+        {
+            fTime += Time.deltaTime;
+
+            foreach (var fr in frogRenderers)
+            {
+                if (fr != null)
+                {
+                    MinusAlpha(fr, (Time.deltaTime) * 5);
+                }
+            }
+
+            if (witchRender != null)
+            {
+                MinusAlpha(witchRender, (Time.deltaTime) * 5);
+            }
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        
+        Destroy(FrogCarrying.gameObject); // :(
+        Destroy(gameObject); // :)
+    }
 
     float GetNextTimeToIdle()
     {

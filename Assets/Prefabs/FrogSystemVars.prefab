@@ -55,9 +55,13 @@ MonoBehaviour:
   MovementEaser: 1
   ThrownEaser: 16
   ThrownEaserSecondary: 13
-  WitchStunnedTime: 4
+  WitchStunnedMinTime: 4
+  WitchStunnedMaxTime: 8
   WitchIdleMinTime: 1
   WitchIdleMaxTime: 4
-  WitchWanderSpeed: 1
-  WitchChaseSpeed: 1
-  WitchFleeSpeed: 1
+  WitchWanderMinTime: 4
+  WitchWanderMaxTime: 8
+  WitchLookForFrogRange: 2
+  WitchWanderSpeed: 0.4
+  WitchChaseSpeed: 0.5
+  WitchFleeSpeed: 0.5
