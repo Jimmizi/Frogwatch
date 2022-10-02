@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 public class GameTimer : MonoBehaviour
 {
-    private float timerDuration = 5f * 60f;
+    [SerializeField] private float timerDuration = 5f * 60f;
 
     private float nextThreshold;
 

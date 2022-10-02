@@ -30,7 +30,7 @@ public class ButtonPromptBase : MonoBehaviour
     }
 
 
-    protected bool isKeyBoard = true;
+    protected static bool isKeyBoard = true;
 
     protected string actionText
     {
