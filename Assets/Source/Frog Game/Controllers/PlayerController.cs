@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : HumanoidController
 {
     public SpriteRenderer DashChargingVisuals;
-    public List<Sprite> ChargingFrames = new();
+   // public List<Sprite> ChargingFrames = new();
 
     public SpriteRenderer DashChargeVisuals;
     public Animator DashChargeAnimator;
@@ -14,7 +14,7 @@ public class PlayerController : HumanoidController
     
     public Animator DashPtfxAnimator;
 
-    public bool DashIsUnlocked = true;
+    public bool DashIsUnlocked = false;
 
 
     private bool bAbortFadeIn = false;
@@ -32,6 +32,8 @@ public class PlayerController : HumanoidController
 
             DashChargePtfx.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
+
+        DashChargingVisuals.enabled = false;
 
         SetDashUnlocked();
 
@@ -69,6 +71,8 @@ public class PlayerController : HumanoidController
         DashChargePtfx.Stop(false, ParticleSystemStopBehavior.StopEmitting);
 
         DashPtfxAnimator.SetTrigger("Dashed");
+
+        DropCarriedFrog();
 
         StartCoroutine(PerformRecharge(true));
 
@@ -110,16 +114,16 @@ public class PlayerController : HumanoidController
             }
 
             DashCooldownTimer -= Time.deltaTime;
-
-            float fPercentageDone = DashCooldownTimer / DashCooldown;
-            int iFrame = Math.Clamp(Mathf.FloorToInt(ChargingFrames.Count * (1.0f - fPercentageDone)), 0, ChargingFrames.Count - 1);
-            DashChargingVisuals.sprite = ChargingFrames[iFrame];
+            DashChargingVisuals.enabled = true;
+            //float fPercentageDone = DashCooldownTimer / DashCooldown;
+            //int iFrame = Math.Clamp(Mathf.FloorToInt(ChargingFrames.Count * (1.0f - fPercentageDone)), 0, ChargingFrames.Count - 1);
+            //DashChargingVisuals.sprite = ChargingFrames[iFrame];
 
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
         OnDashRecharged();
-        DashChargingVisuals.sprite = null;
+        DashChargingVisuals.enabled = false;
     }
 
     IEnumerator DoColorFadeOut()
@@ -133,16 +137,16 @@ public class PlayerController : HumanoidController
 
         bAbortFadeIn = true;
 
-        while (DashChargeVisuals.color.a > 0.2f)
+        while (DashChargeVisuals.color.a > 0.0f)
         {
-            // Fade out over half a second
-            MinusAlpha((0.8f * Time.deltaTime) * 20); // hack just speed this up a bunch (20 instead of 2)
+            // Fade out over 200ms
+            MinusAlpha((Time.deltaTime) * 5);
             
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
         Color col = DashChargeVisuals.color;
-        col.a = 0.2f;
+        col.a = 0.0f;
         DashChargeVisuals.color = col;
 
         bAbortFadeIn = false;
@@ -167,7 +171,7 @@ public class PlayerController : HumanoidController
             }
 
             // Fade in over half a second
-            AddAlpha((0.8f * Time.deltaTime) * 20); // hack just speed this up a bunch (20 instead of 2)
+            AddAlpha((Time.deltaTime) * 2);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 

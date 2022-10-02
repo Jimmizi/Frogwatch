@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 [RequireComponent(typeof(PolygonCollider2D))]
 public class StaticObject : MonoBehaviour
@@ -32,6 +34,22 @@ public class StaticObject : MonoBehaviour
             if (so.m_collider.OverlapPoint(point))
             {
                 return so;
+            }
+        }
+
+        return null;
+    }
+
+    public static StaticObject GetOverlappedIncrement(Vector2 point, Vector2 vReverseDir)
+    {
+        foreach (var so in Geometry)
+        {
+            for (int i = 0; i < 5; ++i)
+            {
+                if (so.m_collider.OverlapPoint(point + (vReverseDir * (i * 0.2f))))
+                {
+                    return so;
+                }
             }
         }
 

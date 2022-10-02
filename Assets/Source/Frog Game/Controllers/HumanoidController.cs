@@ -15,7 +15,7 @@ public class HumanoidController : MonoBehaviour
     public float DashSpeed = 7.5f;
     public float PickupDistance = 1.0f;
     public float DashTime = 0.05f;
-    public float DashLogicalTime = 0.5f;
+    public float DashLogicalTime = 0.35f;
     public Vector2 FrogCarryOffsetStart = new();
     public Vector2 FrogCarryOffsetEnd = new();
     public float CarryFrogAnimSpeed = 0.5f;
@@ -159,6 +159,7 @@ public class HumanoidController : MonoBehaviour
     {
         if (FrogCarrying != null)
         {
+            SetAnimCarrying(false);
             FrogCarrying.SetDropped();
             FrogCarrying = null;
             carryFrogTimer = 0.0f;

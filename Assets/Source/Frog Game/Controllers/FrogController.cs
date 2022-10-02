@@ -31,6 +31,9 @@ public class FrogController : HumanoidController
     private bool bFirstThrowSectionDone;
     private float fDropTimeAccelHops = 0.0f;
 
+    private bool bPerformingBubblesFadeIn = false;
+    private bool bPerformingBubblesFadeOut = false;
+
     public State GetState()
     {
         return state;
@@ -109,6 +112,17 @@ public class FrogController : HumanoidController
         if (fDropTimeAccelHops >= 0.0f)
         {
             fDropTimeAccelHops -= Time.deltaTime;
+        }
+
+        // Fallback incase something doesn't clean this up
+        if (state != State.Carried)
+        {
+            if (!bPerformingBubblesFadeIn && !bPerformingBubblesFadeOut && FrogHeldBubblesRenderer.color.a > 0.0f)
+            {
+                Color col = FrogHeldBubblesRenderer.color;
+                col.a = 0.0f;
+                FrogHeldBubblesRenderer.color = col;
+            }
         }
 
         switch (state)
@@ -439,7 +453,10 @@ public class FrogController : HumanoidController
             FrogHeldBubblesRenderer.color = col;
         }
 
+        bPerformingBubblesFadeOut = true;
+
         bAbortFadeIn = true;
+        bAbortFadeOut = false;
 
         while (FrogHeldBubblesRenderer.color.a > 0.0f)
         {
@@ -463,6 +480,8 @@ public class FrogController : HumanoidController
 
         bAbortFadeIn = false;
 
+        bPerformingBubblesFadeOut = false;
+
         yield return null;
     }
 
@@ -475,7 +494,10 @@ public class FrogController : HumanoidController
             FrogHeldBubblesRenderer.color = col;
         }
 
+        bPerformingBubblesFadeIn = true;
+
         bAbortFadeOut = true;
+        bAbortFadeIn = false;
 
         while (FrogHeldBubblesRenderer.color.a < 1.0f)
         {
@@ -497,6 +519,8 @@ public class FrogController : HumanoidController
         }
 
         bAbortFadeOut = false;
+
+        bPerformingBubblesFadeIn = false;
 
         yield return null;
     }

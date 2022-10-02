@@ -13,6 +13,9 @@ public class EnemyController : HumanoidController
     private Vector2 vCurrentDirection;
     public FrogController targetFrog;
     private Vector2 vCourseCorrectedPosition;
+    private float fCourseCorrectingUpdateTick;
+    private float fTimeSpentCourseCorrecting;
+    private int numRecentCourseCorrectionSpams;
 
     private Vector2 vFleeTarget;
 
@@ -42,6 +45,8 @@ public class EnemyController : HumanoidController
     private float wanderFrogCheckTimer = 0.0f;
     private float wanderInDirectionTimer;
 
+    private float timeSinceLastCourseCorrection = 0.0f;
+
     private float currentSpeedMod = 1.0f;
     private float speedModTimer;
 
@@ -49,6 +54,10 @@ public class EnemyController : HumanoidController
     {
         state = eNew;
         currentStateTimer = 0.0f;
+
+        fTimeSpentCourseCorrecting = 0.0f;
+        fCourseCorrectingUpdateTick = 0.0f;
+        vCourseCorrectedPosition = Vector2.zero;
     }
     float GetTimeInState()
     {
@@ -80,6 +89,8 @@ public class EnemyController : HumanoidController
     {
         currentStateTimer += Time.deltaTime;
         speedModTimer -= Time.deltaTime;
+
+        timeSinceLastCourseCorrection += Time.deltaTime;
 
         if (speedModTimer <= 0.0f)
         {
@@ -143,12 +154,19 @@ public class EnemyController : HumanoidController
 
     public void SetDashedInto()
     {
-        DropCarriedFrog();
-        SetState(State.Stunned);
-        timeToStayInState = GetNextTimeToStun();
+        if (state != State.Stunned)
+        {
+            DropCarriedFrog();
+            SetState(State.Stunned);
+            timeToStayInState = GetNextTimeToStun();
+            vCurrentDirection = Vector2.zero;
+            vCourseCorrectedPosition = Vector2.zero;
 
-        SetAnimCarrying(false);
-        SetAnimWalking(false);
+            SetAnimCarrying(false);
+            SetAnimWalking(false);
+
+            m_animator.SetBool("IsStunned", true);
+        }
     }
 
     void InitWander()
@@ -214,18 +232,25 @@ public class EnemyController : HumanoidController
             }
         }
 
-        // Alter the direction every now and then
-        if (wanderInDirectionTimer <= 0.0f)
+        if (!IsCourseCorrecting())
         {
-            wanderInDirectionTimer = 1.0f;
+            // Alter the direction every now and then
+            if (wanderInDirectionTimer <= 0.0f)
+            {
+                wanderInDirectionTimer = 1.0f;
 
-            Vector2 vMod = new Vector2(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f));
-            vCurrentDirection += new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f)) * vMod;
+                Vector2 vMod = new Vector2(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f));
+                vCurrentDirection += new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f)) * vMod;
 
-            vCurrentDirection.Normalize();
+                vCurrentDirection.Normalize();
+            }
+
+            ProcessCourseCorrection();
         }
-        
-        ProcessCourseCorrection();
+        else
+        {
+            WaitForCourseCorrection();
+        }
     }
 
     void ProcessChasing()
@@ -245,6 +270,8 @@ public class EnemyController : HumanoidController
             {
                 InitFlee();
             }
+
+            ProcessCourseCorrection();
         }
         else
         {
@@ -286,8 +313,9 @@ public class EnemyController : HumanoidController
     {
         if (GetTimeInState() > timeToStayInState)
         {
-            SetState(State.Wandering);
-            InitWander();
+            m_animator.SetBool("IsStunned", false);
+            SetState(State.Idle);
+            InitIdle();
         }
     }
 
@@ -461,28 +489,56 @@ public class EnemyController : HumanoidController
     }
     void WaitForCourseCorrection()
     {
-        if (Vector2.Distance(GetOffsetPosition(), vCourseCorrectedPosition) < PickupDistance)
+        fCourseCorrectingUpdateTick += Time.deltaTime;
+        fTimeSpentCourseCorrecting += Time.deltaTime;
+
+        if (Vector2.Distance(GetOffsetPosition(), vCourseCorrectedPosition) < PickupDistance || fTimeSpentCourseCorrecting > 3.0f)
         {
             vCourseCorrectedPosition = Vector2.zero;
+            fCourseCorrectingUpdateTick = 0.0f;
+        }
+
+        if (fCourseCorrectingUpdateTick >= 0.75f)
+        {
+            fCourseCorrectingUpdateTick = 0.0f;
+            ProcessCourseCorrection(true);
         }
     }
-    void ProcessCourseCorrection()
+    void ProcessCourseCorrection(bool bComingFromCourseCorrectionWait = false)
     {
         float fAheadDist = GetPathfindingAheadDistance();
 
         var vPos = GetOffsetPosition();
         var vFuturePos = vPos + (vCurrentDirection * fAheadDist);
 
-        var overlappedObject = StaticObject.GetOverlapped(vFuturePos);
+        var overlappedObject = StaticObject.GetOverlappedIncrement(vFuturePos, -(vCurrentDirection * fAheadDist));
         if (overlappedObject != null)
         {
+            if (timeSinceLastCourseCorrection < 0.5f)
+            {
+                ++numRecentCourseCorrectionSpams;
+            }
+            else
+            {
+                numRecentCourseCorrectionSpams = 0;
+            }
+
+            timeSinceLastCourseCorrection = 0.0f;
+
+            bool bSpam = (numRecentCourseCorrectionSpams > 4);
+            if (bSpam)
+            {
+                Debug.Log("Spamming ProcessCourseCorrection");
+            }
+
+
             var filter = new ContactFilter2D();
             filter.layerMask = LayerMask.GetMask("MapObject");
             filter.useLayerMask = true;
 
             RaycastHit2D[] results = new RaycastHit2D[25]; // does Raycast only go up to the count or will it crash if there are more hit?! damn unity blackbox
 
-            Physics2D.Raycast(vPos, vCurrentDirection * fAheadDist, filter, results);
+            Physics2D.Raycast(vPos - (vCurrentDirection * 0.05f), vCurrentDirection * fAheadDist, filter, results);
             foreach (var hit in results)
             {
                 if (hit.collider != null)
@@ -491,21 +547,35 @@ public class EnemyController : HumanoidController
                     Vector2 vDirFromHit = vNearestCorner - hit.point;
                     vDirFromHit.Normalize();
 
-                    Vector2 vPushedPosition = vNearestCorner + vDirFromHit * 0.2f;
+                    float fPushAmount = (bComingFromCourseCorrectionWait ? 0.1f : 0.2f);
+
+                    if (bSpam)
+                    {
+                        fPushAmount += Random.Range(-0.05f, 0.5f);
+                        vDirFromHit += Random.insideUnitCircle.normalized * 0.25f;
+                    }
+
+                    Vector2 vPushedPosition = vNearestCorner + vDirFromHit * fPushAmount;
                     
                     vCurrentDirection = vPushedPosition - vPos;
                     vCurrentDirection.Normalize();
                     vCourseCorrectedPosition = vPushedPosition;
+                    fCourseCorrectingUpdateTick = 0.0f;
+
+                    if (!bComingFromCourseCorrectionWait)
+                    {
+                        fTimeSpentCourseCorrecting = 0.0f;
+                    }
 
                     debugLastHitOrigin = vPos;
                     debugLastHit = hit;
 
-                    // If the new position also overlaps, just pick a new direction
-                    var newOverlapped = StaticObject.GetOverlapped(vPos + (vCurrentDirection * fAheadDist));
-                    if (newOverlapped != null)
-                    {
-                        vCurrentDirection = GetNewWanderDirection();
-                    }
+                    //// If the new position also overlaps, just pick a new direction
+                    //var newOverlapped = StaticObject.GetOverlapped(vPos + (vCurrentDirection * fAheadDist));
+                    //if (newOverlapped != null)
+                    //{
+                    //    vCurrentDirection = GetNewWanderDirection();
+                    //}
                     
                     break;
                 }
@@ -556,7 +626,7 @@ public class EnemyController : HumanoidController
             Vector2 vDirFromHit = vNearestCorner - debugLastHit.point;
             vDirFromHit.Normalize();
 
-            Vector2 vPushedPosition = vNearestCorner + vDirFromHit * 0.5f;
+            Vector2 vPushedPosition = vNearestCorner + vDirFromHit * 0.15f;
 
             Gizmos.color = Color.green;
             Gizmos.DrawLine(debugLastHitOrigin, debugLastHit.point);
