@@ -50,8 +50,9 @@ public class FrogIndicatorUI : IndicatorBaseUI
     }
     private void Update()
     {
-        base.Update();
         animator.SetBool("frogInPond", state == FrogController.State.InPond);
+        base.Update();
+
         if(state == FrogController.State.InPond)
         {
             transform.rotation = Quaternion.identity;
