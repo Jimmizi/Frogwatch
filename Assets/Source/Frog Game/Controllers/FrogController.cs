@@ -21,9 +21,12 @@ public class FrogController : HumanoidController
     public static List<FrogController> FrogList = new();
 
     public SpriteRenderer FrogHeldBubblesRenderer;
+    public SpriteRenderer FrogHeldHeartsRenderer;
     public Animator FrogLandAnimator;
-    private bool bAbortFadeIn = false;
-    private bool bAbortFadeOut = false;
+    private bool bAbortFadeInBubbles = false;
+    private bool bAbortFadeOutBubbles = false;
+    private bool bAbortFadeInHearts = false;
+    private bool bAbortFadeOutHearts = false;
 
     private float nextHopInterval;
     private float hopTimer;
@@ -31,8 +34,11 @@ public class FrogController : HumanoidController
     private bool bFirstThrowSectionDone;
     private float fDropTimeAccelHops = 0.0f;
 
-    private bool bPerformingBubblesFadeIn = false;
-    private bool bPerformingBubblesFadeOut = false;
+    private bool bPerformingCarriedPtfxFadeInBubbles = false;
+    private bool bPerformingCarriedPtfxFadeOutBubbles = false;
+
+    private bool bPerformingCarriedPtfxFadeInHearts = false;
+    private bool bPerformingCarriedPtfxFadeOutHearts = false;
 
     public State GetState()
     {
@@ -74,9 +80,13 @@ public class FrogController : HumanoidController
         if (bHeldByWitch)
         {
             m_animator.SetBool("HeldByWitch", true);
+            StartCoroutine(DoBubblesFadeIn());
+        }
+        else
+        {
+            StartCoroutine(DoHeartsFadeIn());
         }
 
-        StartCoroutine(DoBubblesFadeIn());
         FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
     }
 
@@ -87,6 +97,7 @@ public class FrogController : HumanoidController
 
         StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
         StartCoroutine(DoBubblesFadeOut());
+        StartCoroutine(DoHeartsFadeOut());
 
     }
 
@@ -94,6 +105,7 @@ public class FrogController : HumanoidController
     {
         StartCoroutine(PerformThrown(dir));
         StartCoroutine(DoBubblesFadeOut());
+        StartCoroutine(DoHeartsFadeOut());
     }
 
     public bool CanPickup()
@@ -117,11 +129,17 @@ public class FrogController : HumanoidController
         // Fallback incase something doesn't clean this up
         if (state != State.Carried)
         {
-            if (!bPerformingBubblesFadeIn && !bPerformingBubblesFadeOut && FrogHeldBubblesRenderer.color.a > 0.0f)
+            if (!bPerformingCarriedPtfxFadeInBubbles && !bPerformingCarriedPtfxFadeOutBubbles && FrogHeldBubblesRenderer.color.a > 0.0f)
             {
                 Color col = FrogHeldBubblesRenderer.color;
                 col.a = 0.0f;
                 FrogHeldBubblesRenderer.color = col;
+            }
+            if (!bPerformingCarriedPtfxFadeInHearts && !bPerformingCarriedPtfxFadeOutHearts && FrogHeldHeartsRenderer.color.a > 0.0f)
+            {
+                Color col = FrogHeldHeartsRenderer.color;
+                col.a = 0.0f;
+                FrogHeldHeartsRenderer.color = col;
             }
         }
 
@@ -306,8 +324,15 @@ public class FrogController : HumanoidController
                 continue;
             }
 
+            // Don't hop out of bounds
             Vector2 vPossibleNewPosition = vThisPos + (vRandomDir * GetVars().HopDistance);
             if (!frogBounds.OverlapPoint(vPossibleNewPosition))
+            {
+                continue;
+            }
+            
+            // Don't hop into static objects
+            if (StaticObject.GetOverlapped(vPossibleNewPosition) != null)
             {
                 continue;
             }
@@ -443,7 +468,7 @@ public class FrogController : HumanoidController
         Gizmos.color = new Color(1f, 0.1215686f, 0.01568628f, 0.25f);
         Gizmos.DrawSphere(transform.position, GetVars().NearbyAvoidRadius);
     }
-
+    
     IEnumerator DoBubblesFadeOut()
     {
         void MinusAlpha(float a)
@@ -453,14 +478,14 @@ public class FrogController : HumanoidController
             FrogHeldBubblesRenderer.color = col;
         }
 
-        bPerformingBubblesFadeOut = true;
+        bPerformingCarriedPtfxFadeOutBubbles = true;
 
-        bAbortFadeIn = true;
-        bAbortFadeOut = false;
+        bAbortFadeOutBubbles = false;
+        bAbortFadeInBubbles = true;
 
         while (FrogHeldBubblesRenderer.color.a > 0.0f)
         {
-            if (bAbortFadeOut)
+            if (bAbortFadeOutBubbles)
             {
                 break;
             }
@@ -471,16 +496,16 @@ public class FrogController : HumanoidController
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        if (!bAbortFadeOut)
+        if (!bAbortFadeOutBubbles)
         {
             Color col = FrogHeldBubblesRenderer.color;
             col.a = 0.0f;
             FrogHeldBubblesRenderer.color = col;
         }
 
-        bAbortFadeIn = false;
+        bAbortFadeInBubbles = false;
 
-        bPerformingBubblesFadeOut = false;
+        bPerformingCarriedPtfxFadeOutBubbles = false;
 
         yield return null;
     }
@@ -494,14 +519,17 @@ public class FrogController : HumanoidController
             FrogHeldBubblesRenderer.color = col;
         }
 
-        bPerformingBubblesFadeIn = true;
+        bPerformingCarriedPtfxFadeInBubbles = true;
 
-        bAbortFadeOut = true;
-        bAbortFadeIn = false;
+        bAbortFadeInBubbles = false;
+
+        bAbortFadeOutBubbles = true;
+        bAbortFadeInHearts = true;
+        bAbortFadeOutHearts = true;
 
         while (FrogHeldBubblesRenderer.color.a < 1.0f)
         {
-            if (bAbortFadeIn)
+            if (bAbortFadeInBubbles)
             {
                 break;
             }
@@ -511,16 +539,98 @@ public class FrogController : HumanoidController
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        if (!bAbortFadeIn)
+        if (!bAbortFadeInBubbles)
         {
             Color col = FrogHeldBubblesRenderer.color;
             col.a = 1.0f;
             FrogHeldBubblesRenderer.color = col;
         }
 
-        bAbortFadeOut = false;
+        bAbortFadeOutBubbles = false;
 
-        bPerformingBubblesFadeIn = false;
+        bPerformingCarriedPtfxFadeInBubbles = false;
+
+        yield return null;
+    }
+
+
+    IEnumerator DoHeartsFadeOut()
+    {
+        void MinusAlpha(float a)
+        {
+            Color col = FrogHeldHeartsRenderer.color;
+            col.a -= a;
+            FrogHeldHeartsRenderer.color = col;
+        }
+
+        bPerformingCarriedPtfxFadeOutHearts = true;
+
+        bAbortFadeOutHearts = false;
+        bAbortFadeInHearts = true;
+
+        while (FrogHeldHeartsRenderer.color.a > 0.0f)
+        {
+            if (bAbortFadeOutHearts)
+            {
+                break;
+            }
+
+            // Fade out over half a second
+            MinusAlpha((Time.deltaTime) * 2);
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (!bAbortFadeOutHearts)
+        {
+            Color col = FrogHeldHeartsRenderer.color;
+            col.a = 0.0f;
+            FrogHeldHeartsRenderer.color = col;
+        }
+
+        bAbortFadeInHearts = false;
+
+        bPerformingCarriedPtfxFadeOutHearts = false;
+
+        yield return null;
+    }
+
+    IEnumerator DoHeartsFadeIn()
+    {
+        void AddAlpha(float a)
+        {
+            Color col = FrogHeldHeartsRenderer.color;
+            col.a += a;
+            FrogHeldHeartsRenderer.color = col;
+        }
+
+        bPerformingCarriedPtfxFadeInHearts = true;
+
+        bAbortFadeInHearts = false;
+        bAbortFadeOutHearts = true;
+
+        while (FrogHeldHeartsRenderer.color.a < 1.0f)
+        {
+            if (bAbortFadeInHearts)
+            {
+                break;
+            }
+
+            // Fade in over half a second
+            AddAlpha((Time.deltaTime) * 2);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (!bAbortFadeInHearts)
+        {
+            Color col = FrogHeldHeartsRenderer.color;
+            col.a = 1.0f;
+            FrogHeldHeartsRenderer.color = col;
+        }
+
+        bAbortFadeOutHearts = false;
+
+        bPerformingCarriedPtfxFadeInHearts = false;
 
         yield return null;
     }

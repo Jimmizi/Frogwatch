@@ -607,7 +607,7 @@ public class EnemyController : HumanoidController
         return false;
     }
 
-    void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
@@ -677,5 +677,7 @@ public class EnemyController : HumanoidController
         //{
         //    Gizmos.DrawSphere(point, 0.1f);
         //}
+
+        base.OnDrawGizmos();
     }
 }
