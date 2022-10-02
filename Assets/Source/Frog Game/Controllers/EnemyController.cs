@@ -149,7 +149,7 @@ public class EnemyController : HumanoidController
 
     protected override bool CanLeaveBounds()
     {
-        return state == State.Fleeing;
+        return state == State.Fleeing || state == State.SuccessfulFlee;
     }
 
     public void SetDashedInto()
@@ -189,11 +189,11 @@ public class EnemyController : HumanoidController
 
         SetState(State.Fleeing);
 
-        var vNearestCorner = GetRandomBoundsEdge();
-        var vDir = vNearestCorner - GetOffsetPosition();
+        var vRandoCorner = GetRandomBoundsEdge();
+        var vDir = vRandoCorner - GetOffsetPosition();
         vDir.Normalize();
 
-        vFleeTarget = vNearestCorner + (vDir * 2);
+        vFleeTarget = vRandoCorner + (vDir * 2);
         vCurrentDirection = Vector2.zero;
     }
 
@@ -643,5 +643,39 @@ public class EnemyController : HumanoidController
             Gizmos.color = Color.white;
             Gizmos.DrawLine(GetOffsetPosition(), vFleeTarget);
         }
+
+        //BoxCollider2D coll = GetVars().FrogMovementBounds;
+
+        //Vector2 vPos = GetOffsetPosition();
+        //List<Vector2> cornerPoints = new();
+
+        //Vector2 vWorldPos = new Vector2(coll.transform.position.x, coll.transform.position.y) + coll.offset;
+        //float halfHori = coll.size.x / 2;
+        //float halfVert = coll.size.y / 2;
+
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, halfVert));         // Top Left
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori * 0.5f, halfVert));  // Top Middle Left
+        //cornerPoints.Add(vWorldPos + new Vector2(0.0f, halfVert));              // Top Middle
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori * 0.5f, halfVert));   // Top Middle Right
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, halfVert));          // Top Right
+
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, -halfVert));        // Bot Left
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori * 0.5f, -halfVert)); // Bot Middle Left
+        //cornerPoints.Add(vWorldPos + new Vector2(0.5f, -halfVert));             // Bot Middle
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori * 0.5f, -halfVert));  // Bot Middle Right
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, -halfVert));         // Bot Right
+
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, halfVert * 0.5f));  // Top Middle Left
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, 0.0f));             // Middle Left
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, -halfVert * 0.5f)); // Bottom Middle Left
+
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, halfVert * 0.5f));   // Top Middle Right
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, 0.0f));              // Middle Right
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, -halfVert * 0.5f));  // Bottom Middle Right
+
+        //foreach (var point in cornerPoints)
+        //{
+        //    Gizmos.DrawSphere(point, 0.1f);
+        //}
     }
 }
