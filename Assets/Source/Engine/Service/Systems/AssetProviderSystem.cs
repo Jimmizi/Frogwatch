@@ -74,6 +74,7 @@ public class AssetProviderSystem : SystemObject
         var resourcePath = $"{filepath}/{type.Name}";
         var configAsset = Resources.Load(resourcePath, type) as Config;
 
+#if UNITY_EDITOR
         Debug.Log($"AddOrLoadConfig: Loading config '{type}'...");
 
         if (!configAsset)
@@ -90,6 +91,9 @@ public class AssetProviderSystem : SystemObject
             }
                 
         }
+#else
+        Debug.Log($"Failed loading config '{type}'. Cannot create asset at runtime.");
+#endif
 
         return configAsset;
     }

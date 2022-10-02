@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class BuildSceneNavigator : MonoBehaviour
 {
+#if UNITY_EDITOR
     [Tooltip("If populated only navigates through these scenes, otherwise will navigate through all in the build list.")]
     public List<SceneAsset> ScenesToNavigate = new List<SceneAsset>();
 
@@ -96,4 +97,5 @@ public class BuildSceneNavigator : MonoBehaviour
     {
         GUI.Label(new Rect(6, 6, 500, 24), $"Scene: {SceneManager.GetActiveScene().name}");
     }
+#endif
 }
