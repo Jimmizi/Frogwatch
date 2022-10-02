@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[System.Serializable]
+struct AudioEventClip
+{
+    [SerializeField]
+    public AudioEvent audioEvent;
+
+    [SerializeField]
+    public AudioClip clip;
+}
+
 public class AudioSystemVars : ServiceVars
 {
     [Header("One Shots")]
@@ -36,6 +47,9 @@ public class AudioSystemVars : ServiceVars
 
     private List<AudioSource> _musicCrossAudioSources = new List<AudioSource>();
 
+    [Space(10), Header("Events")]
+    List<AudioEventClip> eventClips;
+
 
     private void Awake()
     {
@@ -62,8 +76,7 @@ public class AudioSystemVars : ServiceVars
     }
 
     public void CrossFadeMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0)
-    {
-        // TODO error checking and index checking etc...        
+    {        
         if (channel < 0 || channel >= _maxNumMusicChannels)
         {
             return;
@@ -77,6 +90,19 @@ public class AudioSystemVars : ServiceVars
         {
             StartCoroutine(DoCrossFadeChannel(music, channel, crossFadeTime));
         }
+    }
+
+    public AudioClip FindAudioEventClip(AudioEvent audioEvent)
+    {
+        for (int i=0; i< eventClips.Count; i++)
+        {
+            if (eventClips[i].audioEvent == audioEvent)
+            {
+                return eventClips[i].clip;
+            }
+        }
+
+        return null;
     }
 
     IEnumerator DoCrossFadeChannel(AudioClip music, int channel, float crossFadeTime)
