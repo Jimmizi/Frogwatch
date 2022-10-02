@@ -4,12 +4,26 @@ public class GameTimer : MonoBehaviour
 {
     private float timerDuration = 5f * 60f;
 
-    private float timer;
+    private float nextThreshold;
+
+    //private float timer;
     [SerializeField] private TextMeshProUGUI firstMinute;
     [SerializeField] private TextMeshProUGUI secondMinute;
     [SerializeField] private TextMeshProUGUI seperator;
     [SerializeField] private TextMeshProUGUI firstSecond;
     [SerializeField] private TextMeshProUGUI secondSecond;
+
+    public static float TimeLeft => timeLeft;
+    private static float timeLeft;
+
+    public delegate void TimeCrossedMinuteThresholdDel();
+
+    public static TimeCrossedMinuteThresholdDel OnMinuteCrossed;
+
+    void Awake()
+    {
+        OnMinuteCrossed = null;
+    }
 
     void Start()
     {
@@ -18,15 +32,22 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
-        if (timer > 0)
+        if (timeLeft > 0)
         {
-            timer -= Time.deltaTime;
-            UpdateTimerDisplay(timer);
+            timeLeft -= Time.deltaTime;
+            UpdateTimerDisplay(timeLeft);
+
+            if (timeLeft <= nextThreshold)
+            {
+                nextThreshold -= 60.0f;
+                OnMinuteCrossed?.Invoke();
+            }
         }
     }
     private void ResetTimer()
     {
-        timer = timerDuration;
+        timeLeft = timerDuration;
+        nextThreshold = timerDuration - 60.0f;
     }
     private void UpdateTimerDisplay(float time)
     {

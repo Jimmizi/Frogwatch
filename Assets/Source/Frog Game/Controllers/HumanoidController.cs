@@ -191,7 +191,14 @@ public class HumanoidController : MonoBehaviour
     {
         KeepInBounds();
 
-        m_rigidbody.position += InputDirection * GetCurrentSpeedMult() * Time.deltaTime;
+        Vector2 addition = InputDirection * GetCurrentSpeedMult() * Time.deltaTime;
+        m_rigidbody.position += addition;
+
+        if (ZSort.IsPlayer)
+        {
+            GameStats.AddDistanceMoved(addition.magnitude);
+        }
+
         SetAnimWalking(InputDirection.x != 0.0f || InputDirection.y != 0.0f);
         
         if (JustPressedInteract)
@@ -280,6 +287,11 @@ public class HumanoidController : MonoBehaviour
                 {
                     break;
                 }
+            }
+
+            if (ZSort.IsPlayer)
+            {
+                GameStats.AddDistanceMoved(vAddition.magnitude);
             }
 
             m_rigidbody.position += vAddition;

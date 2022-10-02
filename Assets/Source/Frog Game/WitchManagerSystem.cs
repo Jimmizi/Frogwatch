@@ -9,7 +9,7 @@ public class WitchManagerSystem : SystemObject
     {
         isSpawningWitches = true;
         targetNumberOfWitches = iTargetNumber;
-        spawnTimer = GetTimeBetweenSpawns();
+        spawnTimer = GetTimeBetweenSpawns() + GetFirstTimeSpawnIncrease();
     }
     public void StopSpawningFrogs()
     {
@@ -30,6 +30,11 @@ public class WitchManagerSystem : SystemObject
         return 10.0f;
     }
 
+    float GetFirstTimeSpawnIncrease()
+    {
+        return 20.0f;
+    }
+
     public override void AwakeService()
     {
 
@@ -39,6 +44,11 @@ public class WitchManagerSystem : SystemObject
     {
         StartSpawningWitches(1);
         spawnTimer = 1.0f;
+
+        GameTimer.OnMinuteCrossed += delegate
+        {
+            ++targetNumberOfWitches;
+        };
     }
 
     public override void UpdateService()
@@ -62,7 +72,7 @@ public class WitchManagerSystem : SystemObject
     {
 
     }
-
+    
     void TrySpawnWitch()
     {
         Vector2 vSpawnPos = GetSpawnPosition();

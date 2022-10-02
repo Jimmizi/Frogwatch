@@ -412,6 +412,8 @@ public class FrogController : HumanoidController
         if (pondDroppedOn != null)
         {
             AssignToPond(pondDroppedOn);
+
+            GameStats.RecordFrogThrownIntoPond();
         }
         else
         {
