@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 9d31d672b2efd1c47aa4146bff9c11ca
   - enabled: 1
+    path: Assets/Scenes/VideoPlayStoryboard.unity
+    guid: eaddef2395480c5489516c97fa2354c3
+  - enabled: 1
     path: Assets/Scenes/Temp/JakeTestScene.unity
     guid: 26cb774d7c070e14a96801ed9aab1357
   m_configObjects: {}
