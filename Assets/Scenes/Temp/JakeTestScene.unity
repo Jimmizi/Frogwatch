@@ -11978,7 +11978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &799323947
 Transform:
   m_ObjectHideFlags: 0
@@ -29871,17 +29871,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: WitchPrefab
-      value: 
-      objectReference: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
+      propertyPath: SpawnEaser
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: FrogMovementBounds
       value: 
       objectReference: {fileID: 1032323207}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: FrogEscapeTestInterval
-      value: 7.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101843, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: m_Name
       value: FrogSystemVars
@@ -30010,7 +30006,7 @@ PrefabInstance:
       objectReference: {fileID: 1123086163}
     - target: {fileID: 5367687961178451591, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: orthographic size
-      value: 1.5
+      value: 1.3578125
       objectReference: {fileID: 0}
     - target: {fileID: 5367687961178451594, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: PixelsPerUnit

@@ -45,22 +45,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrogPrefab: {fileID: 48068475901459672, guid: 3793fec8785ba5149be88dd02484e97a, type: 3}
+  WitchPrefab: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
   AllowFrogsToAmbientlyHopIntoPonds: 1
   FrogMovementBounds: {fileID: 0}
   MinTimeBetweenHops: 1
   MaxTimeBetweenHops: 2
   NearbyAvoidRadius: 1.25
+  SpawnNearbyAvoidRadius: 3
   HopDistance: 0.25
   HopMovementSpeed: 4
   ThrownSpeed: 3
   ThrownDistance: 1
-  FrogEscapeTestInterval: 5
+  FrogEscapeTestInterval: 7.5
   BaseEscapeChance: 10
   AdditionalEscapeChancePerExtraFrogMin: 2.5
   AdditionalEscapeChancePerExtraFrogMax: 15
   MovementEaser: 1
   ThrownEaser: 16
   ThrownEaserSecondary: 13
+  SpawnEaser: 16
+  FrogSpawnSpeed: 3
   WitchStunnedMinTime: 4
   WitchStunnedMaxTime: 8
   WitchIdleMinTime: 1

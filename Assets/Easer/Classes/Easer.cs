@@ -2,6 +2,28 @@
 using System.Collections;
 using EaserCore;
 
+public enum EaserEase
+{
+    InSine = 0,
+    OutSine = 1,
+    InOutSine = 2,
+    InBack = 3,
+    OutBack = 4,
+    InOutBack = 5,
+    InCubic = 6,
+    OutCubic = 7,
+    InOutCubic = 8,
+    InElastic = 9,
+    OutElastic = 10,
+    InOutElastic = 11,
+    InBounce = 12,
+    OutBounce = 13,
+    InOutBounce = 14,
+    Wiggly = 15,
+    Throw = 16,
+    Linear = 17,
+}
+
 public class Easer
 {
 	#region Paths
@@ -63,7 +85,7 @@ public class Easer
 	{
 		return Ease(easeType, from, to, Mathf.PingPong(t, 1));
 	}
-
+	
 	/// <summary>
 	/// Returns the Vector2 along <code>easeType</code>'s curve, at t
 	/// </summary>
