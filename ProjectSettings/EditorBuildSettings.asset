@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: f9fd8a87002c9714eba8f15b8a5362fd
+  - enabled: 1
     path: Assets/Scenes/Temp/JakeTestScene.unity
     guid: 26cb774d7c070e14a96801ed9aab1357
   m_configObjects: {}

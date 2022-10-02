@@ -28,24 +28,24 @@ public class PondDropArea : MonoBehaviour
     void Start()
     {
         Ponds.Add(this);
-
-        CollectionBox = GetComponent<BoxCollider2D>();
-        DisplayBox = GetComponentInChildren<BoxCollider2D>();
         Areas.Add(CollectionBox);
         
-        float fRandomXOffset = frogSizeX / 4;
-        float fRandomYOffset = frogSizeY / 4;
+        float fRandomXOffset = frogSizeX / 4.0f;
+        float fRandomYOffset = frogSizeY / 4.0f;
+
+        float fRandomXOffsetHalf = fRandomXOffset / 2.0f;
+        float fRandomYOffsetHalf = fRandomYOffset / 2.0f;
 
         Vector2 vWorldPos = new Vector2(DisplayBox.transform.position.x, DisplayBox.transform.position.y) + DisplayBox.offset;
-        float halfHori = DisplayBox.size.x / 2;
-        float halfVert = DisplayBox.size.y / 2;
+        float halfHori = (DisplayBox.size.x / 2.0f);
+        float halfVert = (DisplayBox.size.y / 2.0f);
 
         // Top left to bottom right solving
-        float fStartX = -halfHori + (frogSizeX / 2);
-        float fStartY = halfVert - (frogSizeY / 2);
+        float fStartX = -halfHori + (frogSizeX / 2.0f);
+        float fStartY = halfVert - (frogSizeY / 2.0f);
 
-        int iAmountX = Mathf.FloorToInt(DisplayBox.size.x / frogSizeX);
-        int iAmountY = Mathf.FloorToInt(DisplayBox.size.y / frogSizeY);
+        int iAmountX = Mathf.RoundToInt(DisplayBox.size.x / frogSizeX);
+        int iAmountY = Mathf.RoundToInt(DisplayBox.size.y / frogSizeY);
 
         // Populate grid points for frogs
         for (int y = 0; y < iAmountY; ++y)
@@ -57,16 +57,16 @@ public class PondDropArea : MonoBehaviour
                 vOffset.x = fStartX + (x * frogSizeX);
                 vOffset.y = fStartY - (y * frogSizeY);
 
-                Vector2 vRandomOffsetFromOffset = Random.insideUnitCircle.normalized * 0.25f;
-                
+                //Vector2 vRandomOffsetFromOffset = Random.insideUnitCircle.normalized * 0.25f;
+
                 // Too close to sides, don't randomise towards side
                 if (x == 0)
                 {
-                    vOffset.x += Random.Range(0.0f, fRandomXOffset);
+                    vOffset.x += Random.Range(fRandomXOffsetHalf, fRandomXOffset);
                 }
                 else if (x == iAmountX - 1)
                 {
-                    vOffset.x -= Random.Range(0.0f, fRandomXOffset);
+                    vOffset.x -= Random.Range(fRandomXOffsetHalf, fRandomXOffset);
                 }
                 else
                 {
@@ -75,11 +75,11 @@ public class PondDropArea : MonoBehaviour
 
                 if (y == 0)
                 {
-                    vOffset.y -= Random.Range(0.0f, fRandomYOffset);
+                    vOffset.y -= Random.Range(fRandomYOffsetHalf, fRandomYOffset);
                 }
                 else if (y == iAmountY - 1)
                 {
-                    vOffset.y += Random.Range(0.0f, fRandomYOffset);
+                    vOffset.y += Random.Range(fRandomYOffsetHalf, fRandomYOffset);
                 }
                 else
                 {
