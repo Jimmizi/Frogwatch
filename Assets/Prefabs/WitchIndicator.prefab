@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1b430e5e22ff34291988e4383e8c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleFactor: 600
+  scaleFactor: 5
   _arrowImage: {fileID: 809566237092377863}
   padding: 32
   _positionTransform: {fileID: 4395032993999489476}

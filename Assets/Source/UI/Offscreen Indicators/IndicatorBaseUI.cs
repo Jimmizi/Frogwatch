@@ -98,10 +98,15 @@ public class IndicatorBaseUI : MonoBehaviour
             float angle = Mathf.Atan2(objectDirection.y, objectDirection.x);
             rotationTransform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
 
+
+            
             float distance = objectDirection.magnitude;
-            float scale = scaleFactor / distance;
-            float clampedScale = Mathf.Clamp(scale, 0.7f, 1.6f);
-            scaleTransform.localScale = new Vector3(clampedScale, clampedScale, clampedScale);
+            if (distance >= 1)
+            {
+                float scale = scaleFactor / distance;
+                float clampedScale = Mathf.Clamp(scale, 0.7f, 2f);
+                scaleTransform.localScale = new Vector3(clampedScale, clampedScale, clampedScale);
+            }
         }
     }
 }
