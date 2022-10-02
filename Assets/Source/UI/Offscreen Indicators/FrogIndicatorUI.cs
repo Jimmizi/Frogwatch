@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FrogIndicatorUI : IndicatorBaseUI
 {
+    private Animator animator;
     private FrogController _frogController;
 
     /// <summary>
@@ -42,5 +43,14 @@ public class FrogIndicatorUI : IndicatorBaseUI
             bool isCarried = (state == FrogController.State.Carried);
             return base.isVisible && !isCarried;
         }
+    }
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+    private void Update()
+    {
+        base.Update();
+        animator.SetBool("frogInPond", state == FrogController.State.InPond);
     }
 }
