@@ -40,6 +40,8 @@ public class FrogController : HumanoidController
     private bool bPerformingCarriedPtfxFadeInHearts = false;
     private bool bPerformingCarriedPtfxFadeOutHearts = false;
 
+    public GameObject exclamationMark;
+
     public State GetState()
     {
         return state;
@@ -79,6 +81,7 @@ public class FrogController : HumanoidController
         m_animator.SetBool("IsCarried", true);
         if (bHeldByWitch)
         {
+            exclamationMark?.SetActive(true);
             m_animator.SetBool("HeldByWitch", true);
             StartCoroutine(DoBubblesFadeIn());
         }
@@ -94,6 +97,7 @@ public class FrogController : HumanoidController
     {
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("HeldByWitch", false);
+        exclamationMark?.gameObject.SetActive(false);
 
         StartCoroutine(PerformThrown(GetHopDirection() * 0.5f, true));
         StartCoroutine(DoBubblesFadeOut());
