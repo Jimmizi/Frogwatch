@@ -32,7 +32,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
 
     public override void StartService()
     {
-        //StartSpawningFrogs(true);
+       // StartSpawningFrogs(true);
     }
 
     public override void UpdateService()
@@ -84,7 +84,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
         GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab);
         FrogController controller = newFrog.GetComponent<FrogController>();
         controller.ExternalSetPosition(vSpawnPos);
-        //controller.OnJustSpawned();
+        controller.OnJustSpawned();
     }
 
     Vector2 GetFrogSpawnPosition()
