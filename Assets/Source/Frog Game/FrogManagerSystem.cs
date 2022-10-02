@@ -23,7 +23,7 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
 
     float GetTimeBetweenSpawns()
     {
-        return 2.0f;
+        return 10.0f;
     }
 
     public override void AwakeService()
@@ -85,10 +85,9 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
     {
         Vector2 vSpawnPos = GetFrogSpawnPosition();
         
-        GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab);
+        GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab, new Vector2(vSpawnPos.x, 9.0f), Quaternion.identity);
         FrogController controller = newFrog.GetComponent<FrogController>();
         controller.SpawnPosition = vSpawnPos;
-        //controller.ExternalSetPosition(vSpawnPos);
         controller.OnJustSpawned();
     }
 
