@@ -178,6 +178,8 @@ public class EnemyController : HumanoidController
     {
         if (state != State.Stunned && state != State.SuccessfulFlee && state != State.Finished)
         {
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.DashIntoWitch, transform.position);
+
             DropCarriedFrog(true);
             SetState(State.Stunned);
             timeToStayInState = GetNextTimeToStun();
@@ -208,6 +210,8 @@ public class EnemyController : HumanoidController
     {
         SetCarryingFrog(targetFrog, true);
         targetFrog = null;
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.WitchPickedFrog, transform.position);
 
         SetState(State.Fleeing);
 
@@ -394,6 +398,7 @@ public class EnemyController : HumanoidController
 
         if (SmokeDisappearAnimator != null)
         {
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.SmokePuff, transform.position);
             SmokeDisappearAnimator.SetTrigger("Start");
         }
 

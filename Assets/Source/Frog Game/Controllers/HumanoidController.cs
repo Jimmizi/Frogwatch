@@ -166,6 +166,7 @@ public class HumanoidController : MonoBehaviour
 
     protected void SetCarryingFrog(FrogController frog, bool bByWitch = false)
     {
+        Service.Get<AudioSystem>().PlayEvent(bByWitch ? AudioEvent.WitchPickedFrog : AudioEvent.PickUpFrog, transform.position);
         frog.SetCarried(bByWitch);
         FrogCarrying = frog;
 
@@ -218,6 +219,7 @@ public class HumanoidController : MonoBehaviour
                 }
                 else
                 {
+                    Service.Get<AudioSystem>().PlayEvent(AudioEvent.ThrowFrog, transform.position);
                     FrogCarrying.SetThrown(InputDirection.x == 0.0f && InputDirection.y == 0.0f ? Random.insideUnitCircle.normalized : InputDirection);
                     FrogCarrying = null;
 

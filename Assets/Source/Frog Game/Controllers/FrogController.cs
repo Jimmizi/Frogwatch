@@ -248,10 +248,7 @@ public class FrogController : HumanoidController
     IEnumerator DoSpawning()
     {
         float fTime = 0.0f;
-        bool bAbort = false;
-
         Vector2 vOriginalPos = m_rigidbody.position;
-
         float fBaseScale = 0.2f;
 
         transform.localScale = new Vector3(fBaseScale, fBaseScale, 1.0f);
@@ -271,13 +268,15 @@ public class FrogController : HumanoidController
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        // If we want camera shake
+        // If we want camera shake - also add on camera
         //if (Vector2.Distance(m_rigidbody.position, Player.GetOffsetPosition()) < 2.0f)
         //{
         //    Camera.main.GetComponent<ProCamera2DShake>().Shake(0.5f, new Vector2(Random.Range(0.05f, 0.2f), Random.Range(0.05f, 0.2f)));
         //}
 
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
         FrogLandAnimator.SetTrigger("TriggerLand");
         state = State.Idle;
     }
@@ -352,6 +351,8 @@ public class FrogController : HumanoidController
         pondFrogIsIn = newPond;
 
         state = State.InPond;
+
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogSplash, transform.position);
         FrogLandAnimator.SetTrigger("TriggerSplash");
         m_animator.SetBool("InPond", true);
         escapeTestTimer = 0.0f;
@@ -424,6 +425,7 @@ public class FrogController : HumanoidController
                 fDropTimeAccelHops = 4.0f;
             }
 
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
             FrogLandAnimator.SetTrigger("TriggerLand");
         }
 
@@ -475,6 +477,7 @@ public class FrogController : HumanoidController
 
             if (!bAssignedToPond)
             {
+                Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
                 FrogLandAnimator.SetTrigger("TriggerLand");
             }
         }
