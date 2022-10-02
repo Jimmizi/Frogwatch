@@ -48,6 +48,7 @@ public class AudioSystemVars : ServiceVars
     private List<AudioSource> _musicCrossAudioSources = new List<AudioSource>();
 
     [Space(10), Header("Events")]
+    [SerializeField]
     List<AudioEventClip> eventClips;
 
 
@@ -94,11 +95,14 @@ public class AudioSystemVars : ServiceVars
 
     public AudioClip FindAudioEventClip(AudioEvent audioEvent)
     {
-        for (int i=0; i< eventClips.Count; i++)
+        if (eventClips != null)
         {
-            if (eventClips[i].audioEvent == audioEvent)
+            for (int i = 0; i < eventClips.Count; i++)
             {
-                return eventClips[i].clip;
+                if (eventClips[i].audioEvent == audioEvent)
+                {
+                    return eventClips[i].clip;
+                }
             }
         }
 

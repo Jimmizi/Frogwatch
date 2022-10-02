@@ -313,6 +313,13 @@ public class FrogController : HumanoidController
                 m_animator.SetBool("InPond", false);
                 
                 TryPerformHop(true);
+                pondFrogIsIn = null;
+            }
+            else if(Random.Range(0.0f, 100.0f) < 20.0f)
+            {
+                pondFrogIsIn.RemoveFrog(this);
+                m_animator.SetBool("InPond", false);
+                TryPerformHop(false, true);
             }
         }
     }
@@ -336,13 +343,19 @@ public class FrogController : HumanoidController
     {
     }
 
-    void TryPerformHop(bool bToEscapePond = false)
+    void TryPerformHop(bool bToEscapePond = false, bool bZeroDirection = false)
     {
-        Vector2 dir = GetHopDirection(bToEscapePond);
-        Vector2 vPos = transform.position;
+        float fMod = (bToEscapePond ? 2.0f : 1.0f);
+        if (pondFrogIsIn != null && pondFrogIsIn.IsLarge)
+        {
+            fMod *= 2.0f;
+        }
 
+        Vector2 dir = !bZeroDirection ? GetHopDirection(bToEscapePond, fMod) : Vector2.zero;
+        Vector2 vPos = transform.position;
+        
         state = State.Hopping;
-        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance * (bToEscapePond ? 2.0f : 1.0f))));
+        StartCoroutine(PerformHop(vPos + (dir * GetVars().HopDistance * fMod)));
     }
 
     void AssignToPond(PondDropArea newPond)
@@ -490,9 +503,9 @@ public class FrogController : HumanoidController
         return Random.Range(GetVars().MinTimeBetweenHops, GetVars().MaxTimeBetweenHops);
     }
     
-    private Vector2 GetHopDirection(bool isEscapingPond = false)
+    private Vector2 GetHopDirection(bool isEscapingPond = false, float fHopMod = 1.0f)
     {
-        float hopDist = GetVars().HopDistance * (isEscapingPond ? 2.0f : 1.0f);
+        float hopDist = GetVars().HopDistance * fHopMod;
         
         int NumDirectionsToScore = 10;
 

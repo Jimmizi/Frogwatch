@@ -11,6 +11,8 @@ public class PondDropArea : MonoBehaviour
     public static List<PondDropArea> Ponds = new();
     public static List<BoxCollider2D> Areas = new();
 
+    public bool IsLarge = false;
+
     public BoxCollider2D CollectionBox;
     public BoxCollider2D DisplayBox;
 

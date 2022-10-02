@@ -4751,6 +4751,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2083557958}
     m_Modifications:
+    - target: {fileID: 797159113812741506, guid: 27411b6dcadd80f4393ce7ffca75a96b, type: 3}
+      propertyPath: eventClips.Array.size
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 1766420083151951245, guid: 27411b6dcadd80f4393ce7ffca75a96b, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -5925,7 +5929,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1932223435 stripped
 Transform:
@@ -6274,7 +6278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367687961178451588, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5367687961178451588, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6347,11 +6351,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6769637615656872974, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 6769637615656872974, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.55
+      value: 1.74
       objectReference: {fileID: 0}
     - target: {fileID: 6769637615656872974, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
       propertyPath: m_LocalPosition.z

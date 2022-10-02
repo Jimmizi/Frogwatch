@@ -43,11 +43,11 @@ public class WitchManagerSystem : SystemObject
     public override void StartService()
     {
         StartSpawningWitches(1);
-        spawnTimer = 1.0f;
 
         GameTimer.OnMinuteCrossed += delegate
         {
             ++targetNumberOfWitches;
+            spawnTimer = 0.0f;
         };
     }
 
@@ -77,7 +77,7 @@ public class WitchManagerSystem : SystemObject
     {
         Vector2 vSpawnPos = GetSpawnPosition();
 
-        GameObject witch = Object.Instantiate(Service.Vars<FrogSystemVars>().WitchPrefab);
+        GameObject witch = Object.Instantiate(Service.Vars<FrogSystemVars>().WitchPrefab, vSpawnPos, Quaternion.identity);
         EnemyController controller = witch.GetComponent<EnemyController>();
         controller.ExternalSetPosition(vSpawnPos);
         controller.OnJustSpawned();

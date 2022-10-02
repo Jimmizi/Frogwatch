@@ -42,6 +42,11 @@ public class GameTimer : MonoBehaviour
                 nextThreshold -= 60.0f;
                 OnMinuteCrossed?.Invoke();
             }
+
+            if (timeLeft < 0)
+            {
+                UpdateTimerDisplay(0);
+            }
         }
     }
     private void ResetTimer()

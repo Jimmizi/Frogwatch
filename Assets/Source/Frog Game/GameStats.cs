@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class GameStats
 {
+    // Add as needed
     public struct InternalStats
     {
         public float DistanceMoved;
@@ -23,7 +24,6 @@ public static class GameStats
     {
         stats.DistanceMoved += fDist;
     }
-
     public static void RecordWitchBonk()
     {
         stats.WitchesBonked++;
