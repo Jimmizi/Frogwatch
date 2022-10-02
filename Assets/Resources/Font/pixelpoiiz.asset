@@ -57,9 +57,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: pixelpoiiz
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 2102100621
   material: {fileID: -2660863095170270763}
-  materialHashCode: 0
+  materialHashCode: 1491211277
   m_Version: 1.1.0
   m_SourceFontFileGUID: c265b2d550de0d9429671e325da64ac4
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: c265b2d550de0d9429671e325da64ac4, type: 3}
