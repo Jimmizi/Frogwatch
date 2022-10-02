@@ -255,7 +255,7 @@ public class FrogController : HumanoidController
                 fChanceToEscape += fExtraChance;
             }
             
-            if (fChanceToEscape < Random.Range(0.0f, 100.0f))
+            if (Random.Range(0.0f, 100.0f) < fChanceToEscape)
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);

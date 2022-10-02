@@ -59,7 +59,7 @@ public class PlayerController : HumanoidController
 
         JustPressedInteract = bInteracted;
         JustPressedDash = DashIsUnlocked && bDashed;
-
+        
         base.Update();
     }
     

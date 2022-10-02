@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e5f85b688f93b8346bb658bf34ac0aa3
+guid: 60345a7e95a6b4f448a979cdb874d154
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -102,23 +102,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 2
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -129,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dash_0
+      name: smoke_ptfx_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f594564e450fbb47b35e1455924fffe
-      internalID: 326489522
+      spriteID: da9d860ac6e2d6f42acef8124bb3e8c9
+      internalID: 1524667859
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_1
+      name: smoke_ptfx_1
       rect:
         serializedVersion: 2
         x: 128
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,20 +152,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3dbdfc215c293244188db93de441b67d
-      internalID: 831354241
+      spriteID: b5d56817650e30e438b8b4992d186e0b
+      internalID: -937795604
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_2
+      name: smoke_ptfx_2
       rect:
         serializedVersion: 2
         x: 256
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -185,20 +173,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb3ce52915e2dfa478c5573a501d1d7c
-      internalID: 1067329944
+      spriteID: 7b82b6c206531e844910f83454daf0f4
+      internalID: 1767809722
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_3
+      name: smoke_ptfx_3
       rect:
         serializedVersion: 2
         x: 384
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +194,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 535ea74afb375ba40bd70fc823e19dc7
-      internalID: -1563204868
+      spriteID: a699ab17c97be4f4d9f4c4543f3591cd
+      internalID: 1905651020
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_4
+      name: smoke_ptfx_4
       rect:
         serializedVersion: 2
         x: 512
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -227,20 +215,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4219fc8e6221f65418b524f058dc4757
-      internalID: -1780380342
+      spriteID: db30e7124c3f8cc46b95afc80226686f
+      internalID: -225819293
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_5
+      name: smoke_ptfx_5
       rect:
         serializedVersion: 2
         x: 640
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -248,20 +236,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c05a7cdc286500045a29d8e08bd28206
-      internalID: -210861313
+      spriteID: 862ae35df41f1bc4da05767302e64a01
+      internalID: -660902690
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_6
+      name: smoke_ptfx_6
       rect:
         serializedVersion: 2
         x: 768
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -269,20 +257,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01068baec9b9c374f8c8e48d6bef468b
-      internalID: 1057869313
+      spriteID: 1e5c23a722178d944b0b10e2a00ea75d
+      internalID: -192650047
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dash_7
+      name: smoke_ptfx_7
       rect:
         serializedVersion: 2
         x: 896
         y: 0
         width: 128
-        height: 64
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -290,8 +278,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 56bd16864cd0340429417eeecda8ab24
-      internalID: 1523896267
+      spriteID: 2026f2a10f418ad4888fcdbde5c46374
+      internalID: 1537274684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: smoke_ptfx_8
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b00a70aae53914846bda2cbab7fcbbf8
+      internalID: -375890988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: smoke_ptfx_9
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6aa54ecc16f032b409bdfcfb53eceaa6
+      internalID: -788467454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: smoke_ptfx_10
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87eae8a56315ef84084e4c8f00cc3f9e
+      internalID: 2000697310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: smoke_ptfx_11
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e17776d32808604696493ef19cf3143
+      internalID: -2086041054
       vertices: []
       indices: 
       edges: []
@@ -307,14 +379,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      dash_6: 1057869313
-      dash_5: -210861313
-      dash_4: -1780380342
-      dash_2: 1067329944
-      dash_3: -1563204868
-      dash_7: 1523896267
-      dash_0: 326489522
-      dash_1: 831354241
+      smoke_ptfx_7: 1537274684
+      smoke_ptfx_11: -2086041054
+      smoke_ptfx_8: -375890988
+      smoke_ptfx_9: -788467454
+      smoke_ptfx_6: -192650047
+      smoke_ptfx_1: -937795604
+      smoke_ptfx_4: -225819293
+      smoke_ptfx_5: -660902690
+      smoke_ptfx_10: 2000697310
+      smoke_ptfx_0: 1524667859
+      smoke_ptfx_2: 1767809722
+      smoke_ptfx_3: 1905651020
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

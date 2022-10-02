@@ -381,17 +381,20 @@ public class EnemyController : HumanoidController
         {
             fTime += Time.deltaTime;
 
-            foreach (var fr in frogRenderers)
+            if (fTime >= 0.25f)
             {
-                if (fr != null)
+                foreach (var fr in frogRenderers)
                 {
-                    MinusAlpha(fr, (Time.deltaTime) * 5);
+                    if (fr != null)
+                    {
+                        MinusAlpha(fr, (Time.deltaTime) * 5);
+                    }
                 }
-            }
 
-            if (witchRender != null)
-            {
-                MinusAlpha(witchRender, (Time.deltaTime) * 5);
+                if (witchRender != null)
+                {
+                    MinusAlpha(witchRender, (Time.deltaTime) * 5);
+                }
             }
 
             yield return new WaitForSeconds(Time.deltaTime);
@@ -493,8 +496,7 @@ public class EnemyController : HumanoidController
     Vector2 GetRandomBoundsEdge()
     {
         BoxCollider2D coll = GetVars().FrogMovementBounds;
-
-        Vector2 vPos = GetOffsetPosition();
+        
         List<Vector2> cornerPoints = new();
 
         Vector2 vWorldPos = new Vector2(coll.transform.position.x, coll.transform.position.y) + coll.offset;

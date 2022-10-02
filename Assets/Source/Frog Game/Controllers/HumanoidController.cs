@@ -69,12 +69,16 @@ public class HumanoidController : MonoBehaviour
     {
         if (OnSpawnedAnimator != null)
         {
-            OnSpawnedAnimator.SetTrigger("Start");
+            //OnSpawnedAnimator.SetTrigger("Start");
         }
     }
-
-    // Start is called before the first frame update
+    
     protected virtual void Start()
+    {
+        
+    }
+
+    protected virtual void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
