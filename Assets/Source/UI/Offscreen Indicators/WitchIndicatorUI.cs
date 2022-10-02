@@ -56,11 +56,9 @@ public class WitchIndicatorUI : IndicatorBaseUI
             // If we change to Fleeing put this arrow on top of other arrows (by making it the last child)
             if (state == EnemyController.State.Fleeing)
             {
-                var temp = transform.parent;
-                transform.parent = null;
-                transform.parent = temp;
+               int childIndex = transform.parent.childCount;
+               transform.SetSiblingIndex(childIndex);
             }
-
             previousState = state;
         }
 
