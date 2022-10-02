@@ -9,6 +9,41 @@ using Vector2 = UnityEngine.Vector2;
 
 public class FrogController : HumanoidController
 {
+    public static int GetNumberOfFrogs()
+    {
+        return FrogList.Count;
+    }
+    public static int GetNumberOfFrogsInPonds()
+    {
+        int iCount = 0;
+        foreach (var frog in FrogList)
+        {
+            if (frog.state == State.InPond)
+            {
+                ++iCount;
+            }
+        }
+
+        return iCount;
+    }
+    
+    public static int GetNumberOfCarriedFrogs()
+    {
+        int iCount = 0;
+        foreach (var frog in FrogList)
+        {
+            if (frog.state == State.Carried)
+            {
+                ++iCount;
+            }
+        }
+
+        return iCount;
+    }
+
+
+
+
     public enum State
     {
         Idle,

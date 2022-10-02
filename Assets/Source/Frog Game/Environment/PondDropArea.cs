@@ -8,7 +8,9 @@ public class PondDropArea : MonoBehaviour
     readonly float frogSizeX = 0.32f;
     readonly float frogSizeY = 0.16f;
 
+    public static List<PondDropArea> Ponds = new();
     public static List<BoxCollider2D> Areas = new();
+
     public BoxCollider2D CollectionBox;
     public BoxCollider2D DisplayBox;
 
@@ -18,8 +20,12 @@ public class PondDropArea : MonoBehaviour
     public Dictionary<FrogController, Vector2> FilledSlots = new();
     public List<FrogController> ExtraFrogs = new();
 
+    
+
     void Start()
     {
+        Ponds.Add(this);
+
         CollectionBox = GetComponent<BoxCollider2D>();
         DisplayBox = GetComponentInChildren<BoxCollider2D>();
         Areas.Add(CollectionBox);
@@ -85,6 +91,7 @@ public class PondDropArea : MonoBehaviour
 
     void OnDestroy()
     {
+        Ponds.Remove(this);
         Areas.Remove(CollectionBox);
     }
 
@@ -93,15 +100,11 @@ public class PondDropArea : MonoBehaviour
         Vector2 vWorldPos = new Vector2(DisplayBox.transform.position.x, DisplayBox.transform.position.y) + DisplayBox.offset;
 
         // FilledSlots will give the positions back as free points when removing the frog
-        if (FreeOffsets.Count > 0 && false)
+        if (FreeOffsets.Count > 0)
         {
             Vector2 vClosestOffset = GetClosestFreeOffset(frog.GetOffsetPosition());
             FreeOffsets.Remove(vClosestOffset);
-
-            //int iIndex = Random.Range(0, FreeOffsets.Count);
-            //Vector2 vRandomOffset = FreeOffsets[iIndex];
-            //FreeOffsets.RemoveAt(iIndex);
-
+            
             FilledSlots.Add(frog, vClosestOffset);
             frog.ExternalSetPosition(vWorldPos + vClosestOffset);
         }
