@@ -29871,6 +29871,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
+      propertyPath: WitchPrefab
+      value: 
+      objectReference: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
+    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: FrogMovementBounds
       value: 
       objectReference: {fileID: 1032323207}
@@ -30074,13 +30078,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2027451366, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
       propertyPath: m_Name
       value: Witch
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6965367066321798110, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
       propertyPath: m_RootOrder

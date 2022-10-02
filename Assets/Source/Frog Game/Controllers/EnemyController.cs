@@ -496,8 +496,7 @@ public class EnemyController : HumanoidController
     Vector2 GetRandomBoundsEdge()
     {
         BoxCollider2D coll = GetVars().FrogMovementBounds;
-
-        Vector2 vPos = GetOffsetPosition();
+        
         List<Vector2> cornerPoints = new();
 
         Vector2 vWorldPos = new Vector2(coll.transform.position.x, coll.transform.position.y) + coll.offset;
