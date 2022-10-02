@@ -49,13 +49,13 @@ public class WitchScreenDebug : MonoBehaviour
             var wc = hc as EnemyController;
             if (wc != null)
             {
-                DrawWitchDebug(wc);
+                //DrawWitchDebug(wc);
             }
         }
 
         // Stats debug
         
-        currentPos = new Vector2(15, 30);
-        DrawText($"Traveled: {GameStats.Stats.DistanceMoved}");
+        //currentPos = new Vector2(15, 30);
+        //DrawText($"Traveled: {GameStats.Stats.DistanceMoved}");
     }
 }
