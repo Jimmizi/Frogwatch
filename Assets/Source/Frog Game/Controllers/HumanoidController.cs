@@ -58,6 +58,11 @@ public class HumanoidController : MonoBehaviour
         return new Vector2(transform.position.x, transform.position.y) + BaseOffset;
     }
 
+    public void ExternalSetPosition(Vector2 vPos)
+    {
+        m_rigidbody.position = vPos - BaseOffset;
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {

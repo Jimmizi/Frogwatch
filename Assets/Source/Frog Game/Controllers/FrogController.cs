@@ -42,6 +42,8 @@ public class FrogController : HumanoidController
 
     public GameObject exclamationMark;
 
+    private PondDropArea pondFrogIsIn;
+
     public State GetState()
     {
         return state;
@@ -79,6 +81,7 @@ public class FrogController : HumanoidController
     {
         state = State.Carried;
         m_animator.SetBool("IsCarried", true);
+        FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
         if (bHeldByWitch)
         {
             exclamationMark?.SetActive(true);
@@ -89,8 +92,6 @@ public class FrogController : HumanoidController
         {
             StartCoroutine(DoHeartsFadeIn());
         }
-
-        FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
     }
 
     public void SetDropped()
@@ -251,23 +252,35 @@ public class FrogController : HumanoidController
             fThrowTime += Time.deltaTime * (GetVars().ThrownSpeed * 2);
             yield return new WaitForSeconds(Time.deltaTime);
         }
-
+        
         m_rigidbody.position = vNewPos - heightOffset;
-        state = State.Idle;
         ResetTimer();
+        
+        PondDropArea pondDroppedOn = PondDropArea.GetOverlapped(m_rigidbody.position);
+        if (pondDroppedOn != null)
+        {
+            pondDroppedOn.AddFrog(this);
+            pondFrogIsIn = pondDroppedOn;
 
-        // TODO Add into pond where if new pos is situated in a pond
+            state = State.InPond;
+            FrogLandAnimator.SetTrigger("TriggerSplash");
+            m_animator.SetBool("InPond", true);
+        }
+        else
+        {
+            state = State.Idle;
+
+            if (bAccelHops)
+            {
+                fDropTimeAccelHops = 4.0f;
+            }
+
+            FrogLandAnimator.SetTrigger("TriggerLand");
+        }
 
         m_animator.SetBool("IsCarried", false);
         m_animator.SetBool("IsHopping", false);
         m_animator.SetBool("HeldByWitch", false);
-
-        FrogLandAnimator.SetTrigger("TriggerLand");
-
-        if (bAccelHops)
-        {
-            fDropTimeAccelHops = 4.0f;
-        }
     }
 
     IEnumerator PerformHop(Vector2 vNewPos)
