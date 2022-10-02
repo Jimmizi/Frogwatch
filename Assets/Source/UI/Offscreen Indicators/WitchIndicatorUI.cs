@@ -40,6 +40,8 @@ public class WitchIndicatorUI : IndicatorBaseUI
         }
     }
 
+    private EnemyController.State previousState;
+
     protected override void Update()
     {
         base.Update();
@@ -47,6 +49,19 @@ public class WitchIndicatorUI : IndicatorBaseUI
         if (_exclamationIcon)
         {
             _exclamationIcon.enabled = isVisible;
+        }
+
+        if (previousState != state)
+        {
+            // If we change to Fleeing put this arrow on top of other arrows (by making it the last child)
+            if (state == EnemyController.State.Fleeing)
+            {
+                var temp = transform.parent;
+                transform.parent = null;
+                transform.parent = temp;
+            }
+
+            previousState = state;
         }
 
         if (_animator)
