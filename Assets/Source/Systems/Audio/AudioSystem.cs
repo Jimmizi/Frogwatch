@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AudioSystem : SystemObjectWithVars<AudioSystemVars>
+{
+    private int lastOneShotIndex = 0;
+
+    public override void AwakeService()
+    {
+    }
+
+    public override void FixedUpdateService()
+    {
+    }
+
+    public override void StartService()
+    {
+    }
+
+    public override void UpdateService()
+    {
+    }
+
+    public void PlayOneShot(AudioClip clip, Vector3 position)
+    {
+        AudioSource audioSource = FindFreeOneShot();
+        audioSource.transform.position = position;
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void CrossFadeToMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0)
+    {
+        GetVars().CrossFadeMusic(music, crossFadeTime, channel);
+    }
+
+    private AudioSource FindFreeOneShot()
+    {
+        List<AudioSource> oneShots = GetVars().oneShotAudioSources;
+        
+        for (int i = 0; i < oneShots.Count; i++)
+        {
+            int oneShotIndex = (lastOneShotIndex + 1 + i) % oneShots.Count;
+            AudioSource oneShotSource = oneShots[oneShotIndex];
+
+            if (!oneShotSource.isPlaying)
+            {
+                lastOneShotIndex = oneShotIndex;
+                return oneShotSource;
+            }
+        }
+
+        return null;
+    }
+}
