@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6965367066321798106}
   - component: {fileID: 6965367066321798107}
   - component: {fileID: 220202813}
+  - component: {fileID: 2511812268137260149}
   m_Layer: 7
   m_Name: Witch
   m_TagString: Untagged
@@ -140,13 +141,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrogCarryFloatEase: 0
   ControllerSpeed: 0.625
+  DashSpeed: 7.5
   PickupDistance: 0.25
+  DashTime: 0.05
+  DashLogicalTime: 0.35
   FrogCarryOffsetStart: {x: 0, y: 0.23}
   FrogCarryOffsetEnd: {x: 0, y: 0.3075}
   CarryFrogAnimSpeed: 0.5
   InteractCooldown: 0.75
+  DashCooldown: 3
   ZSort: {fileID: 0}
   FrogCarrying: {fileID: 0}
+  DashCooldownTimer: 0
   targetFrog: {fileID: 0}
 --- !u!50 &6965367066321798107
 Rigidbody2D:
@@ -195,3 +201,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2}
   m_EdgeRadius: 0
+--- !u!114 &2511812268137260149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6965367066321798084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2838892c2050f4e97cee917b7a7196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicatorUIPrefab: {fileID: 6434610426988326667, guid: 0190febd7abd8a249a01d53c46c749e9, type: 3}
