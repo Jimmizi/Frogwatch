@@ -30,7 +30,9 @@ public class EnemyController : HumanoidController
         Fleeing,    // Has a frog, trying to flee
         Stunned,    // Has been stunned
 
-        SuccessfulFlee
+        SuccessfulFlee,
+
+        Finished
     }
     private State state;
 
@@ -116,6 +118,9 @@ public class EnemyController : HumanoidController
                 ProcessStunned();
                 break;
             case State.SuccessfulFlee:
+                ProcessSuccessfulFlee();
+                break;
+            case State.Finished:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -141,6 +146,7 @@ public class EnemyController : HumanoidController
             case State.Idle:
             case State.Stunned:
             case State.SuccessfulFlee:
+            case State.Finished:
                 return 0.0f;
         }
 
@@ -190,10 +196,8 @@ public class EnemyController : HumanoidController
         SetState(State.Fleeing);
 
         var vRandoCorner = GetRandomBoundsEdge();
-        var vDir = vRandoCorner - GetOffsetPosition();
-        vDir.Normalize();
 
-        vFleeTarget = vRandoCorner + (vDir * 2);
+        vFleeTarget = vRandoCorner;
         vCurrentDirection = Vector2.zero;
     }
 
@@ -319,6 +323,21 @@ public class EnemyController : HumanoidController
         }
     }
 
+    void ProcessSuccessfulFlee()
+    {
+        ++FrogController.NumFrogsTaken;
+
+        SetState(State.Finished);
+        vCurrentDirection = Vector2.zero;
+
+        //StartCoroutine(DoFleeRespawn());
+    }
+
+    //IEnumerator DoFleeRespawn()
+    //{
+
+    //}
+
     float GetNextTimeToIdle()
     {
         var vars = GetVars();
@@ -419,11 +438,12 @@ public class EnemyController : HumanoidController
         float halfHori = coll.size.x / 2;
         float halfVert = coll.size.y / 2;
 
-        cornerPoints.Add(vWorldPos + new Vector2(-halfHori, halfVert));         // Top Left
-        cornerPoints.Add(vWorldPos + new Vector2(-halfHori * 0.5f, halfVert));  // Top Middle Left
-        cornerPoints.Add(vWorldPos + new Vector2(0.0f, halfVert));              // Top Middle
-        cornerPoints.Add(vWorldPos + new Vector2(halfHori * 0.5f, halfVert));   // Top Middle Right
-        cornerPoints.Add(vWorldPos + new Vector2(halfHori, halfVert));          // Top Right
+        // Comment out to make witches not flee towards the top because of the player house (remove if player house not added)
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori, halfVert));         // Top Left
+        //cornerPoints.Add(vWorldPos + new Vector2(-halfHori * 0.5f, halfVert));  // Top Middle Left
+        //cornerPoints.Add(vWorldPos + new Vector2(0.0f, halfVert));              // Top Middle
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori * 0.5f, halfVert));   // Top Middle Right
+        //cornerPoints.Add(vWorldPos + new Vector2(halfHori, halfVert));          // Top Right
         
         cornerPoints.Add(vWorldPos + new Vector2(-halfHori, -halfVert));        // Bot Left
         cornerPoints.Add(vWorldPos + new Vector2(-halfHori * 0.5f, -halfVert)); // Bot Middle Left

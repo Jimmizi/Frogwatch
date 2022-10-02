@@ -41,6 +41,7 @@ public class FrogController : HumanoidController
         return iCount;
     }
 
+    public static int NumFrogsTaken = 0;
 
 
 
