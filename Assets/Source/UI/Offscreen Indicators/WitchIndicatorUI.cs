@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WitchIndicatorUI : IndicatorBaseUI
 {
     [SerializeField]
-    private TextMeshProUGUI _exclamationText;
+    private Image _exclamationIcon;
 
     [SerializeField]
     private Animator _animator;
@@ -44,9 +44,9 @@ public class WitchIndicatorUI : IndicatorBaseUI
     {
         base.Update();
 
-        if (_exclamationText)
+        if (_exclamationIcon)
         {
-            _exclamationText.enabled = isVisible;
+            _exclamationIcon.enabled = isVisible;
         }
 
         if (_animator)
