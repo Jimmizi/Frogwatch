@@ -187,10 +187,13 @@ public class EnemyController : HumanoidController
             Service.Get<AudioSystem>().PlayEvent(AudioEvent.DashIntoWitch, transform.position);
 
             DropCarriedFrog(true);
+            targetFrog = null;
+
             SetState(State.Stunned);
             timeToStayInState = GetNextTimeToStun();
             vCurrentDirection = Vector2.zero;
             vCourseCorrectedPosition = Vector2.zero;
+            
 
             SetAnimCarrying(false);
             SetAnimWalking(false);

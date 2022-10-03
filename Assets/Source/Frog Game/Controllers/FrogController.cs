@@ -349,7 +349,7 @@ public class FrogController : HumanoidController
             Vector2 vDirToCenter = frogBounds.offset - vClosestPoint;
             vDirToCenter.Normalize();
 
-            vClosestPoint += vDirToCenter * 2;
+            vClosestPoint += vDirToCenter * 0.5f;
             m_rigidbody.position = vClosestPoint;
         }
     }
