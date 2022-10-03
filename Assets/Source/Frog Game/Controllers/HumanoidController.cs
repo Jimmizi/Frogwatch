@@ -190,6 +190,11 @@ public class HumanoidController : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (StatsScreen.IsOnStatsScreen)
+        {
+            return;
+        }
+
         KeepInBounds();
 
         Vector2 addition = InputDirection * GetCurrentSpeedMult() * Time.deltaTime;
