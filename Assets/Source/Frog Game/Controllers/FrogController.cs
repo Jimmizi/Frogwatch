@@ -57,6 +57,7 @@ public class FrogController : HumanoidController
 
     public static List<FrogController> FrogList = new();
 
+    public Animator MusicNoteAnimator;
     public SpriteRenderer FrogHeldBubblesRenderer;
     public SpriteRenderer FrogHeldHeartsRenderer;
     public Animator FrogLandAnimator;
@@ -278,6 +279,7 @@ public class FrogController : HumanoidController
 
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
         FrogLandAnimator.SetTrigger("TriggerLand");
+        MusicNoteAnimator.SetBool("InPond", false);
         state = State.Idle;
     }
 
@@ -311,7 +313,8 @@ public class FrogController : HumanoidController
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
-                
+                MusicNoteAnimator.SetBool("InPond", false);
+
                 TryPerformHop(true);
                 pondFrogIsIn = null;
             }
@@ -319,6 +322,7 @@ public class FrogController : HumanoidController
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
+
                 TryPerformHop(false, true);
             }
         }
@@ -367,6 +371,7 @@ public class FrogController : HumanoidController
 
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogSplash, transform.position);
         FrogLandAnimator.SetTrigger("TriggerSplash");
+        MusicNoteAnimator.SetBool("InPond", true);
         m_animator.SetBool("InPond", true);
         escapeTestTimer = 0.0f;
     }
@@ -440,6 +445,7 @@ public class FrogController : HumanoidController
 
             Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
             FrogLandAnimator.SetTrigger("TriggerLand");
+            MusicNoteAnimator.SetBool("InPond", false);
         }
 
         m_animator.SetBool("IsCarried", false);
@@ -492,6 +498,7 @@ public class FrogController : HumanoidController
             {
                 Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
                 FrogLandAnimator.SetTrigger("TriggerLand");
+                MusicNoteAnimator.SetBool("InPond", false);
             }
         }
         
