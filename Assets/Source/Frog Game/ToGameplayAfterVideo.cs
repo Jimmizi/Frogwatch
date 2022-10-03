@@ -6,7 +6,7 @@ using UnityEngine.Video;
 
 public class ToGameplayAfterVideo : MonoBehaviour
 {
-    public VideoPlayer Video;
+    public Animation Anim;
     public string NextScene; // Unity buildDoes not like SceneAsset
 
     private bool bStarted = false;
@@ -15,6 +15,8 @@ public class ToGameplayAfterVideo : MonoBehaviour
     void Start()
     {
         
+
+
     }
 
     // Update is called once per frame
@@ -22,14 +24,13 @@ public class ToGameplayAfterVideo : MonoBehaviour
     {
         if (!bStarted)
         {
-            if (Video.frame != -1)
+            if (Anim.isPlaying)
             {
                 bStarted = true;
             }
         } 
-        else if ((ulong)Video.frame >= Video.frameCount - 1)
+        else if (!Anim.isPlaying)
         {
-            Debug.Log("Video done");
             LoadNextScene();
         }
     }
