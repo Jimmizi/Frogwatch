@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using Com.LuisPedroFonseca.ProCamera2D;
+using HutongGames.PlayMaker.Actions;
 using MyBox;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,6 +18,8 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
     private float tutorialTimer = 0.0f;
 
     private FrogController tutorialFrog;
+
+    private bool hiddenMoveText;
 
     public override void AwakeService()
     {
@@ -36,6 +39,16 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         }
 
         tutorialTimer += Time.deltaTime;
+
+        if (!hiddenMoveText)
+        {
+            if (!GetVars().MoveTextBounds.OverlapPoint(HumanoidController.Player.GetOffsetPosition()))
+            {
+                hiddenMoveText = true;
+                GetVars().HideMoveText();
+            }
+        }
+
 
         bool bDone = false;
         
@@ -120,6 +133,8 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         proCam.CameraTargets[0].TargetInfluenceV = 1.0f;
         proCam.CameraTargets[1].TargetInfluenceH = 0.0f;
         proCam.CameraTargets[1].TargetInfluenceV = 0.0f;
+
+        GetVars().ToDisableWhenDone.SetActive(false);
     }
 
     void SpawnFrog()
@@ -131,4 +146,7 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         tutorialFrog.SpawnPosition = vSpawnPos;
         tutorialFrog.OnJustSpawned();
     }
+
+
+    
 }

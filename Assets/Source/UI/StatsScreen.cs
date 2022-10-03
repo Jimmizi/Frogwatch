@@ -13,6 +13,9 @@ public class StatsScreen : MonoBehaviour
     public TextMeshProUGUI distanceTravelled;
 
     public AudioClip statsMusicClip;
+    
+    public static bool IsOnStatsScreen => onStatsScreen;
+    private static bool onStatsScreen = false;
 
     private float fTimeOnStatsScreen = 0.0f;
 
@@ -38,6 +41,7 @@ public class StatsScreen : MonoBehaviour
                 Service.Get<AudioSystem>().CrossFadeToMusic(statsMusicClip, 0.5f);
                 visible = true;
                 fTimeOnStatsScreen = 0.0f;
+                onStatsScreen = true;
             }
             else
             {
@@ -63,6 +67,8 @@ public class StatsScreen : MonoBehaviour
 
     public void RestartGame()
     {
+        onStatsScreen = false;
+
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.UIConfirm, Camera.main.transform.position);
 
         GameStats.Reset();

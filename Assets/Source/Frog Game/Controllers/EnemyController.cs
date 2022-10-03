@@ -105,6 +105,11 @@ public class EnemyController : HumanoidController
     // Update is called once per frame
     protected override void Update()
     {
+        if (StatsScreen.IsOnStatsScreen)
+        {
+            return;
+        }
+
         currentStateTimer += Time.deltaTime;
         speedModTimer -= Time.deltaTime;
 

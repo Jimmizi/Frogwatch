@@ -52,17 +52,20 @@ public class ServiceManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            gameObject.name = "SERVICE";
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    gameObject.name = "SERVICE";
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
+
+        gameObject.name = "SERVICE";
+        instance = this;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -91,6 +94,7 @@ public class ServiceManager : MonoBehaviour
     void OnDestroy()
     {
         CallServiceShutdown();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public T GetService<T>() where T : SystemObject
