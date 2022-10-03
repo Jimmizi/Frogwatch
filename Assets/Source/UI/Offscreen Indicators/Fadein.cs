@@ -9,7 +9,6 @@ public class Fadein : MonoBehaviour
 {
     private CanvasGroup myUIGroup;
     
-
     private void Start()
     {
         myUIGroup = GetComponent<CanvasGroup>();
@@ -19,9 +18,11 @@ public class Fadein : MonoBehaviour
         if (Service.Get<TutorialSystem>().IsTutorialActive)
         {
             myUIGroup.alpha = 0;
-        } else
+        } 
+        else
         {
             myUIGroup.alpha += Time.deltaTime;
+            myUIGroup.alpha = Mathf.Clamp(myUIGroup.alpha, 0.0f, 1.0f);
         }
     }
 }
