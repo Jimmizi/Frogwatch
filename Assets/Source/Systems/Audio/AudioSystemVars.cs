@@ -76,7 +76,7 @@ public class AudioSystemVars : ServiceVars
         }
     }
 
-    public void CrossFadeMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0)
+    public void CrossFadeMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0, bool resetTime = false)
     {        
         if (channel < 0 || channel >= _maxNumMusicChannels)
         {
@@ -89,7 +89,7 @@ public class AudioSystemVars : ServiceVars
         }
         else
         {
-            StartCoroutine(DoCrossFadeChannel(music, channel, crossFadeTime));
+            StartCoroutine(DoCrossFadeChannel(music, channel, crossFadeTime, resetTime));
         }
     }
 
@@ -109,11 +109,11 @@ public class AudioSystemVars : ServiceVars
         return null;
     }
 
-    IEnumerator DoCrossFadeChannel(AudioClip music, int channel, float crossFadeTime)
+    IEnumerator DoCrossFadeChannel(AudioClip music, int channel, float crossFadeTime, bool resetTime)
     {
         // Setup cross-fade track in sync with main track volume 0
         _musicCrossAudioSources[channel].clip = music;
-        _musicCrossAudioSources[channel].time = 0; // musicAudioSources[0].time;
+        _musicCrossAudioSources[channel].time = resetTime ? 0 : musicAudioSources[0].time;
         _musicCrossAudioSources[channel].volume = 0;
         _musicCrossAudioSources[channel].Play();
 
