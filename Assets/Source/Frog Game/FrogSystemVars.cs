@@ -7,6 +7,9 @@ public class FrogSystemVars : ServiceVars
     public GameObject FrogPrefab;
     public GameObject WitchPrefab;
 
+    public List<GameObject> RareFrogPrefabs;
+    public float ChanceForRareFrog = 10.0f;
+
     public bool AllowFrogsToAmbientlyHopIntoPonds = true;
 
 

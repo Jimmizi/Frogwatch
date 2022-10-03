@@ -90,10 +90,27 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
     {
         Vector2 vSpawnPos = GetFrogSpawnPosition();
         
-        GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab, new Vector2(vSpawnPos.x, 9.0f), Quaternion.identity);
+        GameObject newFrog = Object.Instantiate(GetFrogPrefab(), new Vector2(vSpawnPos.x, 9.0f), Quaternion.identity);
         FrogController controller = newFrog.GetComponent<FrogController>();
         controller.SpawnPosition = vSpawnPos;
         controller.OnJustSpawned();
+    }
+
+    GameObject GetFrogPrefab()
+    {
+        List<GameObject> rareFrogs = GetVars().RareFrogPrefabs;
+
+        if (rareFrogs.Count > 0)
+        {
+            float fChanceForRareFrog = GetVars().ChanceForRareFrog;
+
+            if (Random.Range(0.0f, 100.0f) < fChanceForRareFrog)
+            {
+                return rareFrogs[Random.Range(0, rareFrogs.Count)];
+            }
+        }
+
+        return GetVars().FrogPrefab;
     }
 
     Vector2 GetFrogSpawnPosition()

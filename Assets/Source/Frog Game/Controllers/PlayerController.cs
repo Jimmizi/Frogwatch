@@ -14,10 +14,17 @@ public class PlayerController : HumanoidController
     
     public Animator DashPtfxAnimator;
 
+    public PolygonCollider2D PlaySpookyMusicOutsideOfBounds;
+
     public bool DashIsUnlocked = false;
 
 
     private bool bAbortFadeIn = false;
+    
+    public bool IsInSpookZone()
+    {
+        return !PlaySpookyMusicOutsideOfBounds.OverlapPoint(GetOffsetPosition());
+    }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -49,6 +56,11 @@ public class PlayerController : HumanoidController
     // Update is called once per frame
     protected override void Update()
     {
+        if (IsInSpookZone())
+        {
+            Debug.Log("Player in spook zone");
+        }
+
         float fHorizontal = Input.GetAxis("Horizontal");
         float fVertical = Input.GetAxis("Vertical");
         bool bInteracted = Input.GetButtonDown("Interact");
