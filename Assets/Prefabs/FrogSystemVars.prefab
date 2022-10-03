@@ -46,6 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrogPrefab: {fileID: 48068475901459672, guid: 3793fec8785ba5149be88dd02484e97a, type: 3}
   WitchPrefab: {fileID: 6965367066321798084, guid: b5155aba8b20cbd458847a4b90368293, type: 3}
+  RareFrogPrefabs:
+  - {fileID: 48068475901459672, guid: 1234b6b8ea0d18b4190f3845f87e97e4, type: 3}
+  - {fileID: 48068475901459672, guid: 937092a76ab9bcf45a246d281b6cd4b8, type: 3}
+  - {fileID: 48068475901459672, guid: b8596e8e67bf430428b6ea7545ce7613, type: 3}
+  - {fileID: 48068475901459672, guid: 276209ea19d4ab94ea5ab55d94e52de4, type: 3}
+  - {fileID: 48068475901459672, guid: 2ed521539acfcba4394eccc17473f38b, type: 3}
+  ChanceForRareFrog: 10
   AllowFrogsToAmbientlyHopIntoPonds: 1
   FrogMovementBounds: {fileID: 0}
   MinTimeBetweenHops: 1
