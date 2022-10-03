@@ -33,7 +33,7 @@ public class StatsScreen : MonoBehaviour
             if (!visible)
             {
                 UpdateStats();
-                Service.Get<AudioSystem>().CrossFadeToMusic(statsMusicClip, 1.0f);
+                Service.Get<AudioSystem>().CrossFadeToMusic(statsMusicClip, 0.5f);
                 visible = true;
             }
             else
