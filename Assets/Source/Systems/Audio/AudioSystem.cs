@@ -44,9 +44,14 @@ public class AudioSystem : SystemObjectWithVars<AudioSystemVars>
         audioSource.Play();
     }
 
-    public void CrossFadeToMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0)
+    public void CrossFadeToMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0, bool resetTime = true)
     {
-        GetVars().CrossFadeMusic(music, crossFadeTime, channel);
+        GetVars().CrossFadeMusic(music, crossFadeTime, channel, resetTime);
+    }
+
+    public AudioClip GetCurrentMusicClip(int channel = 0)
+    {        
+        return GetVars()?.musicAudioSources[channel]?.clip;
     }
 
     private AudioSource FindFreeOneShot()
