@@ -401,6 +401,68 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &51240636
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 58115638}
+    m_Modifications:
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5182848514632513656, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+      propertyPath: m_Name
+      value: PondHighlight
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+--- !u!4 &51240637 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 913681789334180620, guid: 70c6544f2ef0f8046a7bf422557a8a05, type: 3}
+  m_PrefabInstance: {fileID: 51240636}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &58115636
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,6 +511,7 @@ Transform:
   - {fileID: 524739103}
   - {fileID: 1932223435}
   - {fileID: 1019224749}
+  - {fileID: 51240637}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19616,37 +19679,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: ChanceForRareFrog
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: FrogMovementBounds
       value: 
       objectReference: {fileID: 1032323207}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.data[0]
-      value: 
-      objectReference: {fileID: 48068475901459672, guid: 1234b6b8ea0d18b4190f3845f87e97e4, type: 3}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.data[1]
-      value: 
-      objectReference: {fileID: 48068475901459672, guid: 937092a76ab9bcf45a246d281b6cd4b8, type: 3}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 48068475901459672, guid: b8596e8e67bf430428b6ea7545ce7613, type: 3}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.data[3]
-      value: 
-      objectReference: {fileID: 48068475901459672, guid: 276209ea19d4ab94ea5ab55d94e52de4, type: 3}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: RareFrogPrefabs.Array.data[4]
-      value: 
-      objectReference: {fileID: 48068475901459672, guid: 2ed521539acfcba4394eccc17473f38b, type: 3}
     - target: {fileID: 1888881048546101843, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: m_Name
       value: FrogSystemVars
