@@ -28,7 +28,7 @@ public class EdgeControlMusic : MonoBehaviour
 
     bool GetShouldPlaySpookyMusic()
     {
-        return Service.Get<AudioSystem>().ShouldPlaySpookyMusic;
+        return Service.Get<AudioSystem>().ShouldPlaySpookyMusic();
     }
 
     void PlayMusic(AudioClip music)
