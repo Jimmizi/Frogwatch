@@ -53,3 +53,26 @@ MonoBehaviour:
   _musicSourcePrefab: {fileID: 9154578799736131726, guid: 0f31da02479a6164389907fa5a75268e, type: 3}
   _maxNumMusicChannels: 2
   musicAudioSources: []
+  eventClips:
+  - audioEvent: 0
+    clip: {fileID: 8300000, guid: 9cb2aa4ec3c24df448355e4ac8d595de, type: 3}
+  - audioEvent: 1
+    clip: {fileID: 8300000, guid: 01b20c46526f6a04bbfdcfc47a5d84a7, type: 3}
+  - audioEvent: 2
+    clip: {fileID: 8300000, guid: aaefce730ae339245a81d20e0f6a9645, type: 3}
+  - audioEvent: 3
+    clip: {fileID: 8300000, guid: 0b1693c57adeb994fb39f27344f29597, type: 3}
+  - audioEvent: 4
+    clip: {fileID: 8300000, guid: 95556abe7d9e52e4981f3422a762b632, type: 3}
+  - audioEvent: 5
+    clip: {fileID: 8300000, guid: 9e5e978fdc190b04592baa4a8b7a2f95, type: 3}
+  - audioEvent: 6
+    clip: {fileID: 8300000, guid: edb663121fede7644aa19ddcb90e7f28, type: 3}
+  - audioEvent: 7
+    clip: {fileID: 8300000, guid: 06c81040ef163f64ebe83a3c756b30b1, type: 3}
+  - audioEvent: 8
+    clip: {fileID: 8300000, guid: bf3a6e1a1f56a934ea39362d39701fe1, type: 3}
+  - audioEvent: 9
+    clip: {fileID: 8300000, guid: d0c32884fc1df1d41b0f9db7519dd5dd, type: 3}
+  - audioEvent: 10
+    clip: {fileID: 8300000, guid: a4b6cd1a637e83d4780f392aaafb4fbc, type: 3}
