@@ -38,6 +38,11 @@ public class FrogManagerSystem : SystemObjectWithVars<FrogSystemVars>
 
     public override void UpdateService()
     {
+        if (Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return;
+        }
+
         cacheAvgFrogPosTimer -= Time.deltaTime;
         if (cacheAvgFrogPosTimer <= 0.0f)
         {

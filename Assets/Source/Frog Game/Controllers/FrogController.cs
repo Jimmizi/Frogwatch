@@ -185,6 +185,12 @@ public class FrogController : HumanoidController
     // Update is called once per frame
     protected new void Update()
     {
+        if (state == State.Idle && Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            // No movement while in tutorial
+            return;
+        }
+        
         if (fDropTimeAccelHops >= 0.0f)
         {
             fDropTimeAccelHops -= Time.deltaTime;
