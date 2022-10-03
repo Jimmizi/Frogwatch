@@ -22,6 +22,11 @@ public class AudioSystem : SystemObjectWithVars<AudioSystemVars>
     {
     }
 
+    public bool ShouldPlaySpookyMusic()
+    {
+        return HumanoidController.Player.IsInSpookZone();
+    }
+
     public void PlayEvent(AudioEvent audioEvent, Vector3 position)
     {
         AudioClip clip = GetVars().FindAudioEventClip(audioEvent);
