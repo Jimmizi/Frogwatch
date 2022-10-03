@@ -52,7 +52,7 @@ public class StatsScreen : MonoBehaviour
         numFrogsThrown.text = $"{GameStats.Stats.FrogsThrownIntoPonds}";
         numFrogsTaken.text = $"{FrogController.NumFrogsTaken}";
         numWitchesBonked.text = $"{GameStats.Stats.WitchesBonked}";
-        distanceTravelled.text = $"{Mathf.RoundToInt(GameStats.Stats.DistanceMoved)}";
+        distanceTravelled.text = $"{Mathf.RoundToInt(GameStats.Stats.DistanceMoved)}m";
     }
 
     public void RestartGame()

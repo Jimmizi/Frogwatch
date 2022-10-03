@@ -4958,7 +4958,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -5
+  m_SortingOrder: -45
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 4
@@ -5304,10 +5304,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd52655403623646b571c2ac3d7347d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnSpawnedAnimator: {fileID: 0}
   FrogCarryFloatEase: 15
   ControllerSpeed: 0.62
   DashSpeed: 7
-  PickupDistance: 0.25
+  PickupDistance: 0.3
   DashTime: 0.05
   DashLogicalTime: 0.35
   FrogCarryOffsetStart: {x: 0, y: 0.23}
@@ -5315,6 +5316,7 @@ MonoBehaviour:
   CarryFrogAnimSpeed: 0.5
   InteractCooldown: 0.75
   DashCooldown: 2
+  InputDirection: {x: 0, y: 0}
   ZSort: {fileID: 0}
   FrogCarrying: {fileID: 0}
   DashCooldownTimer: 0

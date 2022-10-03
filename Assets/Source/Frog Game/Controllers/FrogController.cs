@@ -57,6 +57,7 @@ public class FrogController : HumanoidController
 
     public static List<FrogController> FrogList = new();
 
+    public Animator MusicNoteAnimator;
     public SpriteRenderer FrogHeldBubblesRenderer;
     public SpriteRenderer FrogHeldHeartsRenderer;
     public Animator FrogLandAnimator;
@@ -184,6 +185,12 @@ public class FrogController : HumanoidController
     // Update is called once per frame
     protected new void Update()
     {
+        if (state == State.Idle && Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            // No movement while in tutorial
+            return;
+        }
+        
         if (fDropTimeAccelHops >= 0.0f)
         {
             fDropTimeAccelHops -= Time.deltaTime;
@@ -278,6 +285,7 @@ public class FrogController : HumanoidController
 
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
         FrogLandAnimator.SetTrigger("TriggerLand");
+        MusicNoteAnimator.SetBool("InPond", false);
         state = State.Idle;
     }
 
@@ -311,7 +319,8 @@ public class FrogController : HumanoidController
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
-                
+                MusicNoteAnimator.SetBool("InPond", false);
+
                 TryPerformHop(true);
                 pondFrogIsIn = null;
             }
@@ -319,6 +328,7 @@ public class FrogController : HumanoidController
             {
                 pondFrogIsIn.RemoveFrog(this);
                 m_animator.SetBool("InPond", false);
+
                 TryPerformHop(false, true);
             }
         }
@@ -367,8 +377,22 @@ public class FrogController : HumanoidController
 
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogSplash, transform.position);
         FrogLandAnimator.SetTrigger("TriggerSplash");
+        MusicNoteAnimator.SetBool("InPond", true);
         m_animator.SetBool("InPond", true);
         escapeTestTimer = 0.0f;
+    }
+
+    public bool CanThrowInDirection(Vector2 vDir)
+    {
+        if (!Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return true;
+        }
+
+        BoxCollider2D tutorialBounds = Service.Vars<TutorialVars>().TutorialFrogBounds;
+        Vector2 vNewPos = Player.GetOffsetPosition() + (vDir * (GetVars().ThrownDistance * 1.1f));
+
+        return tutorialBounds.OverlapPoint(vNewPos);
     }
 
     IEnumerator PerformThrown(Vector2 vDir, bool bAccelHops = false)
@@ -440,6 +464,7 @@ public class FrogController : HumanoidController
 
             Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
             FrogLandAnimator.SetTrigger("TriggerLand");
+            MusicNoteAnimator.SetBool("InPond", false);
         }
 
         m_animator.SetBool("IsCarried", false);
@@ -492,6 +517,7 @@ public class FrogController : HumanoidController
             {
                 Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
                 FrogLandAnimator.SetTrigger("TriggerLand");
+                MusicNoteAnimator.SetBool("InPond", false);
             }
         }
         

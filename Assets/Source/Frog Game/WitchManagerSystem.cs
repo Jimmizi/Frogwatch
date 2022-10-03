@@ -53,6 +53,11 @@ public class WitchManagerSystem : SystemObject
 
     public override void UpdateService()
     {
+        if (Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return;
+        }
+
         if (isSpawningWitches)
         {
             if (EnemyController.Witches.Count < targetNumberOfWitches)

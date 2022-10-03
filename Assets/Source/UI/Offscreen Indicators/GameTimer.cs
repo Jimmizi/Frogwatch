@@ -32,6 +32,11 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
+        if (Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return;
+        }
+
         if (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;

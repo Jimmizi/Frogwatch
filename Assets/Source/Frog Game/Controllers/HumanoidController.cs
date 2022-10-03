@@ -219,13 +219,18 @@ public class HumanoidController : MonoBehaviour
                 }
                 else
                 {
-                    Service.Get<AudioSystem>().PlayEvent(AudioEvent.ThrowFrog, transform.position);
-                    FrogCarrying.SetThrown(InputDirection.x == 0.0f && InputDirection.y == 0.0f ? Random.insideUnitCircle.normalized : InputDirection);
-                    FrogCarrying = null;
+                    Vector2 vDirection = InputDirection.x == 0.0f && InputDirection.y == 0.0f ? Random.insideUnitCircle.normalized : InputDirection;
 
-                    SetAnimCarrying(false);
-                    carryFrogTimer = 0.0f;
-                    carryFrogTimeFlipped = false;
+                    if (FrogCarrying.CanThrowInDirection(vDirection))
+                    {
+                        Service.Get<AudioSystem>().PlayEvent(AudioEvent.ThrowFrog, transform.position);
+                        FrogCarrying.SetThrown(vDirection);
+                        FrogCarrying = null;
+
+                        SetAnimCarrying(false);
+                        carryFrogTimer = 0.0f;
+                        carryFrogTimeFlipped = false;
+                    }
                 }
             }
         }
