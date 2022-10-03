@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
@@ -8,7 +7,7 @@ using UnityEngine.Video;
 public class ToGameplayAfterVideo : MonoBehaviour
 {
     public VideoPlayer Video;
-    public SceneAsset NextScene;
+    public string NextScene; // Unity buildDoes not like SceneAsset
 
     private bool bStarted = false;
 
@@ -31,8 +30,12 @@ public class ToGameplayAfterVideo : MonoBehaviour
         else if ((ulong)Video.frame >= Video.frameCount - 1)
         {
             Debug.Log("Video done");
-            SceneManager.LoadScene(NextScene.name);
+            LoadNextScene();
         }
+    }
 
+    public void LoadNextScene()
+    {        
+        SceneManager.LoadScene(NextScene);
     }
 }
