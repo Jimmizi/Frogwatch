@@ -64,7 +64,6 @@ MonoBehaviour:
   ThrownEaser: 16
   ThrownEaserSecondary: 13
   SpawnEaser: 16
-  FrogSpawnSpeed: 3
   WitchStunnedMinTime: 4
   WitchStunnedMaxTime: 8
   WitchIdleMinTime: 1
@@ -72,6 +71,6 @@ MonoBehaviour:
   WitchWanderMinTime: 4
   WitchWanderMaxTime: 8
   WitchLookForFrogRange: 2
-  WitchWanderSpeed: 0.4
+  WitchWanderSpeed: 0.3
   WitchChaseSpeed: 0.5
-  WitchFleeSpeed: 0.5
+  WitchFleeSpeed: 0.4

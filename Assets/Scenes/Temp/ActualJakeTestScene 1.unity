@@ -14781,14 +14781,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: WitchFleeSpeed
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
-      propertyPath: WitchWanderSpeed
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1888881048546101841, guid: 7dc057900d6a77a43818560c8ddb98ea, type: 3}
       propertyPath: FrogMovementBounds
       value: 
       objectReference: {fileID: 1032323207}
@@ -15033,14 +15025,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6645817693207222783, guid: 73bc696a67f555b4da1ebe256b6aa704, type: 3}
-      propertyPath: m_Size.y
-      value: 0.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 6645817693303575658, guid: 73bc696a67f555b4da1ebe256b6aa704, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.193
-      objectReference: {fileID: 0}
     - target: {fileID: 6645817694649200196, guid: 73bc696a67f555b4da1ebe256b6aa704, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -15098,14 +15082,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 420371969, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
-      propertyPath: m_SortingOrder
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 6769637615656872972, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
-      propertyPath: PickupDistance
-      value: 0.3
-      objectReference: {fileID: 0}
     - target: {fileID: 6769637615656872973, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
       propertyPath: m_Name
       value: Player
