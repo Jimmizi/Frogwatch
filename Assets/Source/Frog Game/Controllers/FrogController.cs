@@ -190,7 +190,12 @@ public class FrogController : HumanoidController
             // No movement while in tutorial
             return;
         }
-        
+
+        if (StatsScreen.IsOnStatsScreen)
+        {
+            return;
+        }
+
         if (fDropTimeAccelHops >= 0.0f)
         {
             fDropTimeAccelHops -= Time.deltaTime;

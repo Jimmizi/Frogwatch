@@ -64,7 +64,7 @@ MonoBehaviour:
   ThrownSpeed: 3
   ThrownDistance: 1
   FrogEscapeTestInterval: 7.5
-  BaseEscapeChance: 10
+  BaseEscapeChance: 5
   AdditionalEscapeChancePerExtraFrogMin: 2.5
   AdditionalEscapeChancePerExtraFrogMax: 15
   MovementEaser: 1
