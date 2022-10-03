@@ -122,6 +122,7 @@ public class FrogController : HumanoidController
     {
         state = State.Carried;
         m_animator.SetBool("IsCarried", true);
+        m_animator.SetBool("InPond", false);
         FrogLandAnimator.SetTrigger("TriggerAbort"); // triggers mud splash abort in case of something picking up frog quickly
         if (bHeldByWitch)
         {
@@ -470,6 +471,7 @@ public class FrogController : HumanoidController
             Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
             FrogLandAnimator.SetTrigger("TriggerLand");
             MusicNoteAnimator.SetBool("InPond", false);
+            m_animator.SetBool("InPond", false);
         }
 
         m_animator.SetBool("IsCarried", false);
