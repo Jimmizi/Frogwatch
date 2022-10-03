@@ -14,6 +14,8 @@ public class StatsScreen : MonoBehaviour
 
     public AudioClip statsMusicClip;
 
+    private float fTimeOnStatsScreen = 0.0f;
+
     public bool visible
     {
         get { return transform.GetChild(0).gameObject.activeSelf; }
@@ -35,10 +37,14 @@ public class StatsScreen : MonoBehaviour
                 UpdateStats();
                 Service.Get<AudioSystem>().CrossFadeToMusic(statsMusicClip, 0.5f);
                 visible = true;
+                fTimeOnStatsScreen = 0.0f;
             }
             else
             {
-                if (Input.GetButtonUp("Dash"))
+                fTimeOnStatsScreen += Time.deltaTime;
+
+                // If spamming dash when going into the statboard, then we'd have instantly skipped
+                if (fTimeOnStatsScreen > 2.0f && Input.GetButtonUp("Dash"))
                 {
                     RestartGame();
                 }
