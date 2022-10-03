@@ -382,6 +382,19 @@ public class FrogController : HumanoidController
         escapeTestTimer = 0.0f;
     }
 
+    public bool CanThrowInDirection(Vector2 vDir)
+    {
+        if (!Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return true;
+        }
+
+        BoxCollider2D tutorialBounds = Service.Vars<TutorialVars>().TutorialFrogBounds;
+        Vector2 vNewPos = Player.GetOffsetPosition() + (vDir * (GetVars().ThrownDistance * 1.1f));
+
+        return tutorialBounds.OverlapPoint(vNewPos);
+    }
+
     IEnumerator PerformThrown(Vector2 vDir, bool bAccelHops = false)
     {
         state = State.Thrown;
