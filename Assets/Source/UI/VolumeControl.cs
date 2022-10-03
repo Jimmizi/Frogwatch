@@ -14,6 +14,9 @@ public class VolumeControl : MonoBehaviour
     void Start()
     {
         slider = GetComponentInChildren<Slider>();
+
+        AudioListener.volume = 0.25f;
+
         slider.value = AudioListener.volume;
 
         UpdateSpeaker();
