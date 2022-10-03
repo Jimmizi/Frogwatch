@@ -864,6 +864,7 @@ MonoBehaviour:
   numFrogsTaken: {fileID: 4271411300648854691}
   numWitchesBonked: {fileID: 113682370031672870}
   distanceTravelled: {fileID: 1323312915560708653}
+  statsMusicClip: {fileID: 8300000, guid: d7dcd9dbf013bca4eb295efcac1fe710, type: 3}
 --- !u!1 &3180533964517992359
 GameObject:
   m_ObjectHideFlags: 0

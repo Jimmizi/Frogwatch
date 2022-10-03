@@ -12,6 +12,8 @@ public class StatsScreen : MonoBehaviour
     public TextMeshProUGUI numWitchesBonked;
     public TextMeshProUGUI distanceTravelled;
 
+    public AudioClip statsMusicClip;
+
     public bool visible
     {
         get { return transform.GetChild(0).gameObject.activeSelf; }
@@ -31,6 +33,7 @@ public class StatsScreen : MonoBehaviour
             if (!visible)
             {
                 UpdateStats();
+                Service.Get<AudioSystem>().CrossFadeToMusic(statsMusicClip, 1.0f);
                 visible = true;
             }
             else
@@ -54,6 +57,8 @@ public class StatsScreen : MonoBehaviour
 
     public void RestartGame()
     {
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.UIConfirm, Camera.main.transform.position);
+
         GameStats.Reset();
         FrogController.NumFrogsTaken = 0;
 

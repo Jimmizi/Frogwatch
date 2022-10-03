@@ -113,7 +113,7 @@ public class AudioSystemVars : ServiceVars
     {
         // Setup cross-fade track in sync with main track volume 0
         _musicCrossAudioSources[channel].clip = music;
-        _musicCrossAudioSources[channel].time = musicAudioSources[0].time;
+        _musicCrossAudioSources[channel].time = 0; // musicAudioSources[0].time;
         _musicCrossAudioSources[channel].volume = 0;
         _musicCrossAudioSources[channel].Play();
 

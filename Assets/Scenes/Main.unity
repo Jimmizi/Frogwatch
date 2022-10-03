@@ -6260,6 +6260,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5361449282992598025, guid: 490e6709fe36e704a9d47afb403acd5d, type: 3}
+      propertyPath: _music
+      value: 
+      objectReference: {fileID: 8300000, guid: 691363e4be9e29b448415925b1795fa6, type: 3}
     - target: {fileID: 5361449282992598030, guid: 490e6709fe36e704a9d47afb403acd5d, type: 3}
       propertyPath: m_Name
       value: BGM
@@ -6821,7 +6825,7 @@ PrefabInstance:
       objectReference: {fileID: 1123086163}
     - target: {fileID: 5367687961178451591, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: orthographic size
-      value: 1.4515625
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5367687961178451594, guid: 2fa45cfd99ce0df42857bd409656cc4a, type: 3}
       propertyPath: PixelsPerUnit
