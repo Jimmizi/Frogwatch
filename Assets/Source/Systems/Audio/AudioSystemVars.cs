@@ -76,7 +76,7 @@ public class AudioSystemVars : ServiceVars
         }
     }
 
-    public void CrossFadeMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0, bool resetTime = false)
+    public void CrossFadeMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0, bool resetTime = true)
     {        
         if (channel < 0 || channel >= _maxNumMusicChannels)
         {
