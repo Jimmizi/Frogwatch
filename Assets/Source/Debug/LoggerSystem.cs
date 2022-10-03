@@ -11,7 +11,7 @@ public class LoggerSystem : SystemObject
 
     public void Write(string str)
     {
-        stringWriter.WriteLine(str);
+        //stringWriter.WriteLine(str);
     }
 
     //public static void ReadString()
@@ -24,8 +24,8 @@ public class LoggerSystem : SystemObject
 
     public override void AwakeService()
     {
-        string path = string.Format($"{Application.dataPath}/{Filename}");
-        stringWriter = new StreamWriter(path, false);
+        //string path = string.Format($"{Application.dataPath}/{Filename}");
+        //stringWriter = new StreamWriter(path, false);
     }
 
     public override void StartService()
@@ -45,6 +45,6 @@ public class LoggerSystem : SystemObject
 
     public override void ShutdownService()
     {
-        stringWriter.Close();
+        //stringWriter.Close();
     }
 }
