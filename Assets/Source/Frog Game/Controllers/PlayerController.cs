@@ -56,11 +56,6 @@ public class PlayerController : HumanoidController
     // Update is called once per frame
     protected override void Update()
     {
-        if (IsInSpookZone())
-        {
-            Debug.Log("Player in spook zone");
-        }
-
         float fHorizontal = Input.GetAxis("Horizontal");
         float fVertical = Input.GetAxis("Vertical");
         bool bInteracted = Input.GetButtonDown("Interact");
