@@ -5306,7 +5306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnSpawnedAnimator: {fileID: 0}
   FrogCarryFloatEase: 15
-  ControllerSpeed: 0.62
+  ControllerSpeed: 1.8
   DashSpeed: 7
   PickupDistance: 0.3
   DashTime: 0.05
@@ -5325,6 +5325,7 @@ MonoBehaviour:
   DashChargeAnimator: {fileID: 8025432}
   DashChargePtfx: {fileID: 420371970}
   DashPtfxAnimator: {fileID: 1959567424}
+  PlaySpookyMusicOutsideOfBounds: {fileID: 0}
   DashIsUnlocked: 0
 --- !u!50 &6769637615656872969
 Rigidbody2D:
