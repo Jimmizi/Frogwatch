@@ -14,7 +14,8 @@ public class PlayerController : HumanoidController
     
     public Animator DashPtfxAnimator;
 
-    public PolygonCollider2D PlaySpookyMusicOutsideOfBounds;
+    public PolygonCollider2D PlaySpookyMusicOutsideOfBounds;    
+    public MoveDirection MoveDirectionWidget;
 
     public bool DashIsUnlocked = false;
 
@@ -63,6 +64,13 @@ public class PlayerController : HumanoidController
 
         InputDirection = new Vector2(fHorizontal, fVertical);
         InputDirection.Normalize();
+
+        if (InputDirection != Vector2.zero)
+        {
+            FacingDirection = InputDirection;
+            MoveDirectionWidget.direction = FacingDirection;
+            MoveDirectionWidget.isMark = (FrogCarrying != null);
+        }
 
         JustPressedInteract = bInteracted;
         JustPressedDash = DashIsUnlocked && bDashed;

@@ -39,9 +39,12 @@ public class AudioSystem : SystemObjectWithVars<AudioSystemVars>
     public void PlayOneShot(AudioClip clip, Vector3 position)
     {
         AudioSource audioSource = FindFreeOneShot();
-        audioSource.transform.position = position;
-        audioSource.clip = clip;
-        audioSource.Play();
+        if (audioSource != null)
+        {
+            audioSource.transform.position = position;
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
     }
 
     public void CrossFadeToMusic(AudioClip music, float crossFadeTime = 0.0f, int channel = 0, bool resetTime = true)

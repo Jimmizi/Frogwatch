@@ -26,6 +26,7 @@ public class HumanoidController : MonoBehaviour
     public float DashCooldown = 3.0f;
 
     public Vector2 InputDirection = new();
+    public Vector2 FacingDirection = new();
     protected bool JustPressedInteract;
     protected bool JustPressedDash;
     protected Rigidbody2D m_rigidbody;
@@ -224,7 +225,7 @@ public class HumanoidController : MonoBehaviour
                 }
                 else
                 {
-                    Vector2 vDirection = InputDirection.x == 0.0f && InputDirection.y == 0.0f ? Random.insideUnitCircle.normalized : InputDirection;
+                    Vector2 vDirection = FacingDirection.x == 0.0f && FacingDirection.y == 0.0f ? Random.insideUnitCircle.normalized : FacingDirection;
 
                     if (FrogCarrying.CanThrowInDirection(vDirection))
                     {
@@ -246,9 +247,9 @@ public class HumanoidController : MonoBehaviour
 
         if (JustPressedDash)
         {
-            if (CanDash() && (InputDirection.x != 0.0f || InputDirection.y != 0.0f))
+            if (CanDash() && FacingDirection != Vector2.zero)
             {
-                StartCoroutine(DoDash(InputDirection));
+                StartCoroutine(DoDash(FacingDirection));
             }
         }
         // If can't dash and we're done with our alive timer, then we can start the cooldown going down

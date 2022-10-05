@@ -150,7 +150,7 @@ public class FrogController : HumanoidController
             exclamationMark.SetActive(false);
         }
         
-        Vector2 vDir = (bDueToStunned ? HumanoidController.Player.InputDirection : GetHopDirection()) * 0.5f;
+        Vector2 vDir = (bDueToStunned ? HumanoidController.Player.FacingDirection : GetHopDirection()) * 0.5f;
 
         StartCoroutine(PerformThrown(vDir, true));
         StartCoroutine(DoBubblesFadeOut());
