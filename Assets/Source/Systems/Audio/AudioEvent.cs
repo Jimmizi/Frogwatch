@@ -10,5 +10,7 @@ public enum AudioEvent
     DashRecharged,
     DashIntoWitch,
     WitchPickedFrog,
-    SmokePuff
+    SmokePuff,
+    FrogSpawn,
+    FrogHop
 }

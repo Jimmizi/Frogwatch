@@ -76,3 +76,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d0c32884fc1df1d41b0f9db7519dd5dd, type: 3}
   - audioEvent: 10
     clip: {fileID: 8300000, guid: a4b6cd1a637e83d4780f392aaafb4fbc, type: 3}
+  - audioEvent: 11
+    clip: {fileID: 8300000, guid: 5649a5fb17135e548b851f2abab98cba, type: 3}
+  - audioEvent: 12
+    clip: {fileID: 8300000, guid: d6a17fc68732ec445beaa2165b0032b0, type: 3}

@@ -268,6 +268,8 @@ public class FrogController : HumanoidController
 
         float fNextScale = fBaseScale;
 
+        Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogSpawn, SpawnPosition);
+
         while (fTime <= 1.0f)
         {
             fNextScale += (1.0f - fBaseScale) * Time.deltaTime;
@@ -288,7 +290,6 @@ public class FrogController : HumanoidController
         //}
 
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-
         Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
         FrogLandAnimator.SetTrigger("TriggerLand");
         MusicNoteAnimator.SetBool("InPond", false);
@@ -522,7 +523,7 @@ public class FrogController : HumanoidController
 
             if (!bAssignedToPond)
             {
-                Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogLand, transform.position);
+                Service.Get<AudioSystem>().PlayEvent(AudioEvent.FrogHop, transform.position); // too excessive
                 FrogLandAnimator.SetTrigger("TriggerLand");
                 MusicNoteAnimator.SetBool("InPond", false);
             }

@@ -10764,10 +10764,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2083557958}
     m_Modifications:
-    - target: {fileID: 797159113812741506, guid: 27411b6dcadd80f4393ce7ffca75a96b, type: 3}
-      propertyPath: eventClips.Array.size
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 1766420083151951245, guid: 27411b6dcadd80f4393ce7ffca75a96b, type: 3}
       propertyPath: m_RootOrder
       value: 3
