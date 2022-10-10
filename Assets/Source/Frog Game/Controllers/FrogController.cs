@@ -175,10 +175,23 @@ public class FrogController : HumanoidController
         return bFirstThrowSectionDone && fThrowTime < 0.45f;
     }
 
+    [HideInInspector]
+    public bool InstantSpawn = false;
+
     public override void OnJustSpawned()
     {
-        ExternalSetPosition(new Vector2(SpawnPosition.x, 9.0f));
-        StartCoroutine(DoSpawning());
+        ExternalSetPosition(new Vector2(SpawnPosition.x, InstantSpawn ? SpawnPosition.y : 9.0f));
+
+        if (!InstantSpawn)
+        {
+            StartCoroutine(DoSpawning());
+        }
+        else
+        {
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            MusicNoteAnimator.SetBool("InPond", false);
+            state = State.Idle;
+        }
 
         base.OnJustSpawned();
     }
@@ -186,7 +199,7 @@ public class FrogController : HumanoidController
     // Update is called once per frame
     protected new void Update()
     {
-        if (state == State.Idle && Service.Get<TutorialSystem>().IsTutorialActive)
+        if (Service.Get<TutorialSystem>().IsTutorialActive)
         {
             // No movement while in tutorial
             return;

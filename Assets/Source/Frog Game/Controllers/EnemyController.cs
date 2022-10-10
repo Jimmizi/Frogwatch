@@ -109,6 +109,10 @@ public class EnemyController : HumanoidController
         {
             return;
         }
+        else if (Service.Get<TutorialSystem>().IsTutorialActive)
+        {
+            return;
+        }
 
         currentStateTimer += Time.deltaTime;
         speedModTimer -= Time.deltaTime;
@@ -212,6 +216,19 @@ public class EnemyController : HumanoidController
     void InitIdle()
     {
         timeToStayInState = GetNextTimeToIdle();
+        vCurrentDirection = Vector2.zero;
+    }
+
+    public void TutorialFlee(FrogController frog)
+    {
+        SetCarryingFrog(frog, true);
+        SetState(State.Fleeing);
+        var vRandoCorner = GetRandomBoundsEdge();
+        var vDir = vRandoCorner - GetOffsetPosition();
+        vDir.Normalize();
+
+        vFleeTarget = vRandoCorner + (vDir * 0.2f);
+        vFleeTarget = vRandoCorner;
         vCurrentDirection = Vector2.zero;
     }
 
@@ -354,10 +371,14 @@ public class EnemyController : HumanoidController
         }
     }
 
+    [HideInInspector]
+    public bool TriggerStunInstantEnd = false;
+
     void ProcessStunned()
     {
-        if (GetTimeInState() > timeToStayInState)
+        if (GetTimeInState() > timeToStayInState || TriggerStunInstantEnd)
         {
+            TriggerStunInstantEnd = false;
             m_animator.SetBool("IsStunned", false);
             SetState(State.Idle);
             InitIdle();

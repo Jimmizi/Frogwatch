@@ -6,6 +6,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 using HutongGames.PlayMaker.Actions;
 using MyBox;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using Object = UnityEngine.Object;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
@@ -16,10 +17,13 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
     private bool isTutorialActive;
 
     private float tutorialTimer = 0.0f;
+    private float showWitchAndFrogTimer = 0.0f;
 
     private FrogController tutorialFrog;
+    private EnemyController tutorialWitch;
 
     private bool hiddenMoveText;
+    private bool hiddenChargeText;
 
     public override void AwakeService()
     {
@@ -29,23 +33,36 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
     public override void StartService()
     {
         StartTutorial();
+
+        GetVars().MoveText.alpha = 1.0f;
+        GetVars().ChargeText.alpha = 0.0f;
+        GetVars().ThrowText.alpha = 0.0f;
     }
 
     public override void UpdateService()
     {
         if (!isTutorialActive)
-        {
+        { 
             return;
         }
 
         tutorialTimer += Time.deltaTime;
+
 
         if (!hiddenMoveText)
         {
             if (!GetVars().MoveTextBounds.OverlapPoint(HumanoidController.Player.GetOffsetPosition()))
             {
                 hiddenMoveText = true;
-                GetVars().HideMoveText();
+                GetVars().StageOneText();
+            }
+        }
+        else if (!hiddenChargeText)
+        {
+            if (tutorialWitch.GetState() == EnemyController.State.Stunned)
+            {
+                hiddenChargeText = true;
+                GetVars().StageTwoText();
             }
         }
 
@@ -63,6 +80,7 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         
         if (bDone)
         {
+            tutorialWitch.TriggerStunInstantEnd = true;
             EndTutorial();
         }
     }
@@ -114,6 +132,7 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         proCam.CameraTargets[1].TargetInfluenceV = 1.0f;
 
         SpawnFrog();
+        SpawnWitch();
     }
 
     void EndTutorial()
@@ -144,8 +163,35 @@ public class TutorialSystem : SystemObjectWithVars<TutorialVars>
         GameObject newFrog = Object.Instantiate(Service.Vars<FrogSystemVars>().FrogPrefab, new Vector2(vSpawnPos.x, 9.0f), Quaternion.identity);
         tutorialFrog = newFrog.GetComponent<FrogController>();
         tutorialFrog.SpawnPosition = vSpawnPos;
+        tutorialFrog.InstantSpawn = true;
         tutorialFrog.OnJustSpawned();
+
+        tutorialFrog.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
     }
+
+    void SpawnWitch()
+    {
+        Vector2 vSpawnPos = GetVars().FrogSpawnPosition.position;
+
+        GameObject witch = Object.Instantiate(Service.Vars<FrogSystemVars>().WitchPrefab, vSpawnPos, Quaternion.identity);
+        tutorialWitch = witch.GetComponent<EnemyController>();
+        tutorialWitch.ExternalSetPosition(vSpawnPos);
+        tutorialWitch.OnJustSpawned();
+
+        tutorialWitch.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+
+        if (tutorialWitch.SmokeDisappearAnimator != null)
+        {
+            Service.Get<AudioSystem>().PlayEvent(AudioEvent.SmokePuff, tutorialWitch.transform.position);
+            tutorialWitch.SmokeDisappearAnimator.SetTrigger("Start");
+        }
+        
+        GetVars().StartWitchFrogFadeIn(tutorialWitch.GetComponent<SpriteRenderer>(), tutorialFrog.GetComponent<SpriteRenderer>());
+
+        tutorialWitch.TutorialFlee(tutorialFrog);
+    }
+
+    
 
 
     
