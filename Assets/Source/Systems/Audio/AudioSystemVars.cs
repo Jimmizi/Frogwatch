@@ -89,6 +89,7 @@ public class AudioSystemVars : ServiceVars
         }
         else
         {
+            StopAllCoroutines();
             StartCoroutine(DoCrossFadeChannel(music, channel, crossFadeTime, resetTime));
         }
     }
