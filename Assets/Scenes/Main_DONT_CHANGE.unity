@@ -20180,6 +20180,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6769637615656872972, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
+      propertyPath: ControllerSpeed
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6769637615656872972, guid: 6364a3e8f5d162a4490faa9febfb3dda, type: 3}
       propertyPath: PlaySpookyMusicOutsideOfBounds
       value: 
       objectReference: {fileID: 2144586339}

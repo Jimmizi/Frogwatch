@@ -78,6 +78,6 @@ MonoBehaviour:
   WitchWanderMinTime: 4
   WitchWanderMaxTime: 8
   WitchLookForFrogRange: 2
-  WitchWanderSpeed: 0.3
-  WitchChaseSpeed: 0.5
-  WitchFleeSpeed: 0.4
+  WitchWanderSpeed: 0.4
+  WitchChaseSpeed: 0.7
+  WitchFleeSpeed: 0.5

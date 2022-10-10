@@ -5457,7 +5457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnSpawnedAnimator: {fileID: 0}
   FrogCarryFloatEase: 15
-  ControllerSpeed: 1.8
+  ControllerSpeed: 1.6
   DashSpeed: 7
   PickupDistance: 0.3
   DashTime: 0.05
@@ -5468,6 +5468,7 @@ MonoBehaviour:
   InteractCooldown: 0.75
   DashCooldown: 2
   InputDirection: {x: 0, y: 0}
+  FacingDirection: {x: 0, y: 0}
   ZSort: {fileID: 0}
   FrogCarrying: {fileID: 0}
   DashCooldownTimer: 0
