@@ -1,7 +1,7 @@
 # Frogwatch
 ![Frogs](https://static.jam.host/content/7be/12/z/50b76.png.480x384.fit.jpg)
 
-Made for Ludum Dare 51
+Made for Ludum Dare 51 (Theme: Every 10 seconds)
 
 https://jimmizi.itch.io/frogwatch
 
