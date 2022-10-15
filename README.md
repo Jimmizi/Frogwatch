@@ -22,7 +22,7 @@ Controls: WASD / Arrow Keys / Joystick for movement. E / X / Square - Pickup Spa
 
 [Jimmizi](https://jimmizi.itch.io/)
 
-[Izzo](https://superizzo.itch.io/)
+[Izzo](https://github.com/SuperIzzo)
 
 Morkebla
 
