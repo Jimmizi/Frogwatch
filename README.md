@@ -1,4 +1,6 @@
 # Frogwatch
+![Frogs](https://static.jam.host/content/7be/12/z/50b76.png.480x384.fit.jpg)
+
 Made for Ludum Dare 51
 
 https://jimmizi.itch.io/frogwatch
@@ -18,18 +20,18 @@ Controls: WASD / Arrow Keys / Joystick for movement. E / X / Square - Pickup Spa
 
 **Coding**
 
-Jimmizi
+[Jimmizi](https://jimmizi.itch.io/)
 
-Izzo
+[Izzo](https://superizzo.itch.io/)
 
 Morkebla
 
 **Art**
 
-Nichiiexe
+[Nichiexe](https://nichiiexelinks.carrd.co/)
 
 **Audio**
 
-Jush
+[Jush](https://www.cephalo.io/)
 
-Messmerd
+[Messmerd](https://soundcloud.com/messmerd)
